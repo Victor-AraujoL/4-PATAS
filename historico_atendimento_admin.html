@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação 4 Patas - Histórico de Atendimentos Admin</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8b6b4f;
+            --primary-hover: #795f46;
+            --secondary-color: #a4826f;
+            --secondary-hover: #8c6d4f;
+            --accent-color: #d1ba9d;
+            --background-light: #f5f0e6;
+            --text-color: #333;
+            --text-light: #666;
+            --success-color: #4caf50;
+            --error-color: #c25e48;
+            --gray-light: #f4f4f4;
+            --gray-medium: #ddd;
+            --border-radius: 0.375rem;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #c8b6a6, #a4826f);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .paws {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .paw1 {
+            top: 10%;
+            left: 15%;
+            transform: rotate(45deg);
+            font-size: 8rem;
+        }
+        
+        .paw2 {
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-20deg);
+            font-size: 10rem;
+        }
+        
+        .paw3 {
+            top: 40%;
+            right: 25%;
+            transform: rotate(15deg);
+            font-size: 6rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #f9f6f2;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #d8c9b9;
+        }
+        
+        header h1 {
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+            font-size: 24px;
+        }
+        
+        .buttons-container {
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(139, 107, 79, 0.15);
+        }
+        
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(139, 107, 79, 0.2);
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .search-container input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        th {
+            background-color: #f8f8f8;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .edit-btn, .delete-btn, .view-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .edit-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .edit-btn:hover {
+            background-color: var(--secondary-hover);
+            transform: translateY(-2px);
+        }
+        
+        .delete-btn {
+            background-color: var(--error-color);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .delete-btn:hover {
+            background-color: #b04d3b;
+            transform: translateY(-2px);
+        }
+        
+        .view-btn {
+            background-color: var(--primary-color);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .view-btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+        
+        .pagination button {
+            background-color: #fff;
+            color: var(--primary-color);
+            border: 1px solid var(--gray-medium);
+            min-width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .pagination button:hover {
+            border-color: var(--primary-color);
+            background-color: var(--background-light);
+        }
+        
+        .pagination button.active {
+            background-color: var(--primary-color);
+            color: #fff;
+            border-color: var(--primary-color);
+        }
+        
+        .status-pendente {
+            color: var(--error-color);
+            font-weight: bold;
+        }
+        
+        .status-atendido {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
+    <div class="container">
+        <header>
+            <h1><img src="assets/logo.png.png" alt="Logo 4 Patas" style="width: 40px; height: 40px; margin-right: 10px;">Listagem de Atendimentos</h1>
+            <div class="buttons-container">
+                <button id="voltar-menu" onclick="window.location.href='index.html';"><i class="fas fa-home"></i> Voltar ao Menu</button>
+                <button id="novo-atendimento" onclick="window.location.href='cadastro_atendimento.html';"><i class="fas fa-plus"></i> Novo Atendimento</button>
+                <button id="exportar-pdf"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
+            </div>
+        </header>
+        
+        <div class="search-container">
+            <input type="text" id="pesquisar" placeholder="Pesquisar por pet, dono ou diagnóstico...">
+            <button id="btn-pesquisar">Buscar</button>
+        </div>
+        
+        <table id="tabela-atendimentos">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Pet</th>
+                    <th>Colaborador</th>
+                    <th>Usuário</th>
+                    <th>Peso (kg)</th>
+                    <th>Data/Hora</th>
+                    <th>Medicamento</th>
+                    <th>Diagnóstico</th>
+                    <th>Observação</th>
+                    <th>Data Cadastro</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Dados serão preenchidos via JavaScript -->
+            </tbody>
+        </table>
+        
+        <div class="pagination">
+            <button id="prev-page">&laquo;</button>
+            <button class="page-number active">1</button>
+            <button class="page-number">2</button>
+            <button class="page-number">3</button>
+            <button id="next-page">&raquo;</button>
+        </div>
+    </div>
+    
+    <script>
+        // Dados de exemplo para a listagem
+        const atendimentos = [
+            {
+                id: 1,
+                idPet: 101,
+                nomePet: "Rex",
+                idColaborador: 201,
+                nomeColaborador: "Dr. Carlos Silva",
+                idUsuario: 301,
+                nomeUsuario: "Maria Silva",
+                peso: 12.5,
+                dataHora: "2025-05-16T14:30:00",
+                medicamento: "Antibiótico canino",
+                diagnostico: "Infecção cutânea leve",
+                observacao: "Retorno em 7 dias para reavaliação",
+                dataCadastro: "2025-05-16T09:15:00"
+            },
+            {
+                id: 2,
+                idPet: 102,
+                nomePet: "Luna",
+                idColaborador: 202,
+                nomeColaborador: "Dra. Ana Oliveira",
+                idUsuario: 302,
+                nomeUsuario: "João Pereira",
+                peso: 4.2,
+                dataHora: "2025-05-16T10:15:00",
+                medicamento: "Antipulgas",
+                diagnostico: "Infestação de pulgas",
+                observacao: "Aplicar solução tópica 1x por mês",
+                dataCadastro: "2025-05-16T08:45:00"
+            },
+            {
+                id: 3,
+                idPet: 103,
+                nomePet: "Milo",
+                idColaborador: 201,
+                nomeColaborador: "Dr. Carlos Silva",
+                idUsuario: 303,
+                nomeUsuario: "Fernanda Costa",
+                peso: 8.7,
+                dataHora: "2025-05-17T09:00:00",
+                medicamento: "Anti-inflamatório",
+                diagnostico: "Trauma na pata dianteira",
+                observacao: "Repouso recomendado por 5 dias",
+                dataCadastro: "2025-05-15T16:20:00"
+            },
+            {
+                id: 4,
+                idPet: 104,
+                nomePet: "Bella",
+                idColaborador: 203,
+                nomeColaborador: "Dr. Marcos Santos",
+                idUsuario: 304,
+                nomeUsuario: "Luciana Mendes",
+                peso: 15.3,
+                dataHora: "2025-05-18T13:45:00",
+                medicamento: "Vermífugo",
+                diagnostico: "Verminose intestinal",
+                observacao: "Repetir dose em 15 dias",
+                dataCadastro: "2025-05-17T11:10:00"
+            },
+            {
+                id: 5,
+                idPet: 105,
+                nomePet: "Thor",
+                idColaborador: 202,
+                nomeColaborador: "Dra. Ana Oliveira",
+                idUsuario: 305,
+                nomeUsuario: "Ricardo Souza",
+                peso: 25.8,
+                dataHora: "2025-05-18T16:30:00",
+                medicamento: "Vitamina B12",
+                diagnostico: "Anemia leve",
+                observacao: "Incluir suplemento na dieta diária",
+                dataCadastro: "2025-05-17T14:50:00"
+            }
+        ];
+        
+        // Função para formatar a data
+        function formatarData(dataString) {
+            const data = new Date(dataString);
+            return data.toLocaleString('pt-BR');
+        }
+        
+        // Função para preencher a tabela com os dados
+        function preencherTabela(dados) {
+            const tbody = document.querySelector('#tabela-atendimentos tbody');
+            tbody.innerHTML = '';
+            
+            dados.forEach(atendimento => {
+                const tr = document.createElement('tr');
+                
+                tr.innerHTML = `
+                    <td>${atendimento.id}</td>
+                    <td>${atendimento.nomePet}</td>
+                    <td>${atendimento.nomeColaborador}</td>
+                    <td>${atendimento.nomeUsuario}</td>
+                    <td>${atendimento.peso.toFixed(2)}</td>
+                    <td>${formatarData(atendimento.dataHora)}</td>
+                    <td>${atendimento.medicamento}</td>
+                    <td>${atendimento.diagnostico}</td>
+                    <td>${atendimento.observacao}</td>
+                    <td>${formatarData(atendimento.dataCadastro)}</td>
+                    <td class="actions">
+                        <button class="view-btn" onclick="visualizarAtendimento(${atendimento.id})"><i class="fas fa-eye"></i> Ver</button>
+                        <button class="edit-btn" onclick="editarAtendimento(${atendimento.id})"><i class="fas fa-edit"></i> Editar</button>
+                        <button class="delete-btn" onclick="excluirAtendimento(${atendimento.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                `;
+                
+                tbody.appendChild(tr);
+            });
+            
+            // Adicionar listeners aos botões de ação
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', () => visualizarAtendimento(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => editarAtendimento(btn.dataset.id));
+            });
+            
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => excluirAtendimento(btn.dataset.id));
+            });
+        }
+        
+        // Função para pesquisar atendimentos
+        function pesquisarAtendimentos() {
+            const termoPesquisa = document.getElementById('pesquisar').value.toLowerCase();
+            
+            if (termoPesquisa.trim() === '') {
+                preencherTabela(atendimentos);
+                return;
+            }
+            
+            const resultados = atendimentos.filter(atendimento => 
+                atendimento.nomePet.toLowerCase().includes(termoPesquisa) ||
+                atendimento.nomeUsuario.toLowerCase().includes(termoPesquisa) ||
+                atendimento.diagnostico.toLowerCase().includes(termoPesquisa)
+            );
+            
+            preencherTabela(resultados);
+        }
+        
+        // Funções para ações nos atendimentos
+        function visualizarAtendimento(id) {
+            alert(`Visualizando detalhes do atendimento ID: ${id}`);
+            // Aqui você adicionaria código para abrir uma modal ou redirecionar para a página de detalhes
+        }
+        
+        function editarAtendimento(id) {
+            alert(`Editando atendimento ID: ${id}`);
+            // Aqui você adicionaria código para abrir formulário de edição ou redirecionar para página de edição
+        }
+        
+        function excluirAtendimento(id) {
+            if (confirm(`Tem certeza que deseja excluir o atendimento ID: ${id}?`)) {
+                // Aqui você implementaria a lógica para excluir o registro
+                alert(`Atendimento ID: ${id} excluído com sucesso!`);
+                // Remover da lista de atendimentos e atualizar a tabela
+                const index = atendimentos.findIndex(a => a.id == id);
+                if (index !== -1) {
+                    atendimentos.splice(index, 1);
+                    preencherTabela(atendimentos);
+                }
+            }
+        }
+        
+        // Função para exportar para PDF
+        function exportarPDF() {
+            alert('Exportando dados para PDF...');
+            // Aqui seria implementada a lógica para gerar um PDF com a biblioteca adequada
+            // Como exemplo, podemos simular um alerta de sucesso
+            setTimeout(() => {
+                alert('Arquivo PDF gerado com sucesso!');
+            }, 1000);
+        }
+        
+        // Função para adicionar novo atendimento
+        function novoAtendimento() {
+            window.location.href = 'cadastro_atendimento.html';
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            preencherTabela(atendimentos);
+            
+            document.getElementById('btn-pesquisar').addEventListener('click', pesquisarAtendimentos);
+            document.getElementById('pesquisar').addEventListener('keyup', event => {
+                if (event.key === 'Enter') {
+                    pesquisarAtendimentos();
+                }
+            });
+            
+            document.getElementById('exportar-pdf').addEventListener('click', exportarPDF);
+            document.getElementById('novo-atendimento').addEventListener('click', novoAtendimento);
+            
+            // Paginação (simplificada para demonstração)
+            document.querySelectorAll('.page-number').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelector('.page-number.active').classList.remove('active');
+                    this.classList.add('active');
+                    // Aqui você implementaria a lógica para carregar a página correspondente
+                });
+            });
+            
+            document.getElementById('prev-page').addEventListener('click', () => {
+                const activePage = document.querySelector('.page-number.active');
+                const prevPage = activePage.previousElementSibling;
+                if (prevPage && prevPage.classList.contains('page-number')) {
+                    activePage.classList.remove('active');
+                    prevPage.classList.add('active');
+                    // Aqui você implementaria a lógica para carregar a página anterior
+                }
+            });
+            
+            document.getElementById('next-page').addEventListener('click', () => {
+                const activePage = document.querySelector('.page-number.active');
+                const nextPage = activePage.nextElementSibling;
+                if (nextPage && nextPage.classList.contains('page-number')) {
+                    activePage.classList.remove('active');
+                    nextPage.classList.add('active');
+                    // Aqui você implementaria a lógica para carregar a próxima página
+                }
+            });
+        });
+    </script>
+</body>
+</html>

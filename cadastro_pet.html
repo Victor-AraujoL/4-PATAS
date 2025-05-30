@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação 4 Patas - Cadastro de Pets</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8b6b4f;
+            --primary-hover: #795f46;
+            --secondary-color: #a4826f;
+            --secondary-hover: #8c6d4f;
+            --accent-color: #d1ba9d;
+            --background-light: #f5f0e6;
+            --text-color: #333;
+            --text-light: #666;
+            --success-color: #4caf50;
+            --error-color: #c25e48;
+            --gray-light: #f4f4f4;
+            --gray-medium: #ddd;
+            --border-radius: 0.375rem;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.5;
+            background: linear-gradient(135deg, #c8b6a6, #a4826f);
+        }
+        
+        .close-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: none;
+        }
+        
+        .close-button:hover {
+            background-color: var(--primary-hover);
+            transform: scale(1.1);
+        }
+
+        .paws {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        .paw1 {
+            top: 10%;
+            left: 15%;
+            transform: rotate(45deg);
+            font-size: 8rem;
+        }
+
+        .paw2 {
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-20deg);
+            font-size: 10rem;
+        }
+
+        .paw3 {
+            top: 40%;
+            right: 25%;
+            transform: rotate(15deg);
+            font-size: 6rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background-color: #f9f6f2;
+            border-radius: 1rem;
+            box-shadow: 0 12px 30px rgba(133, 104, 73, 0.4);
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .header-logo {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+            object-fit: contain;
+        }
+        
+        .header-text {
+            text-align: left;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .header p {
+            color: var(--gray-500);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            background-color: #f9f6f2;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .section-header i {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            color: var(--primary-color);
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            color: var(--gray-800);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group.span-2 {
+            grid-column: span 2;
+        }
+
+        .form-group.span-3 {
+            grid-column: span 3;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        .form-group label.required::after {
+            content: "*";
+            color: var(--error-color);
+            margin-left: 0.25rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .form-control:disabled {
+            background-color: var(--gray-100);
+            cursor: not-allowed;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
+            padding-right: 2.5rem;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .radio-option input {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .photo-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .photo-preview {
+            width: 180px;
+            height: 180px;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--gray-100);
+            border: 2px dashed var(--gray-300);
+            margin-bottom: 1rem;
+        }
+
+        .photo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+        }
+
+        .photo-preview .placeholder {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        .photo-preview .placeholder i {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.625rem 1.25rem;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .file-input-label:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .file-input-label i {
+            margin-right: 0.5rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+        }
+
+        .btn i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            border: 1px solid transparent;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+            border: 1px solid transparent;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--secondary-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+
+        .btn-lg {
+            padding: 0.875rem 1.75rem;
+            font-size: 1.125rem;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .alert-success {
+            background-color: rgba(139, 107, 79, 0.1);
+            border-left: 4px solid var(--success-color);
+            color: var(--primary-color);
+        }
+
+        .alert-error {
+            background-color: rgba(194, 94, 72, 0.1);
+            border-left: 4px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .alert i {
+            font-size: 1.25rem;
+            margin-right: 0.75rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.span-2, .form-group.span-3 {
+                grid-column: span 1;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
+    
+    <button class="close-button" onclick="window.location.href='index.html';" title="Cancelar e voltar para a página inicial">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <img src="assets/logo.png.png" alt="Logo 4 Patas" class="header-logo">
+                <div class="header-text">
+                    <h1>Cadastro de Pet</h1>
+                    <p>Preencha os dados para cadastrar um novo pet</p>
+                </div>
+            </div>
+
+            <div id="message-container"></div>
+
+            <form id="petForm">
+                <!-- Seção de Identificação do Pet -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i class="fas fa-paw"></i>
+                        <h2>Identificação do Pet</h2>
+                    </div>
+
+                    <div class="photo-upload">
+                        <div class="photo-preview">
+                            <div id="photo-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <span>Adicionar foto</span>
+                            </div>
+                            <img id="preview-image" src="#" alt="Preview da foto do pet" style="display: none;">
+                        </div>
+                        <label for="pet-photo" class="file-input-label">
+                            <i class="fas fa-upload"></i>
+                            Selecionar Foto
+                            <input type="file" id="pet-photo" class="file-input" accept="image/*">
+                        </label>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="pet-id">ID Pet</label>
+                            <input type="text" id="pet-id" class="form-control" placeholder="Gerado automaticamente" disabled>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-name" class="required">Nome do Pet</label>
+                            <input type="text" id="pet-name" name="petName" class="form-control" placeholder="Nome do pet" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-species" class="required">Espécie</label>
+                            <select id="pet-species" name="petSpecies" class="form-control" required>
+                                <option value="">Selecione uma espécie</option>
+                                <option value="cachorro">Cachorro</option>
+                                <option value="gato">Gato</option>
+                                <option value="ave">Ave</option>
+                                <option value="réptil">Réptil</option>
+                                <option value="roedor">Roedor</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-breed">Raça</label>
+                            <input type="text" id="pet-breed" name="petBreed" class="form-control" placeholder="Raça do pet">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-color">Cor</label>
+                            <input type="text" id="pet-color" name="petColor" class="form-control" placeholder="Cor predominante">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-size">Porte</label>
+                            <select id="pet-size" name="petSize" class="form-control">
+                                <option value="">Selecione o porte</option>
+                                <option value="pequeno">Pequeno</option>
+                                <option value="médio">Médio</option>
+                                <option value="grande">Grande</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-age">Idade</label>
+                            <input type="text" id="pet-age" name="petAge" class="form-control" placeholder="ex: 2 anos">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-weight">Peso (kg)</label>
+                            <input type="number" id="pet-weight" name="petWeight" class="form-control" placeholder="0.00" step="0.01" min="0">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sexo</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="petGender" value="macho" checked> Macho
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="petGender" value="fêmea"> Fêmea
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-status">Situação de Adoção</label>
+                            <select id="pet-status" name="petStatus" class="form-control">
+                                <option value="disponível">Disponível</option>
+                                <option value="em processo">Em Processo</option>
+                                <option value="adotado">Adotado</option>
+                                <option value="não disponível">Não Disponível</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-registry-status">Status do Cadastro</label>
+                            <select id="pet-registry-status" name="petRegistryStatus" class="form-control">
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-origin">Origem</label>
+                            <input type="text" id="pet-origin" name="petOrigin" class="form-control" placeholder="Como o pet chegou até aqui">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="pet-registry-date">Data do Cadastro</label>
+                            <input type="date" id="pet-registry-date" name="petRegistryDate" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group span-3">
+                        <label for="pet-characteristics">Características</label>
+                        <textarea id="pet-characteristics" name="petCharacteristics" class="form-control" placeholder="Descreva características especiais, comportamento, necessidades específicas, etc."></textarea>
+                    </div>
+                </div>
+
+                <!-- Seção de Dados do Tutor -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <i class="fas fa-user"></i>
+                        <h2>Dados do Tutor</h2>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group span-2">
+                            <label for="tutor-name" class="required">Nome do Tutor</label>
+                            <input type="text" id="tutor-name" class="form-control" placeholder="Nome completo do responsável pelo pet" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-cpf" class="required">CPF</label>
+                            <input type="text" id="tutor-cpf" class="form-control" placeholder="000.000.000-00" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-phone" class="required">Telefone</label>
+                            <input type="tel" id="tutor-phone" class="form-control" placeholder="(00) 00000-0000" required>
+                        </div>
+
+                        <div class="form-group span-2">
+                            <label for="tutor-email">E-mail</label>
+                            <input type="email" id="tutor-email" class="form-control" placeholder="email@exemplo.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-cep" class="required">CEP</label>
+                            <input type="text" id="tutor-cep" class="form-control" placeholder="00000-000" required>
+                        </div>
+
+                        <div class="form-group span-2">
+                            <label for="tutor-logradouro" class="required">Logradouro</label>
+                            <input type="text" id="tutor-logradouro" class="form-control" placeholder="Rua, Avenida, etc." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-numero" class="required">Número</label>
+                            <input type="text" id="tutor-numero" class="form-control" placeholder="Nº" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-complemento">Complemento</label>
+                            <input type="text" id="tutor-complemento" class="form-control" placeholder="Apartamento, bloco, etc.">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-cidade" class="required">Cidade</label>
+                            <input type="text" id="tutor-cidade" class="form-control" placeholder="Cidade" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-estado" class="required">Estado</label>
+                            <select id="tutor-estado" class="form-control" required>
+                                <option value="">Selecione</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tutor-relationship">Relação com o Pet</label>
+                            <select id="tutor-relationship" class="form-control">
+                                <option value="">Selecione</option>
+                                <option value="Proprietário">Proprietário</option>
+                                <option value="Familiar">Familiar</option>
+                                <option value="Cuidador">Cuidador</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Salvar Pet
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btn-limpar">
+                        <i class="fas fa-eraser"></i> Limpar Formulário
+                    </button>
+                </div>
+
+                <script>
+                    document.getElementById('btn-limpar').addEventListener('click', function() {
+                        document.querySelector('form').reset();
+                        alert('Formulário limpo com sucesso!');
+                    });
+                </script>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Definir data atual no campo de data do cadastro
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('pet-registry-date').value = today;
+            
+            // Preview da foto do pet
+            const photoInput = document.getElementById('pet-photo');
+            const previewImage = document.getElementById('preview-image');
+            const photoPlaceholder = document.getElementById('photo-placeholder');
+            
+            photoInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        previewImage.src = event.target.result;
+                        previewImage.style.display = 'block';
+                        photoPlaceholder.style.display = 'none';
+                    }
+                    
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+            
+            // Reset do formulário
+            const resetBtn = document.getElementById('resetBtn');
+            const petForm = document.getElementById('petForm');
+            
+            resetBtn.addEventListener('click', function() {
+                petForm.reset();
+                document.getElementById('pet-registry-date').value = today;
+                previewImage.style.display = 'none';
+                photoPlaceholder.style.display = 'flex';
+                clearMessage();
+            });
+            
+            // Função para exibir mensagens
+            function showMessage(message, type) {
+                const container = document.getElementById('message-container');
+                const icon = type === 'success' ? 'check-circle' : 'exclamation-circle';
+                
+                container.innerHTML = `
+                    <div class="alert alert-${type}">
+                        <i class="fas fa-${icon}"></i>
+                        <span>${message}</span>
+                    </div>
+                `;
+                
+                // Scroll para o topo para ver a mensagem
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+            
+            function clearMessage() {
+                document.getElementById('message-container').innerHTML = '';
+            }
+            
+            // Submissão do formulário
+            petForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Adicionar classe de carregamento ao botão
+                const submitBtn = document.getElementById('submitBtn');
+                const originalBtnContent = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading"></span>Processando...';
+                submitBtn.disabled = true;
+                
+                // Validar campos obrigatórios
+                const requiredFields = ['pet-name', 'pet-species', 'tutor-name', 'tutor-phone'];
+                let hasError = false;
+                
+                requiredFields.forEach(field => {
+                    const input = document.getElementById(field);
+                    if (!input.value.trim()) {
+                        input.style.borderColor = 'var(--error-color)';
+                        hasError = true;
+                    } else {
+                        input.style.borderColor = '';
+                    }
+                });
+                
+                if (hasError) {
+                    showMessage('Por favor, preencha todos os campos obrigatórios.', 'error');
+                    submitBtn.innerHTML = originalBtnContent;
+                    submitBtn.disabled = false;
+                    return;
+                }
+                
+                // Simulação de envio para API
+                setTimeout(function() {
+                    // Gerar um ID fictício para o pet
+                    const randomId = 'PET' + Math.floor(10000 + Math.random() * 90000);
+                    document.getElementById('pet-id').value = randomId;
+                    
+                    showMessage('Pet cadastrado com sucesso!', 'success');
+                    submitBtn.innerHTML = originalBtnContent;
+                    submitBtn.disabled = false;
+                    
+                    // Opcional: resetar o formulário após cadastro bem-sucedido
+                    // petForm.reset();
+                    // document.getElementById('pet-registry-date').value = today;
+                    // previewImage.style.display = 'none';
+                    // photoPlaceholder.style.display = 'flex';
+                }, 1500);
+            });
+            
+            // Máscara para telefone
+            const phoneInput = document.getElementById('tutor-phone');
+            phoneInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                
+                if (value.length <= 10) {
+                    // Formato (XX) XXXX-XXXX
+                    value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+                } else {
+                    // Formato (XX) XXXXX-XXXX
+                    value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+                }
+                
+                e.target.value = value;
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação 4 Patas - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #a4826f, #8b5e3c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 0;
+        }
+        
+        .paws {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .paw1 {
+            top: 10%;
+            left: 15%;
+            transform: rotate(45deg);
+            font-size: 8rem;
+        }
+        
+        .paw2 {
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-20deg);
+            font-size: 10rem;
+        }
+        
+        .paw3 {
+            top: 40%;
+            right: 25%;
+            transform: rotate(15deg);
+            font-size: 6rem;
+        }
+        
+        .container {
+            background-color: rgba(249, 246, 242, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            width: 400px;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .btn-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #8b5e3c;
+            transition: color 0.3s;
+        }
+        
+        .btn-close:hover {
+            color: #a4826f;
+        }
+        
+        .logo {
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+        
+        h1 {
+            color: #8b5e3c;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        input:focus {
+            border-color: #a4826f;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(164, 130, 111, 0.2);
+        }
+        
+        .btn {
+            background-color: #a4826f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background-color: #8b5e3c;
+        }
+        
+        .links {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .links a {
+            color: #a4826f;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .links a:hover {
+            color: #8b5e3c;
+            text-decoration: underline;
+        }
+        
+        .paws {
+            position: absolute;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .paw1 {
+            top: 10%;
+            left: 15%;
+            transform: rotate(45deg);
+            font-size: 8rem;
+        }
+        
+        .paw2 {
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-20deg);
+            font-size: 10rem;
+        }
+        
+        .paw3 {
+            top: 40%;
+            right: 25%;
+            transform: rotate(15deg);
+            font-size: 6rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
+    
+    <div class="container">
+        <button class="btn-close" onclick="window.location.href='index.html'">&times;</button>
+        <div class="logo">
+            <img src="assets/logo.png.png" alt="Associação 4 Patas" style="width: 100px; height: auto; object-fit: contain;">
+        </div>
+        <h1>Associação 4 Patas</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" required placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" name="password" required placeholder="********">
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+        </form>
+        <div class="links">
+            <a href="recuperar_senha.html">Esqueceu a senha?</a>
+            <a href="cadastro_usuario.html">Criar conta</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Simulação de autenticação
+            if (email && password) {
+                // Em um cenário real, você enviaria uma requisição para seu backend
+                console.log('Tentativa de login:', { email });
+                
+                // Simulando um login bem-sucedido
+                localStorage.setItem('loggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                
+                // Redirecionamento para a página de listagem de pets (que será criada depois)
+                alert('Login realizado com sucesso!');
+                window.location.href = 'index.html';
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        });
+    </script>
+</body>
+</html>

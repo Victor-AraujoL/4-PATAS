@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação 4 Patas - Cadastro de Atendimento</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #c8b6a6, #a4826f);
+            line-height: 1.6;
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .close-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #8b6b4f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: none;
+        }
+        
+        .close-button:hover {
+            background-color: #795f46;
+            transform: scale(1.1);
+        }
+        
+        .paws {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .paw1 {
+            top: 10%;
+            left: 15%;
+            transform: rotate(45deg);
+            font-size: 8rem;
+        }
+        
+        .paw2 {
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-20deg);
+            font-size: 10rem;
+        }
+        
+        .paw3 {
+            top: 40%;
+            right: 25%;
+            transform: rotate(15deg);
+            font-size: 6rem;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #f9f6f2;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 12px 30px rgba(133, 104, 73, 0.4);
+        }
+        
+        header {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #d8c9b9;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+        }
+        
+        .header-logo {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+        }
+        
+        header h1 {
+            color: #8b6b4f;
+            font-size: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #8b6b4f;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d8c9b9;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #8b6b4f;
+            box-shadow: 0 0 5px rgba(139, 107, 79, 0.3);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+        }
+        
+        .btn-primary {
+            background-color: #8b6b4f;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #a4826f;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+        
+        .btn-secondary {
+            background-color: #6d4c33;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #8b6b4f;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+        
+        .required::after {
+            content: " *";
+            color: #a4826f;
+        }
+        
+        .invalid-feedback {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        input.is-invalid, select.is-invalid, textarea.is-invalid {
+            border-color: #dc3545;
+        }
+        
+        input.is-invalid + .invalid-feedback, 
+        select.is-invalid + .invalid-feedback, 
+        textarea.is-invalid + .invalid-feedback {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
+    
+    <button class="close-button" onclick="window.location.href='index.html';" title="Cancelar e voltar para a página inicial">
+        <i class="fas fa-times"></i>
+    </button>
+    <div class="container">
+        <header>
+            <img src="assets/logo.png.png" alt="Logo 4 Patas" class="header-logo">
+            <h1>Cadastro de Atendimento</h1>
+        </header>
+        
+        <form id="form-atendimento">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="pet" class="required">Pet</label>
+                    <select id="pet" name="idPet" required>
+                        <option value="">Selecione o Pet</option>
+                        <!-- Dados serão carregados via JavaScript -->
+                    </select>
+                    <div class="invalid-feedback">Por favor, selecione um pet.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="colaborador" class="required">Colaborador</label>
+                    <select id="colaborador" name="idColaborador" required>
+                        <option value="">Selecione o Colaborador</option>
+                        <!-- Dados serão carregados via JavaScript -->
+                    </select>
+                    <div class="invalid-feedback">Por favor, selecione um colaborador.</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="usuario" class="required">Responsável</label>
+                    <select id="usuario" name="idUsuario" required>
+                        <option value="">Selecione o Responsável</option>
+                        <!-- Dados serão carregados via JavaScript -->
+                    </select>
+                    <div class="invalid-feedback">Por favor, selecione um responsável.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="peso" class="required">Peso (kg)</label>
+                    <input type="number" id="peso" name="peso" step="0.01" min="0" required>
+                    <div class="invalid-feedback">Por favor, informe o peso do animal.</div>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="dataHora" class="required">Data e Hora</label>
+                    <input type="datetime-local" id="dataHora" name="dataHora" required>
+                    <div class="invalid-feedback">Por favor, selecione uma data e hora.</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="medicamento">Medicamento</label>
+                    <input type="text" id="medicamento" name="medicamento">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="diagnostico" class="required">Diagnóstico</label>
+                <textarea id="diagnostico" name="diagnostico" required></textarea>
+                <div class="invalid-feedback">Por favor, informe o diagnóstico.</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="observacao">Observação</label>
+                <textarea id="observacao" name="observacao"></textarea>
+            </div>
+            
+            <div class="form-actions">
+                <button type="button" id="btn-cancelar" class="btn-secondary"><i class="fas fa-eraser"></i> Limpar Formulário</button>
+                <button type="submit" class="btn-primary">Salvar</button>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Dados de exemplo para carregar os selects
+        const pets = [
+            { id: 101, nome: "Rex", especie: "Cachorro", raca: "Labrador" },
+            { id: 102, nome: "Luna", especie: "Gato", raca: "Siamês" },
+            { id: 103, nome: "Milo", especie: "Cachorro", raca: "Bulldog" },
+            { id: 104, nome: "Bella", especie: "Cachorro", raca: "Golden Retriever" },
+            { id: 105, nome: "Thor", especie: "Cachorro", raca: "Pastor Alemão" }
+        ];
+        
+        const colaboradores = [
+            { id: 201, nome: "Dr. Carlos Silva", cargo: "Veterinário(a)" },
+            { id: 202, nome: "Dra. Ana Oliveira", cargo: "Veterinário(a)" },
+            { id: 203, nome: "Dr. Marcos Santos", cargo: "Veterinário(a)" },
+            { id: 204, nome: "Juliana Costa", cargo: "Auxiliar Veterinário" },
+            { id: 205, nome: "Roberto Almeida", cargo: "Recepcionista" }
+        ];
+        
+        const usuarios = [
+            { id: 301, nome: "Maria Silva", telefone: "(11) 98765-4321" },
+            { id: 302, nome: "João Pereira", telefone: "(11) 91234-5678" },
+            { id: 303, nome: "Fernanda Costa", telefone: "(11) 99876-5432" },
+            { id: 304, nome: "Luciana Mendes", telefone: "(11) 94567-8901" },
+            { id: 305, nome: "Ricardo Souza", telefone: "(11) 92345-6789" }
+        ];
+        
+        // Função para carregar os selects com os dados
+        function carregarSelects() {
+            const selectPet = document.getElementById('pet');
+            const selectColaborador = document.getElementById('colaborador');
+            const selectUsuario = document.getElementById('usuario');
+            
+            // Carregar pets
+            pets.forEach(pet => {
+                const option = document.createElement('option');
+                option.value = pet.id;
+                option.textContent = `${pet.nome} (${pet.especie} - ${pet.raca})`;
+                selectPet.appendChild(option);
+            });
+            
+            // Carregar colaboradores
+            colaboradores.forEach(colaborador => {
+                const option = document.createElement('option');
+                option.value = colaborador.id;
+                option.textContent = `${colaborador.nome} (${colaborador.cargo})`;
+                selectColaborador.appendChild(option);
+            });
+            
+            // Carregar usuários
+            usuarios.forEach(usuario => {
+                const option = document.createElement('option');
+                option.value = usuario.id;
+                option.textContent = `${usuario.nome} - ${usuario.telefone}`;
+                selectUsuario.appendChild(option);
+            });
+        }
+        
+        // Função para definir a data e hora atual como valor padrão
+        function definirDataHoraAtual() {
+            const dataHoraInput = document.getElementById('dataHora');
+            const agora = new Date();
+            
+            // Formatar a data para o formato esperado pelo input datetime-local
+            const ano = agora.getFullYear();
+            const mes = String(agora.getMonth() + 1).padStart(2, '0');
+            const dia = String(agora.getDate()).padStart(2, '0');
+            const hora = String(agora.getHours()).padStart(2, '0');
+            const minuto = String(agora.getMinutes()).padStart(2, '0');
+            
+            const dataFormatada = `${ano}-${mes}-${dia}T${hora}:${minuto}`;
+            dataHoraInput.value = dataFormatada;
+        }
+        
+        // Função para validar o formulário
+        function validarFormulario(form) {
+            let formValido = true;
+            
+            // Verificar campos obrigatórios
+            form.querySelectorAll('[required]').forEach(campo => {
+                if (!campo.value.trim()) {
+                    campo.classList.add('is-invalid');
+                    formValido = false;
+                } else {
+                    campo.classList.remove('is-invalid');
+                }
+            });
+            
+            // Validação específica para o campo de peso
+            const pesoInput = form.querySelector('#peso');
+            if (pesoInput.value && parseFloat(pesoInput.value) <= 0) {
+                pesoInput.classList.add('is-invalid');
+                pesoInput.nextElementSibling.textContent = "O peso deve ser maior que zero.";
+                formValido = false;
+            }
+            
+            return formValido;
+        }
+        
+        // Função para salvar o atendimento
+        function salvarAtendimento(form) {
+            // Aqui você implementaria a lógica para enviar os dados para o servidor
+            // Por enquanto, apenas simularemos o envio
+            
+            // Coletar os dados do formulário
+            const formData = new FormData(form);
+            const atendimento = {
+                idPet: formData.get('idPet'),
+                idColaborador: formData.get('idColaborador'),
+                idUsuario: formData.get('idUsuario'),
+                peso: formData.get('peso'),
+                dataHora: formData.get('dataHora'),
+                medicamento: formData.get('medicamento'),
+                diagnostico: formData.get('diagnostico'),
+                observacao: formData.get('observacao'),
+                dataCadastro: new Date().toISOString() // Data atual
+            };
+            
+            // Simular o envio para o servidor
+            console.log('Atendimento a ser salvo:', atendimento);
+            
+            // Simular sucesso após 1 segundo
+            setTimeout(() => {
+                alert('Atendimento cadastrado com sucesso!');
+                // Redirecionar para a página de listagem
+                window.location.href = 'index.html';
+            }, 1000);
+        }
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarSelects();
+            definirDataHoraAtual();
+            
+            const form = document.getElementById('form-atendimento');
+            
+            // Listener para o evento de submit do formulário
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                
+                if (validarFormulario(form)) {
+                    salvarAtendimento(form);
+                }
+            });
+            
+            // Listener para o botão de limpar formulário
+            document.getElementById('btn-cancelar').addEventListener('click', () => {
+                form.reset();
+                alert('Formulário limpo com sucesso!');
+            });
+            
+            // Validação em tempo real ao sair do campo
+            form.querySelectorAll('input, select, textarea').forEach(campo => {
+                campo.addEventListener('blur', () => {
+                    if (campo.hasAttribute('required') && !campo.value.trim()) {
+                        campo.classList.add('is-invalid');
+                    } else {
+                        campo.classList.remove('is-invalid');
+                    }
+                });
+            });
+            
+            // Validação específica para o campo de peso
+            const pesoInput = document.getElementById('peso');
+            pesoInput.addEventListener('blur', () => {
+                if (pesoInput.value && parseFloat(pesoInput.value) <= 0) {
+                    pesoInput.classList.add('is-invalid');
+                    pesoInput.nextElementSibling.textContent = "O peso deve ser maior que zero.";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

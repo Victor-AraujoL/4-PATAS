@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação 4 Patas - Gerenciamento de Pets</title>
+    <style>
+        :root {
+            --primary: #8b6b4f;
+            --primary-dark: #a4826f;
+            --secondary: #f9f6f2;
+            --dark: #6d4c33;
+            --light: #fff;
+            --gray: #ccc;
+            --danger: #ff4444;
+            --success: #8b6b4f;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #c8b6a6, #a4826f);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .paws {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .paw1 {
+            top: 10%;
+            left: 15%;
+            transform: rotate(45deg);
+            font-size: 8rem;
+        }
+        
+        .paw2 {
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-20deg);
+            font-size: 10rem;
+        }
+        
+        .paw3 {
+            top: 40%;
+            right: 25%;
+            transform: rotate(15deg);
+            font-size: 6rem;
+        }
+        
+        header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(133, 104, 73, 0.25);
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-name {
+            font-weight: 500;
+        }
+        
+        .logout-btn {
+            background-color: var(--light);
+            color: var(--primary);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #f9f6f2;
+        }
+        
+        .btn-save {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+        }
+        
+        .left-side, .right-side {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .right-side {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: var(--dark);
+            color: var(--light);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+            font-weight: 500;
+        }
+        
+        .back-btn:hover {
+            background-color: #8b6b4f;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .add-btn, .export-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+        }
+        
+        .add-btn {
+            background-color: var(--success);
+            color: var(--light);
+        }
+        
+        .add-btn:hover {
+            background-color: #a4826f;
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+        
+        .export-btn {
+            background-color: var(--primary);
+            color: var(--light);
+        }
+        
+        .export-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+        
+        .search-bar {
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .filter-btn {
+            background-color: var(--primary);
+            color: var(--light);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 1200px) {
+            .pets-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .pets-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .pet-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .pet-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(133, 104, 73, 0.4);
+        }
+        
+        .pet-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+        }
+        
+        .pet-info {
+            padding: 1rem;
+        }
+        
+        .pet-name {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .pet-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .pet-detail {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .pet-detail-label {
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            text-align: center;
+        }
+        
+        .status-adopted {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .status-available {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+        
+        .pagination button {
+            background-color: #f9f6f2;
+            border: 1px solid var(--gray);
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .pagination button.active {
+            background-color: var(--primary);
+            color: var(--light);
+            border-color: var(--primary);
+            box-shadow: 0 4px 8px rgba(133, 104, 73, 0.25);
+        }
+        
+        .pagination button:hover:not(.active) {
+            background-color: #f9f6f2;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(249, 246, 242, 0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: var(--light);
+            border-radius: 8px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+            .content-container {
+                flex: 1;
+                overflow-y: auto;
+                padding: 2rem;
+                background-color: #f9f6f2;
+            }
+        }
+        
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #aaa;
+        }
+        
+        .close-modal:hover {
+            color: var(--dark);
+        }
+        
+        .modal-title {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: var(--light);
+        }
+        
+        .form-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .btn-cancel {
+            background-color: #f9f6f2;
+            border: 1px solid var(--gray);
+            color: var(--dark);
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-cancel:hover {
+            background-color: #f9f6f2;
+        }
+        
+        .btn-save {
+            background-color: var(--primary);
+            color: var(--light);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn-save:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+        
+        footer {
+            background-color: var(--primary);
+            color: var(--light);
+            text-align: center;
+            padding: 1rem;
+            margin-top: auto;
+            box-shadow: 0 -4px 8px rgba(133, 104, 73, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
+    <header>
+        <div class="header-container">
+            <div class="left-side">
+                <div class="logo">
+                    <img src="assets/logo.png.png" alt="Logo 4 Patas" style="width: 50px; height: 50px; object-fit: contain;">
+                </div>
+                <button class="back-btn" id="backBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                    Voltar ao Menu
+                </button>
+            </div>
+            <div class="right-side">
+                <div class="action-buttons">
+                    <a href="cadastro_pet.html" class="add-btn" id="addPetBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                        </svg>
+                        Adicionar Pet
+                    </a>
+                    <button class="export-btn" id="exportPdfBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
+                        </svg>
+                        Exportar PDF
+                    </button>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">Olá, Usuário</span>
+                    <button class="logout-btn">Sair</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Buscar pet por nome, espécie, raça...">
+            <button class="filter-btn" id="filterBtn">Filtrar</button>
+        </div>
+        
+        <div class="pets-grid" id="petsGrid">
+            <!-- Os cartões de pets serão gerados dinamicamente pelo JavaScript -->
+        </div>
+        
+        <div class="pagination" id="pagination">
+            <button>1</button>
+            <button class="active">2</button>
+            <button>3</button>
+            <button>></button>
+        </div>
+    </main>
+    
+    <!-- Modal para adicionar/editar pet -->
+    <div class="modal" id="petModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeModal">&times;</button>
+            <h2 class="modal-title" id="modalTitle">Adicionar Novo Pet</h2>
+            <form id="petForm">
+                <input type="hidden" id="petId">
+                <div class="form-group">
+                    <label class="form-label" for="petName">Nome</label>
+                    <input type="text" class="form-control" id="petName" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petSpecies">Espécie</label>
+                    <select class="form-select" id="petSpecies" required>
+                        <option value="">Selecione</option>
+                        <option value="Cachorro">Cachorro</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Ave">Ave</option>
+                        <option value="Roedor">Roedor</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petBreed">Raça</label>
+                    <input type="text" class="form-control" id="petBreed">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petColor">Cor</label>
+                    <input type="text" class="form-control" id="petColor">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petSize">Porte</label>
+                    <select class="form-select" id="petSize" required>
+                        <option value="">Selecione</option>
+                        <option value="P">Pequeno</option>
+                        <option value="M">Médio</option>
+                        <option value="G">Grande</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petAge">Idade (em meses)</label>
+                    <input type="number" class="form-control" id="petAge" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petWeight">Peso (kg)</label>
+                    <input type="number" class="form-control" id="petWeight" step="0.01" min="0">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petCharacteristics">Características</label>
+                    <textarea class="form-control" id="petCharacteristics" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petAdoptionStatus">Situação de Adoção</label>
+                    <select class="form-select" id="petAdoptionStatus" required>
+                        <option value="">Selecione</option>
+                        <option value="Disponível">Disponível para adoção</option>
+                        <option value="Adotado">Já adotado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petNeutered">Castrado</label>
+                    <select class="form-select" id="petNeutered">
+                        <option value="S">Sim</option>
+                        <option value="N">Não</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petSex">Sexo</label>
+                    <select class="form-select" id="petSex" required>
+                        <option value="">Selecione</option>
+                        <option value="M">Macho</option>
+                        <option value="F">Fêmea</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petOrigin">Origem</label>
+                    <input type="text" class="form-control" id="petOrigin">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petPhoto">Foto</label>
+                    <input type="file" class="form-control" id="petPhoto" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Endereço</label>
+                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                        <input type="text" class="form-control" id="petAddress" placeholder="Logradouro">
+                        <input type="text" class="form-control" id="petNumber" placeholder="Número">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="petComplement" placeholder="Complemento">
+                </div>
+                <div class="form-group">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <input type="text" class="form-control" id="petNeighborhood" placeholder="Bairro">
+                        <input type="text" class="form-control" id="petCity" placeholder="Cidade">
+                        <input type="text" class="form-control" id="petState" placeholder="Estado">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petPhone">Telefone</label>
+                    <input type="text" class="form-control" id="petPhone" placeholder="(00) 00000-0000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="petResponsible">Responsável</label>
+                    <input type="text" class="form-control" id="petResponsible">
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
+                    <button type="submit" class="btn-save">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        &copy; 2025 Sistema Pet - Todos os direitos reservados
+    </footer>
+
+    <script>
+        // Dados simulados de pets (normalmente viriam do backend)
+        const petsMockData = [
+            {
+                id: 1,
+                nome: "Rex",
+                especie: "Cachorro",
+                raca: "Labrador",
+                cor: "Caramelo",
+                porte: "G",
+                idade: 24,
+                peso: 25.5,
+                caracteristicas: "Dócil, brincalhão e bem treinado",
+                situacao_adocao: "Disponível",
+                castrado: "S",
+                sexo: "M",
+                origem: "Resgate",
+                foto: "https://api.placeholder.com/400/320",
+                logradouro: "Rua das Flores",
+                numero: "123",
+                complemento: "Casa",
+                bairro: "Centro",
+                cidade: "São Paulo",
+                estado: "SP",
+                telefone: "(11) 99999-9999",
+                responsavel: "João Silva",
+                data_cadastro: "2025-05-15T10:30:00"
+            },
+            {
+                id: 2,
+                nome: "Luna",
+                especie: "Gato",
+                raca: "Siamês",
+                cor: "Branco e Marrom",
+                porte: "P",
+                idade: 12,
+                peso: 3.2,
+                caracteristicas: "Calma e independente",
+                situacao_adocao: "Adotado",
+                castrado: "S",
+                sexo: "F",
+                origem: "Doação",
+                foto: "https://api.placeholder.com/400/320",
+                logradouro: "Av. Paulista",
+                numero: "1000",
+                complemento: "Apto 101",
+                bairro: "Bela Vista",
+                cidade: "São Paulo",
+                estado: "SP",
+                telefone: "(11) 98888-8888",
+                responsavel: "Maria Oliveira",
+                data_cadastro: "2025-05-14T14:15:00"
+            },
+            {
+                id: 3,
+                nome: "Bob",
+                especie: "Cachorro",
+                raca: "Vira-lata",
+                cor: "Preto",
+                porte: "M",
+                idade: 36,
+                peso: 15.0,
+                caracteristicas: "Muito amigável e gosta de crianças",
+                situacao_adocao: "Disponível",
+                castrado: "N",
+                sexo: "M",
+                origem: "Resgate",
+                foto: "https://api.placeholder.com/400/320",
+                logradouro: "Rua dos Pinheiros",
+                numero: "456",
+                complemento: "",
+                bairro: "Pinheiros",
+                cidade: "São Paulo",
+                estado: "SP",
+                telefone: "(11) 97777-7777",
+                responsavel: "Pedro Santos",
+                data_cadastro: "2025-05-13T09:45:00"
+            },
+            {
+                id: 4,
+                nome: "Nina",
+                especie: "Gato",
+                raca: "Persa",
+                cor: "Cinza",
+                porte: "P",
+                idade: 18,
+                peso: 4.1,
+                caracteristicas: "Gosta de carinho e dormir",
+                situacao_adocao: "Disponível",
+                castrado: "S",
+                sexo: "F",
+                origem: "Doação",
+                foto: "https://api.placeholder.com/400/320",
+                logradouro: "Rua Augusta",
+                numero: "789",
+                complemento: "Casa 2",
+                bairro: "Consolação",
+                cidade: "São Paulo",
+                estado: "SP",
+                telefone: "(11) 96666-6666",
+                responsavel: "Ana Sousa",
+                data_cadastro: "2025-05-12T16:20:00"
+            },
+            {
+                id: 5,
+                nome: "Max",
+                especie: "Cachorro",
+                raca: "Golden Retriever",
+                cor: "Dourado",
+                porte: "G",
+                idade: 8,
+                peso: 20.7,
+                caracteristicas: "Filhote muito ativo e brincalhão",
+                situacao_adocao: "Adotado",
+                castrado: "N",
+                sexo: "M",
+                origem: "Criador",
+                foto: "https://api.placeholder.com/400/320",
+                logradouro: "Alameda Santos",
+                numero: "222",
+                complemento: "Apto 303",
+                bairro: "Jardins",
+                cidade: "São Paulo",
+                estado: "SP",
+                telefone: "(11) 95555-5555",
+                responsavel: "Carlos Ferreira",
+                data_cadastro: "2025-05-10T11:10:00"
+            },
+            {
+                id: 6,
+                nome: "Mia",
+                especie: "Gato",
+                raca: "Maine Coon",
+                cor: "Mesclado",
+                porte: "M",
+                idade: 30,
+                peso: 6.5,
+                caracteristicas: "Pelagem longa e densa, gosta de brincar",
+                situacao_adocao: "Disponível",
+                castrado: "S",
+                sexo: "F",
+                origem: "Resgate",
+                foto: "https://api.placeholder.com/400/320",
+                logradouro: "Rua Oscar Freire",
+                numero: "333",
+                complemento: "",
+                bairro: "Jardim Paulista",
+                cidade: "São Paulo",
+                estado: "SP",
+                telefone: "(11) 94444-4444",
+                responsavel: "Beatriz Lima",
+                data_cadastro: "2025-05-08T15:30:00"
+            }
+        ];
+
+        // Ordenar os pets por data de cadastro (mais recentes primeiro)
+        const sortedPets = [...petsMockData].sort((a, b) => {
+            return new Date(b.data_cadastro) - new Date(a.data_cadastro);
+        });
+
+        // Formatação da idade dos pets (meses para anos/meses)
+        function formatAge(months) {
+            if (months < 12) {
+                return `${months} meses`;
+            } else {
+                const years = Math.floor(months / 12);
+                const remainingMonths = months % 12;
+                if (remainingMonths === 0) {
+                    return `${years} ${years === 1 ? 'ano' : 'anos'}`;
+                } else {
+                    return `${years} ${years === 1 ? 'ano' : 'anos'} e ${remainingMonths} ${remainingMonths === 1 ? 'mês' : 'meses'}`;
+                }
+            }
+        }
+        
+        // Função para abrir o modal de adição de pet
+        function openAddPetModal() {
+            document.getElementById('modalTitle').textContent = 'Adicionar Novo Pet';
+            document.getElementById('petId').value = '';
+            document.getElementById('petForm').reset();
+            document.getElementById('petModal').style.display = 'flex';
+        }
+        
+        // Função para abrir o modal de edição de pet
+        function openEditPetModal(petId) {
+            const pet = petsMockData.find(p => p.id === petId);
+            if (!pet) return;
+            
+            document.getElementById('modalTitle').textContent = `Editar Pet: ${pet.nome}`;
+            document.getElementById('petId').value = pet.id;
+            document.getElementById('petName').value = pet.nome;
+            document.getElementById('petSpecies').value = pet.especie;
+            document.getElementById('petBreed').value = pet.raca;
+            document.getElementById('petColor').value = pet.cor;
+            document.getElementById('petSize').value = pet.porte;
+            document.getElementById('petAge').value = pet.idade;
+            document.getElementById('petWeight').value = pet.peso;
+            document.getElementById('petCharacteristics').value = pet.caracteristicas;
+            document.getElementById('petAdoptionStatus').value = pet.situacao_adocao;
+            document.getElementById('petNeutered').value = pet.castrado;
+            document.getElementById('petSex').value = pet.sexo;
+            document.getElementById('petOrigin').value = pet.origem;
+            document.getElementById('petAddress').value = pet.logradouro;
+            document.getElementById('petNumber').value = pet.numero;
+            document.getElementById('petComplement').value = pet.complemento;
+            document.getElementById('petNeighborhood').value = pet.bairro;
+            document.getElementById('petCity').value = pet.cidade;
+            document.getElementById('petState').value = pet.estado;
+            document.getElementById('petPhone').value = pet.telefone;
+            document.getElementById('petResponsible').value = pet.responsavel;
+            
+            document.getElementById('petModal').style.display = 'flex';
+        }
+        
+        // Função para fechar o modal
+        function closeModal() {
+            document.getElementById('petModal').style.display = 'none';
+        }
+        
+        // Função para salvar um pet (adicionar ou atualizar)
+        function savePet(event) {
+            event.preventDefault();
+            
+            const petId = document.getElementById('petId').value;
+            const formData = {
+                id: petId ? parseInt(petId) : petsMockData.length + 1,
+                nome: document.getElementById('petName').value,
+                especie: document.getElementById('petSpecies').value,
+                raca: document.getElementById('petBreed').value,
+                cor: document.getElementById('petColor').value,
+                porte: document.getElementById('petSize').value,
+                idade: parseInt(document.getElementById('petAge').value) || 0,
+                peso: parseFloat(document.getElementById('petWeight').value) || 0,
+                caracteristicas: document.getElementById('petCharacteristics').value,
+                situacao_adocao: document.getElementById('petAdoptionStatus').value,
+                castrado: document.getElementById('petNeutered').value,
+                sexo: document.getElementById('petSex').value,
+                origem: document.getElementById('petOrigin').value,
+                foto: "https://api.placeholder.com/400/320", // Em um sistema real, isso seria tratado corretamente
+                logradouro: document.getElementById('petAddress').value,
+                numero: document.getElementById('petNumber').value,
+                complemento: document.getElementById('petComplement').value,
+                bairro: document.getElementById('petNeighborhood').value,
+                cidade: document.getElementById('petCity').value,
+                estado: document.getElementById('petState').value,
+                telefone: document.getElementById('petPhone').value,
+                responsavel: document.getElementById('petResponsible').value,
+                data_cadastro: new Date().toISOString()
+            };
+            
+            // Se estiver editando, atualiza o pet existente
+            if (petId) {
+                const index = petsMockData.findIndex(p => p.id === parseInt(petId));
+                if (index !== -1) {
+                    // Preservar a data de cadastro original
+                    formData.data_cadastro = petsMockData[index].data_cadastro;
+                    petsMockData[index] = formData;
+                }
+            } else {
+                // Adicionar novo pet
+                petsMockData.push(formData);
+            }
+            
+            // Ordenar e renderizar novamente
+            const sortedPets = [...petsMockData].sort((a, b) => {
+                return new Date(b.data_cadastro) - new Date(a.data_cadastro);
+            });
+            
+            renderPetCards(sortedPets);
+            closeModal();
+            
+            // Feedback visual
+            alert(`Pet ${petId ? 'atualizado' : 'adicionado'} com sucesso!`);
+        }
+        
+        // Função para filtrar pets
+        function filterPets() {
+            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            
+            if (!searchTerm) {
+                // Se não houver termo de busca, mostrar todos os pets ordenados por data
+                renderPetCards([...petsMockData].sort((a, b) => {
+                    return new Date(b.data_cadastro) - new Date(a.data_cadastro);
+                }));
+                return;
+            }
+            
+            const filteredPets = petsMockData.filter(pet => {
+                return (
+                    pet.nome.toLowerCase().includes(searchTerm) ||
+                    pet.especie.toLowerCase().includes(searchTerm) ||
+                    pet.raca.toLowerCase().includes(searchTerm) ||
+                    pet.cor.toLowerCase().includes(searchTerm) ||
+                    pet.caracteristicas.toLowerCase().includes(searchTerm) ||
+                    pet.responsavel.toLowerCase().includes(searchTerm)
+                );
+            });
+            
+            renderPetCards(filteredPets);
+        }
+        
+        // Função para exportar para PDF
+        function exportToPDF() {
+            alert("Funcionalidade de exportação para PDF acionada. Em um sistema real, isso geraria um PDF com os pets filtrados.");
+            // Em uma implementação real, aqui seria utilizada uma biblioteca como jsPDF ou 
+            // uma chamada para o backend gerar o PDF com os dados atuais
+        }
+        
+        // Inicialização da página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Renderizar os pets iniciais
+            renderPetCards(sortedPets);
+            
+            // Event listeners
+            document.getElementById('addPetBtn').addEventListener('click', function() {
+                window.location.href = 'cadastro_pet.html';
+            });
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('cancelBtn').addEventListener('click', closeModal);
+            document.getElementById('petForm').addEventListener('submit', savePet);
+            document.getElementById('filterBtn').addEventListener('click', filterPets);
+            document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
+            
+            // Evento para tecla Enter no campo de busca
+            document.querySelector('.search-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    filterPets();
+                }
+            });
+            
+            // Evento para voltar ao menu
+            document.querySelector('.back-btn').addEventListener('click', function() {
+                // Em um sistema real, isso redirecionaria para a tela de menu
+                window.location.href = 'index.html';
+            });
+            
+            // Manipulação da paginação (simplificado para demonstração)
+            document.querySelectorAll('#pagination button').forEach(button => {
+                button.addEventListener('click', function() {
+                    document.querySelectorAll('#pagination button').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    // Aqui seria implementada a lógica real de paginação
+                });
+            });
+        });
+        
+        // Função para renderizar os cartões de pets
+        function renderPetCards(pets) {
+            const petsGrid = document.getElementById('petsGrid');
+            petsGrid.innerHTML = '';
+            
+            pets.forEach(pet => {
+                const petCard = document.createElement('div');
+                petCard.className = 'pet-card';
+                
+                // Formatar data
+                const cadastroDate = new Date(pet.data_cadastro);
+                const formattedDate = cadastroDate.toLocaleDateString('pt-BR');
+                
+                // Usar as imagens com as novas extensões
+                let imageSrc;
+                if (pet.id === 1) imageSrc = 'assets/pet1.png';
+                else if (pet.id === 2) imageSrc = 'assets/pet2.jpeg';
+                else if (pet.id === 3) imageSrc = 'assets/pet3.jpeg';
+                else if (pet.id === 4) imageSrc = 'assets/pet4.jpeg';
+                else if (pet.id === 5) imageSrc = 'assets/pet5.jpeg';
+                else if (pet.id === 6) imageSrc = 'assets/pet6.jpg';
+                else imageSrc = 'https://api.placeholder.com/400/320';
+                
+                petCard.innerHTML = `
+                    <img src="${imageSrc}" alt="Foto de ${pet.nome}" class="pet-image" data-id="${pet.id}" onerror="this.onerror=null; this.src='https://api.placeholder.com/400/320';">
+                    <div class="pet-info">
+                        <h3 class="pet-name">${pet.nome}</h3>
+                        <div class="pet-details">
+                            <div class="pet-detail">
+                                <span class="pet-detail-label">Espécie:</span>
+                                <span>${pet.especie}</span>
+                            </div>
+                            <div class="pet-detail">
+                                <span class="pet-detail-label">Raça:</span>
+                                <span>${pet.raca}</span>
+                            </div>
+                            <div class="pet-detail">
+                                <span class="pet-detail-label">Idade:</span>
+                                <span>${formatAge(pet.idade)}</span>
+                            </div>
+                            <div class="pet-detail">
+                                <span class="pet-detail-label">Cadastro:</span>
+                                <span>${formattedDate}</span>
+                            </div>
+                            <div class="pet-detail">
+                                <span class="pet-detail-label">Status:</span>
+                                <span class="status-badge ${pet.situacao_adocao === 'Disponível' ? 'status-available' : 'status-adopted'}">
+                                    ${pet.situacao_adocao}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                petsGrid.appendChild(petCard);
+            });
+            
+            // Adicionar event listeners às imagens dos pets
+            document.querySelectorAll('.pet-image').forEach(img => {
+                img.addEventListener('click', function() {
+                    const petId = parseInt(this.getAttribute('data-id'));
+                    openEditPetModal(petId);
+                });
+            });
+        }
+    </script>
+</body>
+</html>

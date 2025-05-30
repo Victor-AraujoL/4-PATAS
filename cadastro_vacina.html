@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação 4 Patas - Cadastro de Vacinas</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8b6b4f;
+            --primary-hover: #795f46;
+            --secondary-color: #a4826f;
+            --secondary-hover: #8c6d4f;
+            --accent-color: #d1ba9d;
+            --background-light: #f5f0e6;
+            --text-color: #333;
+            --text-light: #666;
+            --success-color: #4caf50;
+            --error-color: #c25e48;
+            --gray-light: #f4f4f4;
+            --gray-medium: #ddd;
+            --border-radius: 0.375rem;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #c8b6a6, #a4826f);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .paws {
+            position: fixed;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .paw1 {
+            top: 10%;
+            left: 15%;
+            transform: rotate(45deg);
+            font-size: 8rem;
+        }
+        
+        .paw2 {
+            bottom: 20%;
+            right: 10%;
+            transform: rotate(-20deg);
+            font-size: 10rem;
+        }
+        
+        .paw3 {
+            top: 40%;
+            right: 25%;
+            transform: rotate(15deg);
+            font-size: 6rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .close-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #8b6b4f;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            border: none;
+        }
+        
+        .close-button:hover {
+            background-color: #795f46;
+            transform: scale(1.1);
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e1e5eb;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            font-size: 24px;
+        }
+        
+        .header-logo {
+            width: 50px;
+            height: 50px;
+            margin-right: 12px;
+            object-fit: contain;
+        }
+
+        header h1 svg {
+            margin-right: 10px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+
+        .btn-return {
+            background-color: var(--secondary-color);
+            color: white;
+            box-shadow: 0 8px 15px rgba(133, 104, 73, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-return:hover {
+            background-color: var(--secondary-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(133, 104, 73, 0.4);
+        }
+
+        .vaccine-form-container {
+            background-color: #f9f6f2;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+        }
+
+        .form-title {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #5c6773;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(139, 107, 79, 0.25);
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+            border-top: 1px solid #e1e5eb;
+            padding-top: 20px;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-success {
+            background-color: rgba(139, 107, 79, 0.1);
+            border-left: 4px solid var(--success-color);
+            color: var(--primary-color);
+        }
+
+        .alert-danger {
+            background-color: rgba(194, 94, 72, 0.1);
+            border-left: 4px solid var(--error-color);
+            color: var(--error-color);
+        }
+
+        .alert-warning {
+            background-color: rgba(243, 156, 18, 0.1);
+            border-left: 4px solid #f39c12;
+            color: #9b7a5a;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .form-section {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #f9f6f2;
+            border: 1px solid #edf0f5;
+        }
+
+        .form-section-title {
+            color: #5c6773;
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .section-divider {
+            height: 1px;
+            background-color: #e1e5eb;
+            margin: 30px 0;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon input {
+            padding-left: 40px;
+        }
+
+        .input-with-icon svg {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 6px;
+            color: #999;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: normal;
+            font-size: 12px;
+            width: 160px;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+
+        /* Sem botão close-button */
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .header-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .vaccine-form-container {
+                padding: 15px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
+    
+    <button class="close-button" onclick="window.location.href='index.html';" title="Cancelar e voltar para a página inicial">
+        <i class="fas fa-times"></i>
+    </button>
+    
+    <div class="container">
+        <header>
+            <div style="display: flex; align-items: center;">
+                <img src="assets/logo.png.png" alt="Logo 4 Patas" width="40" height="40" style="margin-right: 15px;">
+                <h1>Cadastro de Vacina</h1>
+            </div>
+            <div class="header-buttons">
+                <button id="btn-new" class="btn btn-primary" onclick="resetForm()">
+                    <i class="fas fa-plus"></i>
+                    Nova Vacina
+                </button>
+            </div>
+        </header>
+
+        <div id="alert" class="alert hidden"></div>
+
+        <div class="vaccine-form-container">
+            <h2 class="form-title">Informações da Vacina</h2>
+            
+            <form id="vaccine-form">
+                <div class="form-section">
+                    <h3 class="form-section-title">Dados Principais</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="vaccine-name">Nome da Vacina *</label>
+                            <input type="text" id="vaccine-name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vaccine-manufacturer">Fabricante *</label>
+                            <input type="text" id="vaccine-manufacturer" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vaccine-batch">
+                        </div>
+                        <div class="form-group">
+                            <label for="vaccine-dosage">Dosagem *</label>
+                            <input type="text" id="vaccine-dosage" class="form-control" placeholder="Ex: 0.5ml, 1ml, etc." required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Datas</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="vaccine-creation-date">Data de Cadastro *</label>
+                            <input type="date" id="vaccine-creation-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vaccine-expiry-date">Data de Validade *</label>
+                            <input type="date" id="vaccine-expiry-date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vaccine-next-application">Data da Próxima Aplicação *</label>
+                            <input type="date" id="vaccine-next-application" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="vaccine-applier">Aplicado por *</label>
+                            <input type="text" id="vaccine-applier" class="form-control" placeholder="Nome do veterinário ou técnico" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <div class="form-section">
+                    <h3 class="form-section-title">Status</h3>
+                    <div class="form-group">
+                        <label for="vaccine-status">Status da Vacina *</label>
+                        <select id="vaccine-status" class="form-control" required>
+                            <option value="active">Ativa</option>
+                            <option value="inactive">Inativa</option>
+                        </select>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="vaccine-notes">Observações</label>
+                        <textarea id="vaccine-notes" class="form-control" rows="4" placeholder="Informações adicionais sobre a vacina (opcional)"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" id="btn-cancel" class="btn btn-return">
+                        <i class="fas fa-eraser"></i>
+                        Limpar Formulário
+                    </button>
+                    <button type="submit" id="btn-save" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                            <polyline points="17 21 17 13 7 13 7 21"/>
+                            <polyline points="7 3 7 8 15 8"/>
+                        </svg>
+                        Salvar Vacina
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Elementos DOM
+        const vaccineForm = document.getElementById('vaccine-form');
+        const btnReturn = document.getElementById('btn-return');
+        const btnCancel = document.getElementById('btn-cancel');
+        const alertBox = document.getElementById('alert');
+
+        // Preencher a data de cadastro com a data atual
+        document.addEventListener('DOMContentLoaded', () => {
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('vaccine-creation-date').value = formattedDate;
+            
+            // Sugestão para data de validade (1 ano a partir de hoje)
+            const nextYear = new Date();
+            nextYear.setFullYear(nextYear.getFullYear() + 1);
+            document.getElementById('vaccine-expiry-date').value = nextYear.toISOString().split('T')[0];
+            
+            // Sugestão para próxima aplicação (6 meses a partir de hoje)
+            const nextApplication = new Date();
+            nextApplication.setMonth(nextApplication.getMonth() + 6);
+            document.getElementById('vaccine-next-application').value = nextApplication.toISOString().split('T')[0];
+        });
+
+        // Funções
+        function showAlert(message, type) {
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            
+            // Esconder o alerta após 3 segundos
+            setTimeout(() => {
+                alertBox.classList.add('hidden');
+            }, 3000);
+        }
+
+        function resetForm() {
+            vaccineForm.reset();
+            
+            // Redefinir a data de cadastro
+            const today = new Date();
+            document.getElementById('vaccine-creation-date').value = today.toISOString().split('T')[0];
+            
+            // Redefinir sugestões de datas
+            const nextYear = new Date();
+            nextYear.setFullYear(nextYear.getFullYear() + 1);
+            document.getElementById('vaccine-expiry-date').value = nextYear.toISOString().split('T')[0];
+            
+            const nextApplication = new Date();
+            nextApplication.setMonth(nextApplication.getMonth() + 6);
+            document.getElementById('vaccine-next-application').value = nextApplication.toISOString().split('T')[0];
+        }
+
+        function saveVaccine(vaccineData) {
+            // Em uma aplicação real, aqui você enviaria os dados para o servidor
+            console.log('Salvando vacina:', vaccineData);
+            
+            // Simulando gravação bem-sucedida
+            showAlert('Vacina cadastrada com sucesso!', 'success');
+            resetForm();
+            
+            // Em uma aplicação real, você pode redirecionar para a listagem
+            // window.location.href = 'vaccine-list.html';
+        }
+
+        // Event Listeners
+        vaccineForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Coletar dados do formulário
+            const vaccineData = {
+                name: document.getElementById('vaccine-name').value,
+                manufacturer: document.getElementById('vaccine-manufacturer').value,
+                batch: document.getElementById('vaccine-batch').value,
+                dosage: document.getElementById('vaccine-dosage').value,
+                creationDate: document.getElementById('vaccine-creation-date').value,
+                expiryDate: document.getElementById('vaccine-expiry-date').value,
+                nextApplication: document.getElementById('vaccine-next-application').value,
+                applier: document.getElementById('vaccine-applier').value,
+                status: document.getElementById('vaccine-status').value,
+                notes: document.getElementById('vaccine-notes').value,
+            };
+            
+            // Validação básica - verificar se campos obrigatórios estão preenchidos
+            if (!vaccineData.name || !vaccineData.batch || !vaccineData.dosage || 
+                !vaccineData.creationDate || !vaccineData.expiryDate || 
+                !vaccineData.nextApplication || !vaccineData.applier || 
+                !vaccineData.manufacturer) {
+                showAlert('Por favor, preencha todos os campos obrigatórios.', 'danger');
+                return;
+            }
+            
+            // Verificar se a data de validade é maior que a data de cadastro
+            if (new Date(vaccineData.expiryDate) <= new Date(vaccineData.creationDate)) {
+                showAlert('A data de validade deve ser posterior à data de cadastro.', 'warning');
+                return;
+            }
+            
+            // Salvar a vacina
+            saveVaccine(vaccineData);
+        });
+
+        btnReturn.addEventListener('click', () => {
+            // Redirecionar para o menu principal
+            if (confirm('Deseja voltar ao menu principal? Quaisquer alterações não salvas serão perdidas.')) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        btnCancel.addEventListener('click', () => {
+            resetForm();
+            showAlert('Formulário limpo com sucesso!', 'success');
+        });
+
+        // Validação quando o usuário sai do campo data de validade
+        document.getElementById('vaccine-expiry-date').addEventListener('change', (e) => {
+            const expiryDate = new Date(e.target.value);
+            const creationDate = new Date(document.getElementById('vaccine-creation-date').value);
+            
+            if (expiryDate <= creationDate) {
+                showAlert('A data de validade deve ser posterior à data de cadastro.', 'warning');
+                e.target.focus();
+            }
+        });
+
+        // Verificar se a dosagem está no formato correto
+        document.getElementById('vaccine-dosage').addEventListener('blur', (e) => {
+            const dosageValue = e.target.value;
+            // Expressão regular para verificar se termina com ml ou ML (insensível a maiúsculas/minúsculas)
+            const dosagePattern = /^\d+(\.\d+)?\s*ml$/i;
+            
+            if (dosageValue && !dosagePattern.test(dosageValue)) {
+                showAlert('Por favor, informe a dosagem no formato correto (ex: 0.5ml, 1ml).', 'warning');
+            }
+        });
+    </script>
+</body>
+</html>
