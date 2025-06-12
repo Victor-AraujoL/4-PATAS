@@ -1,7 +1,5 @@
-// src/controllers/petController.js
 const petService = require('../services/petService');
 
-// src/Controller/petController.js
 const PetService = require('../services/petService');
 
 const createPet = async (req, res) => {

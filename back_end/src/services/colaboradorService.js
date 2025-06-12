@@ -1,7 +1,5 @@
-// src/services/colaboradorService.js
 const Colaborador = require('../Models/colaborador');
 
-// Buscar todos os colaboradores
 const getAllColaboradores = async (req, res) => {
   try {
     const colaboradores = await Colaborador.findAll();
@@ -12,7 +10,6 @@ const getAllColaboradores = async (req, res) => {
   }
 };
 
-// Buscar colaborador por ID
 const getColaboradorById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -27,19 +24,17 @@ const getColaboradorById = async (req, res) => {
   }
 };
 
-// Criar novo colaborador
 const createColaborador = async (req, res) => {
   const data = req.body;
   try {
     const colaborador = await Colaborador.create(data);
     res.status(201).json({ message: 'Colaborador criado com sucesso', id: colaborador.id });
   } catch (err) {
-    console.error("Erro ao criar colaborador:", err);  // Log detalhado do erro
-    res.status(500).json({ message: 'Erro ao criar colaborador', error: err.message });  // Detalha o erro
+    console.error("Erro ao criar colaborador:", err); 
+    res.status(500).json({ message: 'Erro ao criar colaborador', error: err.message }); 
   }
 };
 
-// Atualizar colaborador
 const updateColaborador = async (req, res) => {
   const { id } = req.params;
   const data = req.body;
@@ -51,12 +46,11 @@ const updateColaborador = async (req, res) => {
     await colaborador.update(data);
     res.json({ message: 'Colaborador atualizado com sucesso' });
   } catch (err) {
-    console.error("Erro ao atualizar colaborador:", err);  // Log do erro
+    console.error("Erro ao atualizar colaborador:", err); 
     res.status(500).json({ message: 'Erro ao atualizar colaborador' });
   }
 };
 
-// Deletar colaborador
 const deleteColaborador = async (req, res) => {
   const { id } = req.params;
   try {

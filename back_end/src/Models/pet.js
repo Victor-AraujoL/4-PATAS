@@ -1,4 +1,3 @@
-// src/Models/pet.js
 const { Sequelize, DataTypes } = require('sequelize');
 const db = require('../config/db');
 

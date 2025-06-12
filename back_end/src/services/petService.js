@@ -1,5 +1,3 @@
-// src/services/petService.js
-// src/services/petService.js
 const Pet = require('../Models/pet');
 
 const createPet = async (data) => {

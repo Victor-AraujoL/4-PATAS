@@ -1,9 +1,7 @@
-// src/Routes/petRoutes.js
 const express = require('express');
 const router = express.Router();
 const PetController = require('../Controller/petController'); // Caminho corrigido
 
-// Definir as rotas do pet
 router.post('/', PetController.createPet);
 router.get('/', PetController.getAllPets);
 router.get('/:id', PetController.getPetById);

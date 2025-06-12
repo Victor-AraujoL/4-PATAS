@@ -1,4 +1,3 @@
-// src/controllers/colaboradorController.js
 const Colaborador = require('../Models/colaborador');
 
 exports.getAllColaboradores = (req, res) => {
