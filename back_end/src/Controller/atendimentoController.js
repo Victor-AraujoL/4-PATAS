@@ -1,107 +1,223 @@
 const Atendimento = require('../Models/atendimento');
+const { Op } = require('sequelize');
 
-exports.getAllAtendimentos = (req, res) => {
-  Atendimento.getAll((err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao obter atendimentos' });
-    }
-    res.status(200).json(results);
-  });
-};
-
-exports.getAtendimentoById = (req, res) => {
-  const { id } = req.params;
-  Atendimento.getById(id, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao obter atendimento' });
-    }
-    if (!results) {
-      return res.status(404).json({ message: 'Atendimento não encontrado' });
-    }
-    res.status(200).json(results);
-  });
-};
-
-exports.createAtendimento = (req, res) => {
-  const { idpet, idcolaborador, idusuario, peso, datahora, medicamento, diagnostico, observacao } = req.body;
-  const newAtendimento = {
-    IDPET: idpet,
-    IDCOLABORADOR: idcolaborador,
-    IDUSUARIO: idusuario,
-    PESO: peso,
-    DATAHORA: datahora,
-    MEDICAMENTO: medicamento,
-    DIAGNOSTICO: diagnostico,
-    OBSERVACAO: observacao,
-    DATACAD: new Date()
-  };
+class AtendimentoController {
   
-  Atendimento.create(newAtendimento, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao criar atendimento' });
+  static async create(req, res) {
+    try {
+      const novoAtendimento = await Atendimento.create(req.body);
+      
+      res.status(201).json({
+        success: true,
+        message: 'Atendimento criado com sucesso',
+        data: novoAtendimento
+      });
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: 'Erro ao criar atendimento',
+        error: error.message
+      });
     }
-    res.status(201).json({ message: 'Atendimento criado com sucesso!' });
-  });
-};
+  }
 
-exports.updateAtendimento = (req, res) => {
-  const { id } = req.params;
-  const { idpet, idcolaborador, idusuario, peso, datahora, medicamento, diagnostico, observacao } = req.body;
-  const updatedData = {
-    IDPET: idpet,
-    IDCOLABORADOR: idcolaborador,
-    IDUSUARIO: idusuario,
-    PESO: peso,
-    DATAHORA: datahora,
-    MEDICAMENTO: medicamento,
-    DIAGNOSTICO: diagnostico,
-    OBSERVACAO: observacao
-  };
-  
-  Atendimento.update(id, updatedData, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao atualizar atendimento' });
-    }
-    res.status(200).json({ message: 'Atendimento atualizado com sucesso!' });
-  });
-};
+  static async getAll(req, res) {
+    try {
+      const atendimentos = await Atendimento.findAll({
+        order: [['DATAHORA', 'DESC']]
+      });
 
-exports.deleteAtendimento = (req, res) => {
-  const { id } = req.params;
-  Atendimento.delete(id, (err, result) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao deletar atendimento' });
+      res.json({
+        success: true,
+        data: atendimentos
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao buscar atendimentos',
+        error: error.message
+      });
     }
-    res.status(200).json({ message: 'Atendimento deletado com sucesso!' });
-  });
-};
+  }
 
-exports.getAtendimentosByPet = (req, res) => {
-  const { idPet } = req.params;
-  Atendimento.getByPet(idPet, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao obter atendimentos do pet' });
-    }
-    res.status(200).json(results);
-  });
-};
+  static async getById(req, res) {
+    try {
+      const { id } = req.params;
+      
+      const atendimento = await Atendimento.findByPk(id);
 
-exports.getAtendimentosByColaborador = (req, res) => {
-  const { idColaborador } = req.params;
-  Atendimento.getByColaborador(idColaborador, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao obter atendimentos do colaborador' });
-    }
-    res.status(200).json(results);
-  });
-};
+      if (!atendimento) {
+        return res.status(404).json({
+          success: false,
+          message: 'Atendimento não encontrado'
+        });
+      }
 
-exports.getAtendimentosByUsuario = (req, res) => {
-  const { idUsuario } = req.params;
-  Atendimento.getByUsuario(idUsuario, (err, results) => {
-    if (err) {
-      return res.status(500).json({ message: 'Erro ao obter atendimentos do usuário' });
+      res.json({
+        success: true,
+        data: atendimento
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao buscar atendimento',
+        error: error.message
+      });
     }
-    res.status(200).json(results);
-  });
-};
+  }
+
+  static async update(req, res) {
+    try {
+      const { id } = req.params;
+      
+      const [updated] = await Atendimento.update(req.body, {
+        where: { IDATENDIMENTO: id } 
+      });
+
+      if (updated) {
+        const atendimentoAtualizado = await Atendimento.findByPk(id);
+        res.json({
+          success: true,
+          message: 'Atendimento atualizado com sucesso',
+          data: atendimentoAtualizado
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'Atendimento não encontrado'
+        });
+      }
+    } catch (error) {
+      res.status(400).json({
+        success: false,
+        message: 'Erro ao atualizar atendimento',
+        error: error.message
+      });
+    }
+  }
+
+  static async delete(req, res) {
+    try {
+      const { id } = req.params;
+      
+      const deleted = await Atendimento.destroy({
+        where: { IDATENDIMENTO: id } 
+      });
+
+      if (deleted) {
+        res.json({
+          success: true,
+          message: 'Atendimento removido com sucesso'
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'Atendimento não encontrado'
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao remover atendimento',
+        error: error.message
+      });
+    }
+  }
+
+  static async getByPetId(req, res) {
+    try {
+      const { petId } = req.params;
+      const atendimentos = await Atendimento.findAll({
+        where: { IDPET: petId },
+        order: [['DATAHORA', 'DESC']]
+      });
+      
+      res.json({
+        success: true,
+        data: atendimentos
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao buscar atendimentos do pet',
+        error: error.message
+      });
+    }
+  }
+
+  static async getByColaboradorId(req, res) {
+    try {
+      const { colaboradorId } = req.params;
+      const atendimentos = await Atendimento.findAll({
+        where: { IDCOLABORADOR: colaboradorId },
+        order: [['DATAHORA', 'DESC']]
+      });
+      
+      res.json({
+        success: true,
+        data: atendimentos
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao buscar atendimentos do colaborador',
+        error: error.message
+      });
+    }
+  }
+
+  static async getByUsuarioId(req, res) {
+    try {
+      const { usuarioId } = req.params;
+      const atendimentos = await Atendimento.findAll({
+        where: { IDUSUARIO: usuarioId },
+        order: [['DATAHORA', 'DESC']]
+      });
+      
+      res.json({
+        success: true,
+        data: atendimentos
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao buscar atendimentos do usuário',
+        error: error.message
+      });
+    }
+  }
+
+  static async getByDate(req, res) {
+    try {
+      const { data } = req.params;
+      
+      const startOfDay = new Date(data);
+      startOfDay.setHours(0, 0, 0, 0);
+      
+      const endOfDay = new Date(data);
+      endOfDay.setHours(23, 59, 59, 999);
+      
+      const atendimentos = await Atendimento.findAll({
+        where: {
+          DATAHORA: {
+            [Op.between]: [startOfDay, endOfDay]
+          }
+        },
+        order: [['DATAHORA', 'ASC']]
+      });
+      
+      res.json({
+        success: true,
+        data: atendimentos
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: 'Erro ao buscar atendimentos da data',
+        error: error.message
+      });
+    }
+  }
+}
+
+module.exports = AtendimentoController;

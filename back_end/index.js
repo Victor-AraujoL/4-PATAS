@@ -4,6 +4,7 @@ const PetRoutes = require('./src/Routes/petRoutes');
 const ColaboradorRoutes = require('./src/Routes/colaboradorRoutes');
 const VacinaRoutes = require('./src/Routes/vacinaRoutes');
 const UsuarioRoutes = require('./src/Routes/usuarioRoutes');
+const AtendimentoRoutes = require('./src/Routes/atendimentoRoutes');
 
 const db = require('./src/config/db'); 
 
@@ -17,6 +18,7 @@ app.use('/api/pets', PetRoutes);
 app.use('/api/colaboradores', ColaboradorRoutes);
 app.use('/api/vacinas', VacinaRoutes);
 app.use('/api/usuarios', UsuarioRoutes);
+app.use('/api/atendimentos', AtendimentoRoutes);
 
 db.sync()
   .then(() => console.log('Banco de dados sincronizado com sucesso!'))
