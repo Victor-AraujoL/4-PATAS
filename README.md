@@ -31,7 +31,7 @@ PASSO A PASSO PARA RODAR O PROJETO
 
 1. Clonar o repositório:
 
-git clone https://github.com/seu-usuario/seu-projeto.git
+git clone [https://github.com/seu-usuario/seu-projeto.git](https://github.com/Victor-AraujoL/4-PATAS.git)
 cd seu-projeto
 
 2. Instalar as dependências:
