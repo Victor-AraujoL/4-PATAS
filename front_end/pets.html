@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Associação 4 Patas - Gerenciamento de Pets</title>
-    <link rel="stylesheet" type="text/css" href="css/login.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="css/pets.css"/>
 </head>
 <body>
     <div class="paws paw1">🐾</div>
@@ -143,10 +145,7 @@
                     <label class="form-label" for="petOrigin">Origem</label>
                     <input type="text" class="form-control" id="petOrigin">
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="petPhoto">Foto</label>
-                    <input type="file" class="form-control" id="petPhoto" accept="image/*">
-                </div>
+               
                 <div class="form-group">
                     <label class="form-label">Endereço</label>
                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
@@ -201,8 +200,6 @@
                 castrado: "S",
                 sexo: "M",
                 origem: "Resgate",
-                foto: "https://api.placeholder.com/400/320",
-                logradouro: "Rua das Flores",
                 numero: "123",
                 complemento: "Casa",
                 bairro: "Centro",
@@ -226,7 +223,6 @@
                 castrado: "S",
                 sexo: "F",
                 origem: "Doação",
-                foto: "https://api.placeholder.com/400/320",
                 logradouro: "Av. Paulista",
                 numero: "1000",
                 complemento: "Apto 101",
@@ -251,7 +247,6 @@
                 castrado: "N",
                 sexo: "M",
                 origem: "Resgate",
-                foto: "https://api.placeholder.com/400/320",
                 logradouro: "Rua dos Pinheiros",
                 numero: "456",
                 complemento: "",
@@ -276,7 +271,6 @@
                 castrado: "S",
                 sexo: "F",
                 origem: "Doação",
-                foto: "https://api.placeholder.com/400/320",
                 logradouro: "Rua Augusta",
                 numero: "789",
                 complemento: "Casa 2",
@@ -301,7 +295,6 @@
                 castrado: "N",
                 sexo: "M",
                 origem: "Criador",
-                foto: "https://api.placeholder.com/400/320",
                 logradouro: "Alameda Santos",
                 numero: "222",
                 complemento: "Apto 303",
@@ -326,7 +319,6 @@
                 castrado: "S",
                 sexo: "F",
                 origem: "Resgate",
-                foto: "https://api.placeholder.com/400/320",
                 logradouro: "Rua Oscar Freire",
                 numero: "333",
                 complemento: "",
@@ -422,7 +414,6 @@
                 castrado: document.getElementById('petNeutered').value,
                 sexo: document.getElementById('petSex').value,
                 origem: document.getElementById('petOrigin').value,
-                foto: "https://api.placeholder.com/400/320", // Em um sistema real, isso seria tratado corretamente
                 logradouro: document.getElementById('petAddress').value,
                 numero: document.getElementById('petNumber').value,
                 complemento: document.getElementById('petComplement').value,
@@ -534,60 +525,39 @@
         
         // Função para renderizar os cartões de pets
         function renderPetCards(pets) {
-            const petsGrid = document.getElementById('petsGrid');
-            petsGrid.innerHTML = '';
-            
-            pets.forEach(pet => {
-                const petCard = document.createElement('div');
-                petCard.className = 'pet-card';
-                
-                // Formatar data
-                const cadastroDate = new Date(pet.data_cadastro);
-                const formattedDate = cadastroDate.toLocaleDateString('pt-BR');
-                
-                // Usar as imagens com as novas extensões
-                let imageSrc;
-                if (pet.id === 1) imageSrc = 'assets/pet1.png';
-                else if (pet.id === 2) imageSrc = 'assets/pet2.jpeg';
-                else if (pet.id === 3) imageSrc = 'assets/pet3.jpeg';
-                else if (pet.id === 4) imageSrc = 'assets/pet4.jpeg';
-                else if (pet.id === 5) imageSrc = 'assets/pet5.jpeg';
-                else if (pet.id === 6) imageSrc = 'assets/pet6.jpg';
-                else imageSrc = 'https://api.placeholder.com/400/320';
-                
-                petCard.innerHTML = `
-                    <img src="${imageSrc}" alt="Foto de ${pet.nome}" class="pet-image" data-id="${pet.id}" onerror="this.onerror=null; this.src='https://api.placeholder.com/400/320';">
-                    <div class="pet-info">
-                        <h3 class="pet-name">${pet.nome}</h3>
-                        <div class="pet-details">
-                            <div class="pet-detail">
-                                <span class="pet-detail-label">Espécie:</span>
-                                <span>${pet.especie}</span>
-                            </div>
-                            <div class="pet-detail">
-                                <span class="pet-detail-label">Raça:</span>
-                                <span>${pet.raca}</span>
-                            </div>
-                            <div class="pet-detail">
-                                <span class="pet-detail-label">Idade:</span>
-                                <span>${formatAge(pet.idade)}</span>
-                            </div>
-                            <div class="pet-detail">
-                                <span class="pet-detail-label">Cadastro:</span>
-                                <span>${formattedDate}</span>
-                            </div>
-                            <div class="pet-detail">
-                                <span class="pet-detail-label">Status:</span>
-                                <span class="status-badge ${pet.situacao_adocao === 'Disponível' ? 'status-available' : 'status-adopted'}">
-                                    ${pet.situacao_adocao}
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                
-                petsGrid.appendChild(petCard);
-            });
+    const petsGrid = document.getElementById('petsGrid');
+    petsGrid.innerHTML = '';
+    
+    pets.forEach(pet => {
+        const petCard = document.createElement('div');
+        petCard.className = 'pet-card';
+        
+        const cadastroDate = new Date(pet.data_cadastro);
+        const formattedDate = cadastroDate.toLocaleDateString('pt-BR');
+        
+       
+        petCard.innerHTML = `
+         
+            <div class="pet-info">
+                <h3 class="pet-name">${pet.nome}</h3>
+                <div class="pet-details">
+                    <div class="pet-detail"><span class="pet-detail-label">Espécie:</span> <span>${pet.especie}</span></div>
+                    <div class="pet-detail"><span class="pet-detail-label">Raça:</span> <span>${pet.raca}</span></div>
+                    <div class="pet-detail"><span class="pet-detail-label">Idade:</span> <span>${formatAge(pet.idade)}</span></div>
+                      <div class="pet-detail"><span class="pet-detail-label">Sexo:</span> <span>${pet.sexo}</span></div>
+                    <div class="pet-detail"><span class="pet-detail-label">Cadastro:</span> <span>${formattedDate}</span></div>
+                </div>
+            </div>
+        `;
+        
+        // 🔑 Agora o card inteiro é clicável
+        petCard.addEventListener('click', () => {
+            openEditPetModal(pet.id);
+        });
+
+        petsGrid.appendChild(petCard);
+    });
+}
             
             // Adicionar event listeners às imagens dos pets
             document.querySelectorAll('.pet-image').forEach(img => {
@@ -596,7 +566,8 @@
                     openEditPetModal(petId);
                 });
             });
-        }
+        
     </script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </html>
