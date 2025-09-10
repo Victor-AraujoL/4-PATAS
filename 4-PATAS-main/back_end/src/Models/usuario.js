@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const { DataTypes } = require('sequelize');
+const bcrypt = require('bcryptjs');
 
 const Usuario = db.define('Usuario', {
   IDUSUARIO: {
@@ -20,7 +21,8 @@ const Usuario = db.define('Usuario', {
     allowNull: true,
   },
   SENHA: {
-    type: DataTypes.STRING(20),
+    // bcrypt gera ~60 caracteres. Use 60 ou 255.
+    type: DataTypes.STRING(60),
     allowNull: true,
   },
   ADMIN: {
@@ -40,6 +42,16 @@ const Usuario = db.define('Usuario', {
 }, {
   tableName: 'usuario',
   timestamps: false,
+});
+
+// Hook para garantir hash de senha em qualquer criação/atualização
+Usuario.addHook('beforeSave', async (user) => {
+  if (!user.SENHA) return;
+  const val = user.SENHA.toString();
+  // Evita re-hash se já estiver em formato bcrypt
+  if (val.startsWith('$2a$') || val.startsWith('$2b$') || val.startsWith('$2y$')) return;
+  const salt = await bcrypt.genSalt(10);
+  user.SENHA = await bcrypt.hash(val, salt);
 });
 
 module.exports = Usuario;

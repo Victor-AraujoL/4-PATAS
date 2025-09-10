@@ -1,4 +1,5 @@
 const Usuario = require('../Models/usuario'); // ⚠️ Caminho ajustado para sua estrutura
+const bcrypt = require('bcryptjs');
 
 const getAllUsuarios = async (req, res) => {
   try {
@@ -27,6 +28,14 @@ const getUsuarioById = async (req, res) => {
 const createUsuario = async (req, res) => {
   const data = req.body;
   try {
+    // aceita SENHA ou password
+    const senhaPura = data.SENHA || data.password || data.senha;
+    if (senhaPura) {
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(senhaPura, salt);
+      data.SENHA = hash;
+    }
+
     const usuario = await Usuario.create(data);
     res.status(201).json({ message: 'Usuário criado com sucesso', id: usuario.IDUSUARIO });
   } catch (err) {
@@ -43,8 +52,20 @@ const updateUsuario = async (req, res) => {
     if (!usuario) {
       return res.status(404).json({ message: 'Usuário não encontrado' });
     }
+    // Se veio senha para atualizar, gerar novo hash
+    const senhaPura = data.SENHA || data.password || data.senha;
+    let hashApplied = false;
+    if (senhaPura) {
+      const salt = await bcrypt.genSalt(10);
+      const hash = await bcrypt.hash(senhaPura, salt);
+      data.SENHA = hash;
+      hashApplied = true;
+    } else {
+      // evitar sobrescrever SENHA com undefined
+      delete data.SENHA;
+    }
     await usuario.update(data);
-    res.json({ message: 'Usuário atualizado com sucesso' });
+    res.json({ message: 'Usuário atualizado com sucesso', hashApplied, receivedKeys: Object.keys(data) });
   } catch (err) {
     console.error("Erro ao atualizar usuário:", err);
     res.status(500).json({ message: 'Erro ao atualizar usuário' });
@@ -97,10 +118,27 @@ const loginUsuario = async (req, res) => {
       return res.status(401).json({ message: 'Usuário não encontrado' });
     }
 
-    // Comparação em texto puro (conforme modelo atual SENHA varchar(20))
-    if (usuario.SENHA !== senhaInformada) {
-      return res.status(401).json({ message: 'Senha inválida' });
+    // Compara hash (bcrypt)
+    let ok = false;
+    let migratedPassword = false;
+    try {
+      ok = await bcrypt.compare(senhaInformada, usuario.SENHA || '');
+    } catch {}
+    if (!ok) {
+      // Fallback de migração: se senha antiga era texto puro, aceita uma vez e atualiza para hash
+      if ((usuario.SENHA || '') === senhaInformada) {
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(senhaInformada, salt);
+        await usuario.update({ SENHA: hash });
+        ok = true;
+        migratedPassword = true;
+      }
     }
+    if (!ok) return res.status(401).json({ message: 'Senha inválida' });
+
+    // Normaliza flag de admin
+    const adminRaw = (usuario.ADMIN ?? '').toString().trim().toUpperCase();
+    const isAdmin = ['S', 'Y', '1', 'SIM', 'TRUE'].includes(adminRaw);
 
     // Retorna dados essenciais do usuário (evitar retornar SENHA)
     const payload = {
@@ -109,10 +147,11 @@ const loginUsuario = async (req, res) => {
       email: usuario.EMAIL,
       login: usuario.LOGIN,
       admin: usuario.ADMIN,
+      isAdmin,
       ativo: usuario.ATIVO,
     };
 
-    return res.json({ message: 'Login realizado com sucesso', usuario: payload });
+    return res.json({ message: 'Login realizado com sucesso', usuario: payload, migratedPassword });
   } catch (err) {
     console.error('Erro no login:', err);
     return res.status(500).json({ message: 'Erro ao realizar login' });

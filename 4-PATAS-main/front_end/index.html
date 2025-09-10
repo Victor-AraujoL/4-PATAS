@@ -28,8 +28,8 @@
       </div>
 
       <div class="user-info">
-        <div class="user-name">Olá, Usuário</div>
-        <div class="user-role">Administrador</div>
+        <div class="user-name" id="user-name">Olá, Usuário</div>
+        <div class="user-role" id="user-role">Perfil</div>
       </div>
 
       <nav class="sidebar-menu">
@@ -45,13 +45,16 @@
         <a href="pesquisar_vacinas.html" class="menu-item">
           <i class="fas fa-syringe"></i><span>Vacinas</span>
         </a>
-        <a href="historico_atendimento_admin.html" class="menu-item">
+        <a href="historico_atendimento_admin.html" class="menu-item" data-admin-only="true" id="hist-admin-item">
           <i class="fas fa-clipboard-list"></i><span>Histórico</span>
         </a>
-        <a href="colaboradores.html" class="menu-item">
+        <a href="historico_atendimento.html" class="menu-item" data-user-only="true" id="hist-user-item" style="display:none;">
+          <i class="fas fa-clipboard-list"></i><span>Histórico</span>
+        </a>
+        <a href="colaboradores.html" class="menu-item" data-admin-only="true">
           <i class="fas fa-user-md"></i><span>Colaboradores</span>
         </a>
-        <a href="cadastro_usuario.html" class="menu-item">
+        <a href="cadastro_usuario.html" class="menu-item" data-admin-only="true">
           <i class="fas fa-users"></i><span>Usuários</span>
         </a>
       </nav>
@@ -94,19 +97,24 @@
             <div class="card-description">Controle de vacinação</div>
           </div>
 
-          <div class="dashboard-card" onclick="window.location.href='historico_atendimento_admin.html'">
+          <div class="dashboard-card" onclick="window.location.href='historico_atendimento_admin.html'" data-admin-only="true" id="card-hist-admin">
+            <i class="fas fa-clipboard-list"></i>
+            <div class="card-title">Histórico</div>
+            <div class="card-description">Registro de atendimentos</div>
+          </div>
+          <div class="dashboard-card" onclick="window.location.href='historico_atendimento.html'" data-user-only="true" id="card-hist-user" style="display:none;">
             <i class="fas fa-clipboard-list"></i>
             <div class="card-title">Histórico</div>
             <div class="card-description">Registro de atendimentos</div>
           </div>
 
-          <div class="dashboard-card" onclick="window.location.href='colaboradores.html'">
+          <div class="dashboard-card" onclick="window.location.href='colaboradores.html'" data-admin-only="true">
             <i class="fas fa-user-md"></i>
             <div class="card-title">Colaboradores</div>
             <div class="card-description">Veterinários e equipe</div>
           </div>
 
-          <div class="dashboard-card" onclick="window.location.href='cadastro_usuario.html'">
+          <div class="dashboard-card" onclick="window.location.href='cadastro_usuario.html'" data-admin-only="true">
             <i class="fas fa-users"></i>
             <div class="card-title">Usuários</div>
             <div class="card-description">Gerenciar contas</div>
@@ -127,6 +135,47 @@
       if (menuToggle) {
         menuToggle.addEventListener('click', function () {
           sidebar.classList.toggle('open');
+        });
+      }
+
+      // Proteção básica: exige login
+      const loggedIn = localStorage.getItem('loggedIn') === 'true';
+      if (!loggedIn) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      // Preenche nome e papel
+      const userRaw = localStorage.getItem('user');
+      let user = {};
+      try { user = JSON.parse(userRaw || '{}'); } catch(e) {}
+      const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+      const nameEl = document.getElementById('user-name');
+      const roleEl = document.getElementById('user-role');
+      if (nameEl) nameEl.textContent = user.nome ? `Olá, ${user.nome}` : 'Olá';
+      if (roleEl) roleEl.textContent = isAdmin ? 'Administrador' : 'Usuário';
+
+      // Mostra/oculta itens do menu e cards por papel
+      document.querySelectorAll('[data-admin-only]')
+        .forEach(el => { el.style.display = isAdmin ? '' : 'none'; });
+
+      document.querySelectorAll('[data-user-only]')
+        .forEach(el => { el.style.display = isAdmin ? 'none' : ''; });
+
+      // Ajusta layout dos cards para 2x2 quando for usuário
+      const dashboard = document.querySelector('.dashboard');
+      if (dashboard && !isAdmin) {
+        dashboard.classList.add('two-col');
+      }
+
+      // Limpa sessão ao sair
+      const logoutLink = document.querySelector('.logout');
+      if (logoutLink) {
+        logoutLink.addEventListener('click', function () {
+          localStorage.removeItem('loggedIn');
+          localStorage.removeItem('user');
+          localStorage.removeItem('isAdmin');
         });
       }
     });

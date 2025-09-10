@@ -63,7 +63,16 @@
                 localStorage.setItem('loggedIn', 'true');
                 localStorage.setItem('user', JSON.stringify(data.usuario));
 
-                alert('Login realizado com sucesso!');
+                // Fallback inteligente para isAdmin
+                const rawAdmin = (data.usuario.admin ?? data.usuario.ADMIN ?? '').toString().trim().toUpperCase();
+                const fallbackIsAdmin = ['S','Y','1','SIM','TRUE'].includes(rawAdmin);
+                const isAdmin = (typeof data.usuario.isAdmin === 'boolean') ? data.usuario.isAdmin : fallbackIsAdmin;
+                localStorage.setItem('isAdmin', isAdmin ? 'true' : 'false');
+
+                alert(`Login realizado com sucesso! Perfil: ${isAdmin ? 'Administrador' : 'Usuário'}`);
+                // Redirecione como preferir. Mantendo para index.html por padrão.
+                // Exemplo alternativo:
+                // window.location.href = data.usuario.isAdmin ? 'historico_atendimento_admin.html' : 'historico_atendimento.html';
                 window.location.href = 'index.html';
             } catch (e) {
                 console.error('Erro na requisição de login:', e);

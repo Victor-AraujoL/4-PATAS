@@ -130,14 +130,21 @@ body {
 .dashboard {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  gap: 24px;
   flex-grow: 1;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
-  padding: 60px;
+  padding: 40px;
   justify-content: center;
   align-items: center;
   justify-items: center;
+}
+
+/* Variante para layout 2x2 (usuário) */
+.dashboard.two-col {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 600px;
+  gap: 24px;
 }
 
 .dashboard-card {
