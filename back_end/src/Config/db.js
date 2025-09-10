@@ -1,6 +1,8 @@
-// src/config/db.js
+// src/Config/db.js
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+const path = require('path');
+// Carrega .env a partir da pasta do backend, independente do cwd
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 // Criação da instância do Sequelize
 const sequelize = new Sequelize(
@@ -14,11 +16,14 @@ const sequelize = new Sequelize(
   }
 );
 
-try {
-  sequelize.authenticate();
-  console.log('Conexão com o banco de dados foi bem-sucedida!');
-} catch (error) {
-  console.error('Erro ao conectar ao banco de dados:', error);
-}
+// Validação explícita da conexão (assíncrona)
+(async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Conexão com o banco de dados foi bem-sucedida!');
+  } catch (error) {
+    console.error('Erro ao conectar ao banco de dados:', error);
+  }
+})();
 
 module.exports = sequelize;

@@ -208,4 +208,41 @@ router.put('/:id', UsuarioController.updateUsuario);
  */
 router.delete('/:id', UsuarioController.deleteUsuario);
 
+/**
+ * @swagger
+ * /api/usuarios/login:
+ *   post:
+ *     summary: Realiza login de usuário (email ou login + senha)
+ *     tags: [Usuários]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               login:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *             example:
+ *               email: "usuario@email.com"
+ *               senha: "123456"
+ *     responses:
+ *       200:
+ *         description: Login realizado com sucesso
+ *       400:
+ *         description: Parâmetros ausentes
+ *       401:
+ *         description: Usuário não encontrado ou senha inválida
+ *       500:
+ *         description: Erro interno do servidor
+ */
+router.post('/login', UsuarioController.loginUsuario);
+
 module.exports = router;

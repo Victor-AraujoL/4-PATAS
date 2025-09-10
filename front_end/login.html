@@ -34,26 +34,40 @@
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-            
-            const email = document.getElementById('email').value;
+
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
-            
-            // Simulação de autenticação
-            if (email && password) {
-                // Em um cenário real, você enviaria uma requisição para seu backend
-                console.log('Tentativa de login:', { email });
-                
-                // Simulando um login bem-sucedido
+
+            if (!email || !password) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+
+            try {
+                const resp = await fetch('http://localhost:3000/api/usuarios/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha: password })
+                });
+
+                if (!resp.ok) {
+                    const err = await resp.json().catch(() => ({ message: 'Erro ao realizar login' }));
+                    alert(err.message || 'Falha no login');
+                    return;
+                }
+
+                const data = await resp.json();
+                // Armazena identificação básica (em produção, prefira JWT)
                 localStorage.setItem('loggedIn', 'true');
-                localStorage.setItem('userEmail', email);
-                
-                // Redirecionamento para a página de listagem de pets (que será criada depois)
+                localStorage.setItem('user', JSON.stringify(data.usuario));
+
                 alert('Login realizado com sucesso!');
                 window.location.href = 'index.html';
-            } else {
-                alert('Por favor, preencha todos os campos.');
+            } catch (e) {
+                console.error('Erro na requisição de login:', e);
+                alert('Não foi possível conectar ao servidor.');
             }
         });
     </script>
