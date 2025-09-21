@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associação 4 Patas - Gerenciamento de Colaboradores</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="css/colaboradores.css"/>
+    
+</head>
+<body>
+    <!-- Decorative paws -->
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="main-container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-placeholder">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Gerenciamento de Colaboradores</h1>
+                        <p class="header-subtitle">Associação 4 Patas</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-custom-secondary me-2" onclick="window.location.href='index.html';">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar ao Menu
+                    </button>
+                    <button class="btn btn-custom-primary me-2" id="novo-colaborador">
+                        <i class="fas fa-plus me-2"></i>
+                        Novo Colaborador
+                    </button>
+                    <button class="btn btn-custom-secondary" id="exportar-pdf">
+                        <i class="fas fa-download me-2"></i>
+                        Exportar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Alert -->
+        <div id="alert" class="alert d-none mt-3" role="alert"></div>
+
+        <!-- Search -->
+        <div class="search-section">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" id="search-input" class="form-control search-input border-start-0" 
+                               placeholder="Buscar colaborador por nome, função, ID...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-custom-primary w-100" onclick="filterCollaborators()">
+                        <i class="fas fa-search me-2"></i>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DESKTOP VIEW: Table -->
+        <div class="collaborators-container-desktop">
+            <div class="collaborators-table">
+                <div class="table-header">
+                    <h3>
+                        <i class="fas fa-users"></i>
+                        Lista de Colaboradores
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Função</th>
+                                <th>CRMV</th>
+                                <th>Data Cadastro</th>
+                                <th>Status</th>
+                                <th width="140">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="collaborators-table-body">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE VIEW: Cards -->
+        <div class="collaborators-container-mobile">
+            <div id="collaborators-cards-container">
+                <!-- Cards serão inseridos via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" id="prev-page"><i class="fas fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#" class="page-number">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" class="page-number">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" class="page-number">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" id="next-page"><i class="fas fa-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Modal Colaborador -->
+    <div class="modal fade" id="collaboratorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Novo Colaborador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="form-colaborador" novalidate>
+                        <input type="hidden" id="colaborador-id">
+                        
+                        <!-- Dados Pessoais -->
+                        <div class="row mb-3">
+                            <div class="col-md-8 mb-3">
+                                <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
+                                <input type="text" id="nome" name="nome" class="form-control" required>
+                                <div class="invalid-feedback">Nome é obrigatório</div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="funcao" class="form-label">Função <span class="text-danger">*</span></label>
+                                <select id="funcao" name="funcao" class="form-control" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="Veterinário(a)">Veterinário(a)</option>
+                                    <option value="Auxiliar Veterinário">Auxiliar Veterinário</option>
+                                    <option value="Recepcionista">Recepcionista</option>
+                                    <option value="Administrador">Administrador</option>
+                                    <option value="Tosador(a)">Tosador(a)</option>
+                                    <option value="Voluntário">Voluntário</option>
+                                </select>
+                                <div class="invalid-feedback">Função é obrigatória</div>
+                            </div>
+                        </div>
+
+                        <!-- Contato -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="telefone" class="form-label">Telefone <span class="text-danger">*</span></label>
+                                <input type="tel" id="telefone" name="telefone" class="form-control" 
+                                       placeholder="(00) 00000-0000" required>
+                                <div class="invalid-feedback">Telefone é obrigatório</div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" id="email" name="email" class="form-control" 
+                                       placeholder="email@exemplo.com">
+                            </div>
+                        </div>
+
+                        <!-- CRMV e Status -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="crmv" class="form-label">CRMV</label>
+                                <input type="text" id="crmv" name="crmv" class="form-control" 
+                                       placeholder="CRMV-SP 12345">
+                                <small class="text-muted">Apenas para veterinários</small>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
+                                <select id="status" name="status" class="form-control" required>
+                                    <option value="Ativo">Ativo</option>
+                                    <option value="Inativo">Inativo</option>
+                                </select>
+                                <div class="invalid-feedback">Status é obrigatório</div>
+                            </div>
+                        </div>
+
+                        <!-- Data de Cadastro -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="data-cadastro" class="form-label">Data de Cadastro</label>
+                                <input type="date" id="data-cadastro" name="dataCadastro" class="form-control" readonly>
+                            </div>
+                        </div>
+
+                        <!-- Observações -->
+                        <div class="mb-3">
+                            <label for="observacoes" class="form-label">Observações</label>
+                            <textarea id="observacoes" name="observacoes" class="form-control" rows="3" 
+                                      placeholder="Informações adicionais sobre o colaborador"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-salvar">
+                        <i class="fas fa-save me-2"></i>Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Tem certeza que deseja excluir este colaborador?</p>
+                    <p class="text-muted">Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btn-confirm-delete">
+                        <i class="fas fa-trash me-2"></i>Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Dados simulados de colaboradores
+        const collaboratorsMockData = [
+            {
+                id: 201,
+                nome: "Dr. Carlos Silva",
+                funcao: "Veterinário(a)",
+                crmv: "CRMV-SP 12345",
+                telefone: "(11) 98765-4321",
+                email: "carlos.silva@4patas.com",
+                dataCadastro: "2024-10-15T14:30:00",
+                status: "Ativo",
+                observacoes: "Especialista em cirurgias de pequenos animais"
+            },
+            {
+                id: 202,
+                nome: "Dra. Ana Oliveira",
+                funcao: "Veterinário(a)",
+                crmv: "CRMV-SP 23456",
+                telefone: "(11) 97654-3210",
+                email: "ana.oliveira@4patas.com",
+                dataCadastro: "2024-11-03T09:15:00",
+                status: "Ativo",
+                observacoes: "Especialista em dermatologia veterinária"
+            },
+            {
+                id: 203,
+                nome: "Dr. Marcos Santos",
+                funcao: "Veterinário(a)",
+                crmv: "CRMV-SP 34567",
+                telefone: "(11) 96543-2109",
+                email: "marcos.santos@4patas.com",
+                dataCadastro: "2024-12-10T11:45:00",
+                status: "Ativo",
+                observacoes: "Especialista em animais exóticos"
+            },
+            {
+                id: 204,
+                nome: "Juliana Costa",
+                funcao: "Auxiliar Veterinário",
+                crmv: "",
+                telefone: "(11) 95432-1098",
+                email: "juliana.costa@4patas.com",
+                dataCadastro: "2025-01-20T10:30:00",
+                status: "Ativo",
+                observacoes: "Experiência em cuidados intensivos"
+            },
+            {
+                id: 205,
+                nome: "Roberto Almeida",
+                funcao: "Recepcionista",
+                crmv: "",
+                telefone: "(11) 94321-0987",
+                email: "roberto.almeida@4patas.com",
+                dataCadastro: "2025-02-15T13:00:00",
+                status: "Ativo",
+                observacoes: "Atendimento bilíngue (português/inglês)"
+            },
+            {
+                id: 206,
+                nome: "Maria Santos",
+                funcao: "Tosador(a)",
+                crmv: "",
+                telefone: "(11) 93210-8765",
+                email: "maria.santos@4patas.com",
+                dataCadastro: "2025-01-10T08:00:00",
+                status: "Inativo",
+                observacoes: "Especializada em tosa de cães de pelo longo"
+            }
+        ];
+
+        // Elementos DOM
+        const searchInput = document.getElementById('search-input');
+        const alertBox = document.getElementById('alert');
+        const collaboratorsTableBody = document.getElementById('collaborators-table-body');
+        const collaboratorsCardsContainer = document.getElementById('collaborators-cards-container');
+        const collaboratorModal = new bootstrap.Modal(document.getElementById('collaboratorModal'));
+        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        const btnConfirmDelete = document.getElementById('btn-confirm-delete');
+
+        let currentDeleteId = null;
+        let editingId = null;
+
+        // Formatação da data
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        // Mostrar alerta
+        function showAlert(message, type) {
+            alertBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                ${message}
+            `;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.classList.remove('d-none');
+            
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+            }, 4000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Renderizar tabela (Desktop)
+        function renderCollaboratorsTable(collaborators) {
+            collaboratorsTableBody.innerHTML = '';
+            
+            collaborators.forEach(collaborator => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${collaborator.id}</strong></td>
+                    <td>${collaborator.nome}</td>
+                    <td>${collaborator.funcao}</td>
+                    <td>${collaborator.crmv || '-'}</td>
+                    <td>${formatDate(collaborator.dataCadastro)}</td>
+                    <td>
+                        <span class="status-badge status-${collaborator.status.toLowerCase()}">
+                            ${collaborator.status}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn btn-view" onclick="viewCollaborator(${collaborator.id})" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn btn-edit" onclick="editCollaborator(${collaborator.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${collaborator.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                collaboratorsTableBody.appendChild(row);
+            });
+        }
+
+        // Renderizar cards (Mobile)
+        function renderCollaboratorsCards(collaborators) {
+            collaboratorsCardsContainer.innerHTML = '';
+            
+            collaborators.forEach(collaborator => {
+                const card = document.createElement('div');
+                card.className = 'collaborator-card-mobile';
+                card.innerHTML = `
+                    <div class="collaborator-header-mobile">
+                        <h4 class="collaborator-name-mobile">${collaborator.nome}</h4>
+                        <span class="status-badge status-${collaborator.status.toLowerCase()}">
+                            ${collaborator.status}
+                        </span>
+                    </div>
+                    
+                    <div class="collaborator-details-mobile">
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">ID</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.id}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">Função</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.funcao}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">CRMV</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.crmv || '-'}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">Telefone</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.telefone}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">E-mail</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.email || '-'}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">Data Cadastro</span>
+                            <span class="collaborator-detail-value-mobile">${formatDate(collaborator.dataCadastro)}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="collaborator-actions-mobile">
+                        <button class="action-btn btn-view" onclick="viewCollaborator(${collaborator.id})" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn btn-edit" onclick="editCollaborator(${collaborator.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${collaborator.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                collaboratorsCardsContainer.appendChild(card);
+            });
+        }
+
+        // Renderizar colaboradores (ambas as views)
+        function renderCollaborators(collaborators = collaboratorsMockData) {
+            renderCollaboratorsTable(collaborators);
+            renderCollaboratorsCards(collaborators);
+        }
+
+        // Filtrar colaboradores
+        function filterCollaborators() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderCollaborators();
+                return;
+            }
+            
+            const filteredCollaborators = collaboratorsMockData.filter(collaborator => {
+                return (
+                    collaborator.nome.toLowerCase().includes(searchTerm) ||
+                    collaborator.funcao.toLowerCase().includes(searchTerm) ||
+                    collaborator.id.toString().includes(searchTerm) ||
+                    (collaborator.crmv && collaborator.crmv.toLowerCase().includes(searchTerm))
+                );
+            });
+            
+            renderCollaborators(filteredCollaborators);
+            
+            if (filteredCollaborators.length === 0) {
+                showAlert('Nenhum colaborador encontrado com os termos de busca informados.', 'warning');
+            } else {
+                showAlert(`${filteredCollaborators.length} colaborador(es) encontrado(s).`, 'success');
+            }
+        }
+
+        // Abrir modal para novo colaborador
+        function openNewCollaboratorModal() {
+            document.getElementById('modal-title').textContent = 'Novo Colaborador';
+            document.getElementById('form-colaborador').reset();
+            document.getElementById('colaborador-id').value = '';
+            
+            // Definir data atual
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('data-cadastro').value = today;
+            
+            // Habilitar todos os campos
+            enableFormFields();
+            
+            editingId = null;
+            collaboratorModal.show();
+        }
+
+        // Visualizar colaborador
+        function viewCollaborator(collaboratorId) {
+            const collaborator = collaboratorsMockData.find(c => c.id === collaboratorId);
+            if (collaborator) {
+                document.getElementById('modal-title').textContent = 'Detalhes do Colaborador';
+                fillForm(collaborator);
+                
+                // Desabilitar todos os campos para visualização
+                disableFormFields();
+                
+                collaboratorModal.show();
+            }
+        }
+
+        // Editar colaborador
+        function editCollaborator(collaboratorId) {
+            const collaborator = collaboratorsMockData.find(c => c.id === collaboratorId);
+            if (collaborator) {
+                document.getElementById('modal-title').textContent = 'Editar Colaborador';
+                fillForm(collaborator);
+                
+                // Habilitar campos exceto data de cadastro
+                enableFormFields();
+                document.getElementById('data-cadastro').readOnly = true;
+                
+                editingId = collaboratorId;
+                collaboratorModal.show();
+            }
+        }
+
+        // Preencher formulário
+        function fillForm(collaborator) {
+            document.getElementById('colaborador-id').value = collaborator.id;
+            document.getElementById('nome').value = collaborator.nome;
+            document.getElementById('funcao').value = collaborator.funcao;
+            document.getElementById('crmv').value = collaborator.crmv;
+            document.getElementById('telefone').value = collaborator.telefone;
+            document.getElementById('email').value = collaborator.email;
+            document.getElementById('status').value = collaborator.status;
+            document.getElementById('observacoes').value = collaborator.observacoes;
+            
+            const date = new Date(collaborator.dataCadastro);
+            document.getElementById('data-cadastro').value = date.toISOString().split('T')[0];
+        }
+
+        // Habilitar campos do formulário
+        function enableFormFields() {
+            document.querySelectorAll('#form-colaborador input, #form-colaborador select, #form-colaborador textarea').forEach(field => {
+                field.disabled = false;
+            });
+            document.getElementById('btn-salvar').style.display = 'inline-block';
+        }
+
+        // Desabilitar campos do formulário
+        function disableFormFields() {
+            document.querySelectorAll('#form-colaborador input, #form-colaborador select, #form-colaborador textarea').forEach(field => {
+                field.disabled = true;
+            });
+            document.getElementById('btn-salvar').style.display = 'none';
+        }
+
+        // Mostrar confirmação de exclusão
+        function showDeleteConfirmation(collaboratorId) {
+            currentDeleteId = collaboratorId;
+            confirmDeleteModal.show();
+        }
+
+        // Excluir colaborador
+        function deleteCollaborator(collaboratorId) {
+            const index = collaboratorsMockData.findIndex(c => c.id === collaboratorId);
+            if (index !== -1) {
+                const collaboratorName = collaboratorsMockData[index].nome;
+                collaboratorsMockData.splice(index, 1);
+                renderCollaborators();
+                showAlert(`Colaborador "${collaboratorName}" excluído com sucesso!`, 'success');
+            }
+        }
+
+        // Salvar colaborador
+        function saveCollaborator() {
+            const form = document.getElementById('form-colaborador');
+            
+            // Validação simples
+            if (!validateForm(form)) {
+                showAlert('Por favor, preencha todos os campos obrigatórios.', 'danger');
+                return;
+            }
+
+            const formData = new FormData(form);
+            const collaborator = {
+                id: editingId || Math.max(...collaboratorsMockData.map(c => c.id)) + 1,
+                nome: formData.get('nome'),
+                funcao: formData.get('funcao'),
+                crmv: formData.get('crmv') || '',
+                telefone: formData.get('telefone'),
+                email: formData.get('email') || '',
+                dataCadastro: editingId ? 
+                    collaboratorsMockData.find(c => c.id === editingId).dataCadastro :
+                    new Date().toISOString(),
+                status: formData.get('status'),
+                observacoes: formData.get('observacoes') || ''
+            };
+
+            if (editingId) {
+                // Atualizar colaborador existente
+                const index = collaboratorsMockData.findIndex(c => c.id === editingId);
+                if (index !== -1) {
+                    collaboratorsMockData[index] = collaborator;
+                    showAlert('Colaborador atualizado com sucesso!', 'success');
+                }
+            } else {
+                // Adicionar novo colaborador
+                collaboratorsMockData.push(collaborator);
+                showAlert('Colaborador cadastrado com sucesso!', 'success');
+            }
+
+            renderCollaborators();
+            collaboratorModal.hide();
+        }
+
+        // Validar formulário
+        function validateForm(form) {
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            return isValid;
+        }
+
+        // Exportar PDF
+        function exportToPDF() {
+            showAlert('Funcionalidade de exportação para PDF acionada! Em breve será implementada.', 'success');
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                filterCollaborators();
+            }
+        });
+
+        document.getElementById('novo-colaborador').addEventListener('click', openNewCollaboratorModal);
+        document.getElementById('btn-salvar').addEventListener('click', saveCollaborator);
+        document.getElementById('exportar-pdf').addEventListener('click', exportToPDF);
+
+        btnConfirmDelete.addEventListener('click', () => {
+            if (currentDeleteId !== null) {
+                deleteCollaborator(currentDeleteId);
+                confirmDeleteModal.hide();
+                currentDeleteId = null;
+            }
+        });
+
+        // Máscara para telefone
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 10) {
+                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else {
+                value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+            }
+            e.target.value = value;
+        });
+
+        // Inicializar
+        renderCollaborators();
+    </script>
+</body>
+</html>
