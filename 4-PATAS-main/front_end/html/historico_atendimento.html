@@ -12,7 +12,7 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-            <link rel="stylesheet" type="text/css" href="css/historico_atendimento.css"/>
+            <link rel="stylesheet" type="text/css" href="../css/historico_atendimento.css"/>
 </head>
 <body>
     <!-- Decorative paws -->
@@ -40,7 +40,7 @@
                     </button>
                     <button class="btn btn-custom-primary me-2" onclick="window.location.href='cadastro_atendimento.html';">
                         <i class="fas fa-plus me-2"></i>
-                        Agendar Consulta
+                        Cadastrar atendimento
                     </button>
                     <button class="btn btn-custom-secondary" onclick="exportToPDF()">
                         <i class="fas fa-download me-2"></i>
@@ -508,8 +508,6 @@
             updateStats();
             renderAppointments();
             
-            // Mostrar mensagem de boas-vindas
-            showAlert('Bem-vindo(a)! Aqui você pode consultar todo o histórico veterinário dos seus pets.', 'info');
         });
     </script>
 </body>

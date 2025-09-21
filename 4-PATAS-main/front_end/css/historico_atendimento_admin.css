@@ -313,12 +313,12 @@
         }
 
         .btn-view {
-            background: rgba(13, 110, 253, 0.1);
-            color: #0d6efd;
+            background: rgba(139, 107, 79, 0.1);
+            color: var(--primary-color);
         }
 
         .btn-view:hover {
-            background: #0d6efd;
+            background: var(--primary-color);
             color: white;
             transform: scale(1.1);
         }

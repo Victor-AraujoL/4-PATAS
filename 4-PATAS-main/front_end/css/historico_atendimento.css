@@ -331,12 +331,12 @@
         }
 
         .btn-view {
-            background: rgba(13, 110, 253, 0.1);
-            color: #0d6efd;
+            background: rgba(139, 107, 79, 0.1);
+            color: var(--primary-color);
         }
 
         .btn-view:hover {
-            background: #0d6efd;
+            background: var(--primary-color);
             color: white;
             transform: scale(1.1);
         }
@@ -378,12 +378,6 @@
             background: rgba(255, 193, 7, 0.1);
             border-left-color: var(--warning-color);
             color: #856404;
-        }
-
-        .alert-info {
-            background: rgba(13, 110, 253, 0.1);
-            border-left-color: #0d6efd;
-            color: #0d6efd;
         }
 
         /* Modal improvements */
