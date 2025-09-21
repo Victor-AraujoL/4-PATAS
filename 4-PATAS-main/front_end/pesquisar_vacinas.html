@@ -3,831 +3,624 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Associação 4 Patas - Pesquisa de Vacinas</title>
-    <link rel="stylesheet" type="text/css" href="css/login.css"/>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        .close-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background-color: #8b6b4f;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            cursor: pointer;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            border: none;
-        }
-        
-        .close-button:hover {
-            background-color: #795f46;
-            transform: scale(1.1);
-        }
-
-        body {
-            background: linear-gradient(135deg, #c8b6a6, #a4826f);
-            color: #333;
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-        
-        .paws {
-            position: fixed;
-            opacity: 0.1;
-            z-index: -1;
-        }
-        
-        .paw1 {
-            top: 10%;
-            left: 15%;
-            transform: rotate(45deg);
-            font-size: 8rem;
-        }
-        
-        .paw2 {
-            bottom: 20%;
-            right: 10%;
-            transform: rotate(-20deg);
-            font-size: 10rem;
-        }
-        
-        .paw3 {
-            top: 40%;
-            right: 25%;
-            transform: rotate(15deg);
-            font-size: 6rem;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9f6f2;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #e1e5eb;
-        }
-
-        header h1 {
-            color: #8b6b4f;
-            display: flex;
-            align-items: center;
-            font-size: 24px;
-        }
-
-        header h1 svg {
-            margin-right: 10px;
-        }
-
-        .header-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .btn-primary {
-            background-color: #8b6b4f;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #795f46;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-return {
-            background-color: #f5f0e6;
-            color: #8b6b4f;
-        }
-
-        .btn-return:hover {
-            background-color: #e9e1d3;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .search-container {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .btn-search {
-            background-color: #8b6b4f;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-search:hover {
-            background-color: #795f46;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .vaccines-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        thead {
-            background-color: #f8f9fa;
-        }
-
-        th, td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e1e5eb;
-        }
-
-        th {
-            font-weight: 600;
-            color: #5c6773;
-        }
-
-        tr:hover {
-            background-color: #f8f9fc;
-        }
-
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-edit, .btn-delete {
-            border: none;
-            background: none;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 4px;
-            transition: all 0.2s;
-        }
-
-        .btn-edit {
-            color: #8b6b4f;
-            background-color: rgba(139, 107, 79, 0.1);
-        }
-
-        .btn-delete {
-            color: #e74c3c;
-            background-color: rgba(231, 76, 60, 0.1);
-        }
-
-        .btn-edit:hover {
-            background-color: rgba(139, 107, 79, 0.2);
-        }
-
-        .btn-delete:hover {
-            background-color: rgba(231, 76, 60, 0.2);
-        }
-
-        .status {
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .status-active {
-            background-color: #e3f7ed;
-            color: #27ae60;
-        }
-
-        .status-inactive {
-            background-color: #fbeae9;
-            color: #e74c3c;
-        }
-
-        .pagination {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 20px;
-            gap: 5px;
-        }
-
-        .pagination button {
-            width: 35px;
-            height: 35px;
-            border: 1px solid #ddd;
-            background-color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pagination button.active {
-            background-color: #8b6b4f;
-            color: white;
-            border-color: #8b6b4f;
-        }
-        
-        .pagination button:hover {
-            background-color: #f5f0e6;
-            color: #8b6b4f;
-            border-color: #a4826f;
-        }
-
-        /* Modal styles */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            visibility: hidden;
-            opacity: 0;
-            transition: all 0.3s;
-        }
-
-        .modal-overlay.active {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .modal {
-            background-color: white;
-            width: 500px;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.15);
-            transform: translateY(-20px);
-            transition: all 0.3s;
-        }
-
-        .modal-overlay.active .modal {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            color: #3a7bd5;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: #999;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            color: #5c6773;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 14px;
-        }
-
-        .form-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        /* Alert styles */
-        .alert {
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .alert-success {
-            background-color: #e3f7ed;
-            color: #27ae60;
-        }
-
-        .alert-danger {
-            background-color: #fbeae9;
-            color: #e74c3c;
-        }
-
-        .alert-warning {
-            background-color: #fff8e6;
-            color: #f39c12;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .header-buttons {
-                width: 100%;
-                justify-content: space-between;
-            }
-            
-            th, td {
-                padding: 10px 5px;
-                font-size: 14px;
-            }
-            
-            .table-responsive {
-                overflow-x: auto;
-            }
-            
-            .modal {
-                width: 90%;
-            }
-        }
-    </style>
+    <title>Controle de Vacinas - Associação 4 Patas</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="css/pesquisar_vacinas.css"/>
+    
 </head>
 <body>
+    <!-- Decorative paws -->
     <div class="paws paw1">🐾</div>
     <div class="paws paw2">🐾</div>
     <div class="paws paw3">🐾</div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="main-container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-placeholder">
+                        <i class="fas fa-syringe"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Controle de Vacinas</h1>
+                        <p class="header-subtitle">Associação 4 Patas</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-custom-secondary me-2" onclick="window.location.href='index.html';">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar ao Menu
+                    </button>
+                    <button class="btn btn-custom-primary me-2" onclick="openVaccineModal()">
+                        <i class="fas fa-plus me-2"></i>
+                        Nova Vacina
+                    </button>
+                    <button class="btn btn-custom-secondary" onclick="exportToPDF()">
+                        <i class="fas fa-download me-2"></i>
+                        Exportar PDF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Alert -->
+        <div id="alert" class="alert d-none mt-3" role="alert"></div>
+
+        <!-- Search -->
+        <div class="search-section">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" id="search-input" class="form-control search-input border-start-0" 
+                               placeholder="Buscar por nome da vacina, lote ou veterinário...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-custom-primary w-100" onclick="filterVaccines()">
+                        <i class="fas fa-search me-2"></i>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DESKTOP VIEW: Table -->
+        <div class="vaccines-container-desktop">
+            <div class="vaccines-table">
+                <div class="table-header">
+                    <h3>
+                        <i class="fas fa-list"></i>
+                        Lista de Vacinas Cadastradas
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Vacina</th>
+                                <th>Lote</th>
+                                <th>Cadastro</th>
+                                <th>Validade</th>
+                                <th>Próxima</th>
+                                <th>Veterinário</th>
+                                <th>Status</th>
+                                <th width="120">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vaccines-table-body">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE VIEW: Cards -->
+        <div class="vaccines-container-mobile">
+            <div id="vaccines-cards-container">
+                <!-- Cards serão inseridos via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Modal Adicionar/Editar Vacina -->
+    <div class="modal fade" id="vaccineModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Nova Vacina</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="vaccine-form">
+                        <input type="hidden" id="vaccine-id">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="vaccine-name" class="form-label">Nome da Vacina</label>
+                                <input type="text" class="form-control" id="vaccine-name" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="vaccine-batch" class="form-label">Lote</label>
+                                <input type="text" class="form-control" id="vaccine-batch" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="vaccine-expiry" class="form-label">Data de Validade</label>
+                                <input type="date" class="form-control" id="vaccine-expiry" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="vaccine-next" class="form-label">Próxima Aplicação</label>
+                                <input type="date" class="form-control" id="vaccine-next" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="vaccine-applied-by" class="form-label">Aplicado por</label>
+                                <input type="text" class="form-control" id="vaccine-applied-by" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="vaccine-status" class="form-label">Status</label>
+                                <select class="form-control" id="vaccine-status" required>
+                                    <option value="active">Ativa</option>
+                                    <option value="inactive">Inativa</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-custom-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-custom-primary" id="btn-save">
+                        <i class="fas fa-save me-2"></i>Salvar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmação Exclusão -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Tem certeza que deseja excluir esta vacina?</p>
+                    <p class="text-muted">Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btn-confirm-delete">
+                        <i class="fas fa-trash me-2"></i>Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <button class="close-button" onclick="window.location.href='index.html';" title="Cancelar e voltar para a página inicial">
-        <i class="fas fa-times"></i>
-    </button>
-    
-    <div class="container">
-        <header>
-            <h1>
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M14.5 4h-5L7 7H4a2 2 0 00-2 2v9a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2h-3l-2.5-3z"/>
-                    <circle cx="12" cy="13" r="3"/>
-                </svg>
-                Associação 4 Patas - Controle de Vacinas
-            </h1>
-            <div class="header-buttons">
-                <button id="btn-return" class="btn btn-return" onclick="window.location.href='index.html';">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 12H5M12 19l-7-7 7-7"/>
-                    </svg>
-                    Voltar ao Menu
-                </button>
-                <button id="btn-add-vaccine" class="btn btn-primary" onclick="window.location.href='cadastro_vacina.html';">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 5v14M5 12h14"/>
-                    </svg>
-                    Nova Vacina
-                </button>
-            </div>
-        </header>
-
-        <div id="alert" class="alert hidden"></div>
-
-        <div class="search-container">
-            <input type="text" id="search-input" class="search-input" placeholder="Pesquisar vacina...">
-            <button class="btn-search">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                </svg>
-            </button>
-        </div>
-
-        <div class="vaccines-container">
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Nome da Vacina</th>
-                            <th>Lote</th>
-                            <th>Data de Cadastro</th>
-                            <th>Data de Validade</th>
-                            <th>Próxima Aplicação</th>
-                            <th>Aplicado por</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="vaccines-list">
-                        <!-- Dados das vacinas serão inseridos aqui via JavaScript -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="pagination">
-            <button>1</button>
-            <button class="active">2</button>
-            <button>3</button>
-            <button>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 18l6-6-6-6"/>
-                </svg>
-            </button>
-        </div>
-    </div>
-
-    <!-- Modal para adicionar/editar vacina -->
-    <div id="vaccine-modal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="modal-title">Nova Vacina</h2>
-                <button class="modal-close" id="modal-close">&times;</button>
-            </div>
-            <form id="vaccine-form">
-                <input type="hidden" id="vaccine-id">
-                <div class="form-group">
-                    <label for="vaccine-name">Nome da Vacina</label>
-                    <input type="text" id="vaccine-name" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="vaccine-batch">Lote</label>
-                    <input type="text" id="vaccine-batch" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="vaccine-expiry">Data de Validade</label>
-                    <input type="date" id="vaccine-expiry" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="vaccine-next">Próxima Aplicação</label>
-                    <input type="date" id="vaccine-next" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="vaccine-applied-by">Aplicado por</label>
-                    <input type="text" id="vaccine-applied-by" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="vaccine-status">Status</label>
-                    <select id="vaccine-status" class="form-control" required>
-                        <option value="active">Ativa</option>
-                        <option value="inactive">Inativa</option>
-                    </select>
-                </div>
-                <div class="form-actions">
-                    <button type="button" class="btn btn-return" id="btn-cancel">Cancelar</button>
-                    <button type="submit" class="btn btn-primary" id="btn-save">Salvar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal de confirmação para excluir -->
-    <div id="confirm-modal" class="modal-overlay">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Confirmar Exclusão</h2>
-                <button class="modal-close" id="confirm-close">&times;</button>
-            </div>
-            <p>Tem certeza que deseja excluir esta vacina?</p>
-            <div class="form-actions">
-                <button type="button" class="btn btn-return" id="btn-cancel-delete">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btn-confirm-delete">Confirmar</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Dados de exemplo para as vacinas
-        let vaccines = [
+        // Dados simulados de vacinas
+        const vaccinesMockData = [
             {
                 id: 1,
                 name: "Antirrábica",
-                batch: "AR2023-045",
-                created: "2023-05-10",
+                batch: "AR2024-045",
+                created: "2024-05-10",
                 expiry: "2025-05-10",
-                next: "2024-05-10",
+                next: "2024-11-10",
                 appliedBy: "Dr. Carlos Silva",
                 status: "active"
             },
             {
                 id: 2,
                 name: "V10",
-                batch: "V10-2023-112",
-                created: "2023-04-15",
+                batch: "V10-2024-112",
+                created: "2024-04-15",
                 expiry: "2025-04-15",
-                next: "2024-04-15",
+                next: "2024-10-15",
                 appliedBy: "Dra. Ana Oliveira",
                 status: "active"
             },
             {
                 id: 3,
                 name: "Giárdia",
-                batch: "GI2023-078",
-                created: "2023-06-20",
-                expiry: "2024-06-20",
-                next: "2024-01-20",
+                batch: "GI2024-078",
+                created: "2024-06-20",
+                expiry: "2025-06-20",
+                next: "2024-12-20",
                 appliedBy: "Dr. Marcos Santos",
                 status: "inactive"
             },
             {
                 id: 4,
                 name: "Leishmaniose",
-                batch: "LE2023-056",
-                created: "2023-07-05",
+                batch: "LE2024-056",
+                created: "2024-07-05",
                 expiry: "2025-07-05",
-                next: "2024-07-05",
+                next: "2024-11-05",
                 appliedBy: "Dra. Luiza Costa",
                 status: "active"
             },
             {
                 id: 5,
                 name: "Gripe Canina",
-                batch: "GC2023-098",
-                created: "2023-08-12",
-                expiry: "2024-08-12",
-                next: "2024-02-12",
+                batch: "GC2024-098",
+                created: "2024-08-12",
+                expiry: "2025-08-12",
+                next: "2025-02-12",
                 appliedBy: "Dr. Roberto Almeida",
+                status: "active"
+            },
+            {
+                id: 6,
+                name: "Parvovirose",
+                batch: "PV2024-134",
+                created: "2024-09-03",
+                expiry: "2025-09-03",
+                next: "2024-12-03",
+                appliedBy: "Dra. Fernanda Lima",
                 status: "active"
             }
         ];
 
         // Elementos DOM
-        const vaccinesList = document.getElementById('vaccines-list');
-        const vaccineModal = document.getElementById('vaccine-modal');
-        const confirmModal = document.getElementById('confirm-modal');
-        const modalTitle = document.getElementById('modal-title');
-        const vaccineForm = document.getElementById('vaccine-form');
-        const vaccineIdInput = document.getElementById('vaccine-id');
-        const btnAddVaccine = document.getElementById('btn-add-vaccine');
-        const modalClose = document.getElementById('modal-close');
-        const btnCancel = document.getElementById('btn-cancel');
-        const confirmClose = document.getElementById('confirm-close');
-        const btnCancelDelete = document.getElementById('btn-cancel-delete');
-        const btnConfirmDelete = document.getElementById('btn-confirm-delete');
-        const btnReturn = document.getElementById('btn-return');
         const searchInput = document.getElementById('search-input');
         const alertBox = document.getElementById('alert');
+        const vaccinesTableBody = document.getElementById('vaccines-table-body');
+        const vaccinesCardsContainer = document.getElementById('vaccines-cards-container');
+        const vaccineModal = new bootstrap.Modal(document.getElementById('vaccineModal'));
+        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        const vaccineForm = document.getElementById('vaccine-form');
+        const btnSave = document.getElementById('btn-save');
+        const btnConfirmDelete = document.getElementById('btn-confirm-delete');
+        const modalTitle = document.getElementById('modalTitle');
 
         let currentDeleteId = null;
+        let isEditing = false;
 
-        // Formatar data para exibição (DD/MM/AAAA)
+        // Formatação de data
         function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('pt-BR');
+            return new Date(dateString).toLocaleDateString('pt-BR');
         }
 
-        // Renderizar lista de vacinas
-        function renderVaccines(vaccineList = vaccines) {
-            vaccinesList.innerHTML = '';
+        // Verificar se a vacina está expirando
+        function isExpiring(expiryDate) {
+            const today = new Date();
+            const expiry = new Date(expiryDate);
+            const diffTime = expiry - today;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            return diffDays <= 30 && diffDays > 0;
+        }
+
+        // Mostrar alerta
+        function showAlert(message, type) {
+            alertBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'exclamation-triangle'} me-2"></i>
+                ${message}
+            `;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.classList.remove('d-none');
             
-            if (vaccineList.length === 0) {
-                vaccinesList.innerHTML = `
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+            }, 4000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Renderizar tabela (Desktop)
+        function renderVaccinesTable(vaccines) {
+            vaccinesTableBody.innerHTML = '';
+
+            if (vaccines.length === 0) {
+                vaccinesTableBody.innerHTML = `
                     <tr>
-                        <td colspan="8" style="text-align: center; padding: 20px;">
-                            Nenhuma vacina encontrada.
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i class="fas fa-search"></i>
+                                <h5>Nenhuma vacina encontrada</h5>
+                                <p class="mb-0">Tente ajustar os termos de busca ou adicione uma nova vacina.</p>
+                            </div>
                         </td>
                     </tr>
                 `;
                 return;
             }
             
-            vaccineList.forEach(vaccine => {
+            vaccines.forEach(vaccine => {
+                const expiring = isExpiring(vaccine.expiry);
+                let statusClass = vaccine.status === 'active' ? 'status-active' : 'status-inactive';
+                let statusText = vaccine.status === 'active' ? 'Ativa' : 'Inativa';
+                
+                if (expiring && vaccine.status === 'active') {
+                    statusClass = 'status-expiring';
+                    statusText = 'Expirando';
+                }
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${vaccine.name}</td>
-                    <td>${vaccine.batch}</td>
+                    <td><strong>${vaccine.name}</strong></td>
+                    <td><span class="batch-code">${vaccine.batch}</span></td>
                     <td>${formatDate(vaccine.created)}</td>
                     <td>${formatDate(vaccine.expiry)}</td>
                     <td>${formatDate(vaccine.next)}</td>
                     <td>${vaccine.appliedBy}</td>
                     <td>
-                        <span class="status ${vaccine.status === 'active' ? 'status-active' : 'status-inactive'}">
-                            ${vaccine.status === 'active' ? 'Ativa' : 'Inativa'}
+                        <span class="status-badge ${statusClass}">
+                            ${statusText}
                         </span>
                     </td>
-                    <td class="actions">
-                        <button class="btn-edit" data-id="${vaccine.id}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/>
-                                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
-                            </svg>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editVaccine(${vaccine.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn-delete" data-id="${vaccine.id}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                                <line x1="10" y1="11" x2="10" y2="17"/>
-                                <line x1="14" y1="11" x2="14" y2="17"/>
-                            </svg>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${vaccine.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 `;
-                vaccinesList.appendChild(row);
-            });
-
-            // Adicionar event listeners aos botões de editar e excluir
-            document.querySelectorAll('.btn-edit').forEach(btn => {
-                btn.addEventListener('click', () => editVaccine(parseInt(btn.dataset.id)));
-            });
-
-            document.querySelectorAll('.btn-delete').forEach(btn => {
-                btn.addEventListener('click', () => showDeleteConfirmation(parseInt(btn.dataset.id)));
+                vaccinesTableBody.appendChild(row);
             });
         }
 
-        // Mostrar modal de adicionar/editar vacina
-        function showVaccineModal(isEdit = false) {
-            vaccineModal.classList.add('active');
-            modalTitle.textContent = isEdit ? 'Editar Vacina' : 'Nova Vacina';
+        // Renderizar cards (Mobile)
+        function renderVaccinesCards(vaccines) {
+            vaccinesCardsContainer.innerHTML = '';
+
+            if (vaccines.length === 0) {
+                vaccinesCardsContainer.innerHTML = `
+                    <div class="vaccine-card-mobile">
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <h5>Nenhuma vacina encontrada</h5>
+                            <p class="mb-0">Tente ajustar os termos de busca ou adicione uma nova vacina.</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            vaccines.forEach(vaccine => {
+                const expiring = isExpiring(vaccine.expiry);
+                let statusClass = vaccine.status === 'active' ? 'status-active' : 'status-inactive';
+                let statusText = vaccine.status === 'active' ? 'Ativa' : 'Inativa';
+                
+                if (expiring && vaccine.status === 'active') {
+                    statusClass = 'status-expiring';
+                    statusText = 'Expirando';
+                }
+
+                const card = document.createElement('div');
+                card.className = 'vaccine-card-mobile';
+                card.innerHTML = `
+                    <div class="vaccine-header-mobile">
+                        <h4 class="vaccine-name-mobile">${vaccine.name}</h4>
+                        <span class="status-badge ${statusClass}">
+                            ${statusText}
+                        </span>
+                    </div>
+                    
+                    <div class="vaccine-details-mobile">
+                        <div class="vaccine-detail-mobile">
+                            <span class="vaccine-detail-label-mobile">Lote</span>
+                            <span class="vaccine-detail-value-mobile"><span class="batch-code">${vaccine.batch}</span></span>
+                        </div>
+                        <div class="vaccine-detail-mobile">
+                            <span class="vaccine-detail-label-mobile">Cadastro</span>
+                            <span class="vaccine-detail-value-mobile">${formatDate(vaccine.created)}</span>
+                        </div>
+                        <div class="vaccine-detail-mobile">
+                            <span class="vaccine-detail-label-mobile">Validade</span>
+                            <span class="vaccine-detail-value-mobile">${formatDate(vaccine.expiry)}</span>
+                        </div>
+                        <div class="vaccine-detail-mobile">
+                            <span class="vaccine-detail-label-mobile">Próxima</span>
+                            <span class="vaccine-detail-value-mobile">${formatDate(vaccine.next)}</span>
+                        </div>
+                        <div class="vaccine-detail-mobile">
+                            <span class="vaccine-detail-label-mobile">Veterinário</span>
+                            <span class="vaccine-detail-value-mobile">${vaccine.appliedBy}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="vaccine-actions-mobile">
+                        <button class="action-btn btn-edit" onclick="editVaccine(${vaccine.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${vaccine.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                vaccinesCardsContainer.appendChild(card);
+            });
         }
 
-        // Esconder modal de adicionar/editar vacina
-        function hideVaccineModal() {
-            vaccineModal.classList.remove('active');
+        // Renderizar vacinas (ambas as views)
+        function renderVaccines(vaccines = vaccinesMockData) {
+            renderVaccinesTable(vaccines);
+            renderVaccinesCards(vaccines);
+        }
+
+        // Filtrar vacinas
+        function filterVaccines() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderVaccines();
+                return;
+            }
+            
+            const filteredVaccines = vaccinesMockData.filter(vaccine => {
+                return (
+                    vaccine.name.toLowerCase().includes(searchTerm) ||
+                    vaccine.batch.toLowerCase().includes(searchTerm) ||
+                    vaccine.appliedBy.toLowerCase().includes(searchTerm)
+                );
+            });
+            
+            renderVaccines(filteredVaccines);
+            
+            if (filteredVaccines.length === 0) {
+                showAlert('Nenhuma vacina encontrada com os termos de busca informados.', 'warning');
+            } else {
+                showAlert(`${filteredVaccines.length} vacina(s) encontrada(s).`, 'success');
+            }
+        }
+
+        // Abrir modal de vacina
+        function openVaccineModal() {
+            isEditing = false;
+            modalTitle.textContent = 'Nova Vacina';
             vaccineForm.reset();
-        }
-
-        // Mostrar modal de confirmação de exclusão
-        function showDeleteConfirmation(id) {
-            currentDeleteId = id;
-            confirmModal.classList.add('active');
-        }
-
-        // Esconder modal de confirmação de exclusão
-        function hideDeleteConfirmation() {
-            confirmModal.classList.remove('active');
-            currentDeleteId = null;
+            document.getElementById('vaccine-id').value = '';
+            vaccineModal.show();
         }
 
         // Editar vacina
-        function editVaccine(id) {
-            const vaccine = vaccines.find(v => v.id === id);
+        function editVaccine(vaccineId) {
+            const vaccine = vaccinesMockData.find(v => v.id === vaccineId);
             if (vaccine) {
-                vaccineIdInput.value = vaccine.id;
+                isEditing = true;
+                modalTitle.textContent = 'Editar Vacina';
+                document.getElementById('vaccine-id').value = vaccine.id;
                 document.getElementById('vaccine-name').value = vaccine.name;
                 document.getElementById('vaccine-batch').value = vaccine.batch;
                 document.getElementById('vaccine-expiry').value = vaccine.expiry;
                 document.getElementById('vaccine-next').value = vaccine.next;
                 document.getElementById('vaccine-applied-by').value = vaccine.appliedBy;
                 document.getElementById('vaccine-status').value = vaccine.status;
-                showVaccineModal(true);
+                vaccineModal.show();
             }
         }
 
-        // Excluir vacina
-        function deleteVaccine(id) {
-            vaccines = vaccines.filter(v => v.id !== id);
-            renderVaccines();
-            hideDeleteConfirmation();
-            showAlert('Vacina excluída com sucesso!', 'success');
+        // Mostrar confirmação de exclusão
+        function showDeleteConfirmation(vaccineId) {
+            currentDeleteId = vaccineId;
+            confirmDeleteModal.show();
         }
 
-        // Mostrar alerta
-        function showAlert(message, type) {
-            alertBox.textContent = message;
-            alertBox.className = `alert alert-${type}`;
-            
-            // Esconder o alerta após 3 segundos
-            setTimeout(() => {
-                alertBox.classList.add('hidden');
-            }, 3000);
+        // Excluir vacina
+        function deleteVaccine(vaccineId) {
+            const index = vaccinesMockData.findIndex(v => v.id === vaccineId);
+            if (index !== -1) {
+                const vaccineName = vaccinesMockData[index].name;
+                vaccinesMockData.splice(index, 1);
+                renderVaccines();
+                showAlert(`Vacina "${vaccineName}" excluída com sucesso!`, 'success');
+            }
+        }
+
+        // Exportar para PDF
+        function exportToPDF() {
+            showAlert('Funcionalidade de exportação para PDF acionada! Em breve será implementada.', 'success');
         }
 
         // Event Listeners
-        btnAddVaccine.addEventListener('click', () => {
-            vaccineIdInput.value = '';
-            showVaccineModal();
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                filterVaccines();
+            }
         });
 
-        modalClose.addEventListener('click', hideVaccineModal);
-        btnCancel.addEventListener('click', hideVaccineModal);
-        confirmClose.addEventListener('click', hideDeleteConfirmation);
-        btnCancelDelete.addEventListener('click', hideDeleteConfirmation);
+        // Salvar vacina
+        btnSave.addEventListener('click', () => {
+            // Validar campos obrigatórios
+            const requiredFields = ['vaccine-name', 'vaccine-batch', 'vaccine-expiry', 'vaccine-next', 'vaccine-applied-by', 'vaccine-status'];
+            let isValid = true;
+            const vaccineData = {};
+            
+            requiredFields.forEach(field => {
+                const value = document.getElementById(field).value.trim();
+                if (!value) {
+                    isValid = false;
+                    document.getElementById(field).classList.add('is-invalid');
+                } else {
+                    document.getElementById(field).classList.remove('is-invalid');
+                    vaccineData[field.replace('vaccine-', '')] = value;
+                }
+            });
+
+            if (!isValid) {
+                showAlert('Por favor, preencha todos os campos obrigatórios.', 'danger');
+                return;
+            }
+
+            // Simular loading
+            btnSave.classList.add('btn-loading');
+            btnSave.disabled = true;
+
+            setTimeout(() => {
+                const id = document.getElementById('vaccine-id').value;
+                
+                if (id) {
+                    // Editar
+                    const index = vaccinesMockData.findIndex(v => v.id === parseInt(id));
+                    if (index !== -1) {
+                        vaccinesMockData[index] = {
+                            ...vaccinesMockData[index],
+                            name: vaccineData.name,
+                            batch: vaccineData.batch,
+                            expiry: vaccineData.expiry,
+                            next: vaccineData.next,
+                            appliedBy: vaccineData['applied-by'],
+                            status: vaccineData.status
+                        };
+                        showAlert('Vacina atualizada com sucesso!', 'success');
+                    }
+                } else {
+                    // Adicionar
+                    const newVaccine = {
+                        id: Date.now(),
+                        name: vaccineData.name,
+                        batch: vaccineData.batch,
+                        created: new Date().toISOString().split('T')[0],
+                        expiry: vaccineData.expiry,
+                        next: vaccineData.next,
+                        appliedBy: vaccineData['applied-by'],
+                        status: vaccineData.status
+                    };
+                    vaccinesMockData.push(newVaccine);
+                    showAlert('Nova vacina adicionada com sucesso!', 'success');
+                }
+
+                renderVaccines();
+                vaccineModal.hide();
+                
+                btnSave.classList.remove('btn-loading');
+                btnSave.disabled = false;
+            }, 1500);
+        });
 
         btnConfirmDelete.addEventListener('click', () => {
             if (currentDeleteId !== null) {
                 deleteVaccine(currentDeleteId);
+                confirmDeleteModal.hide();
+                currentDeleteId = null;
             }
         });
 
-        btnReturn.addEventListener('click', () => {
-            // Aqui você redirecionaria para o menu principal
-            alert("Retornando ao menu principal...");
-            // window.location.href = "menu.html";
-        });
-
-        vaccineForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const id = vaccineIdInput.value ? parseInt(vaccineIdInput.value) : Date.now();
-            const vaccine = {
-                id: id,
-                name: document.getElementById('vaccine-name').value,
-                batch: document.getElementById('vaccine-batch').value,
-                created: vaccineIdInput.value ? (vaccines.find(v => v.id === id)?.created || new Date().toISOString().split('T')[0]) : new Date().toISOString().split('T')[0],
-                expiry: document.getElementById('vaccine-expiry').value,
-                next: document.getElementById('vaccine-next').value,
-                appliedBy: document.getElementById('vaccine-applied-by').value,
-                status: document.getElementById('vaccine-status').value
-            };
-
-            if (vaccineIdInput.value) {
-                // Editar vacina existente
-                const index = vaccines.findIndex(v => v.id === id);
-                if (index !== -1) {
-                    vaccines[index] = vaccine;
-                    showAlert('Vacina atualizada com sucesso!', 'success');
-                }
-            } else {
-                // Adicionar nova vacina
-                vaccines.push(vaccine);
-                showAlert('Nova vacina adicionada com sucesso!', 'success');
-            }
-
-            renderVaccines();
-            hideVaccineModal();
-        });
-
-        searchInput.addEventListener('input', () => {
-            const searchTerm = searchInput.value.toLowerCase();
-            const filteredVaccines = vaccines.filter(vaccine => 
-                vaccine.name.toLowerCase().includes(searchTerm) || 
-                vaccine.batch.toLowerCase().includes(searchTerm) || 
-                vaccine.appliedBy.toLowerCase().includes(searchTerm)
-            );
-            renderVaccines(filteredVaccines);
-        });
-
-        // Inicializar a aplicação
+        // Inicializar
         renderVaccines();
     </script>
 </body>

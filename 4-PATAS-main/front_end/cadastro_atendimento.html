@@ -4,91 +4,168 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Associação 4 Patas - Cadastro de Atendimento</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/cadastro_atendimento.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+                <link rel="stylesheet" type="text/css" href="css/cadastro_atendimento.css"/>
+
 </head>
 <body>
+    <!-- Decorative paws -->
     <div class="paws paw1">🐾</div>
     <div class="paws paw2">🐾</div>
     <div class="paws paw3">🐾</div>
-    
-    <button class="close-button" onclick="window.location.href='index.html';" title="Cancelar e voltar para a página inicial">
-        <i class="fas fa-times"></i>
-    </button>
-    <div class="container">
-        <header>
-            <img src="assets/logo.png.png" alt="Logo 4 Patas" class="header-logo">
-            <h1>Cadastro de Atendimento</h1>
-        </header>
-        
-        <form id="form-atendimento">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="pet" class="required">Pet</label>
-                    <select id="pet" name="idPet" required>
-                        <option value="">Selecione o Pet</option>
-                        <!-- Dados serão carregados via JavaScript -->
-                    </select>
-                    <div class="invalid-feedback">Por favor, selecione um pet.</div>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="main-container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-placeholder">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Cadastro de Atendimento</h1>
+                        <p class="header-subtitle">Associação 4 Patas</p>
+                    </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="colaborador" class="required">Colaborador</label>
-                    <select id="colaborador" name="idColaborador" required>
-                        <option value="">Selecione o Colaborador</option>
-                        <!-- Dados serão carregados via JavaScript -->
-                    </select>
-                    <div class="invalid-feedback">Por favor, selecione um colaborador.</div>
+                <div class="header-actions">
+                    <button class="btn btn-custom-secondary" onclick="window.location.href='index.html';">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar ao Menu
+                    </button>
                 </div>
             </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="usuario" class="required">Responsável</label>
-                    <select id="usuario" name="idUsuario" required>
-                        <option value="">Selecione o Responsável</option>
-                        <!-- Dados serão carregados via JavaScript -->
-                    </select>
-                    <div class="invalid-feedback">Por favor, selecione um responsável.</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="peso" class="required">Peso (kg)</label>
-                    <input type="number" id="peso" name="peso" step="0.01" min="0" required>
-                    <div class="invalid-feedback">Por favor, informe o peso do animal.</div>
-                </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- Alert -->
+        <div id="alert" class="alert d-none mt-3" role="alert"></div>
+
+        <!-- Formulário de Cadastro -->
+        <div class="content-card">
+            <div class="card-header-custom">
+                <h3>
+                    <i class="fas fa-user-md"></i>
+                    Novo Atendimento Veterinário
+                </h3>
             </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="dataHora" class="required">Data e Hora</label>
-                    <input type="datetime-local" id="dataHora" name="dataHora" required>
-                    <div class="invalid-feedback">Por favor, selecione uma data e hora.</div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="medicamento">Medicamento</label>
-                    <input type="text" id="medicamento" name="medicamento">
-                </div>
+            <div class="card-body-custom">
+                <form id="form-atendimento" novalidate>
+                    <!-- Primeira linha: Pet e Colaborador -->
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="pet" class="form-label form-label-custom required">Pet</label>
+                            <select id="pet" name="idPet" class="form-control form-control-custom" required>
+                                <option value="">Selecione o Pet</option>
+                            </select>
+                            <div class="invalid-feedback">Por favor, selecione um pet.</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="colaborador" class="form-label form-label-custom required">Veterinário</label>
+                            <select id="colaborador" name="idColaborador" class="form-control form-control-custom" required>
+                                <option value="">Selecione o Veterinário</option>
+                            </select>
+                            <div class="invalid-feedback">Por favor, selecione um veterinário.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Segunda linha: Responsável e Peso -->
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="usuario" class="form-label form-label-custom required">Responsável</label>
+                            <select id="usuario" name="idUsuario" class="form-control form-control-custom" required>
+                                <option value="">Selecione o Responsável</option>
+                            </select>
+                            <div class="invalid-feedback">Por favor, selecione um responsável.</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="peso" class="form-label form-label-custom required">Peso (kg)</label>
+                            <input type="number" id="peso" name="peso" class="form-control form-control-custom" 
+                                   step="0.01" min="0" placeholder="Ex: 12.5" required>
+                            <div class="invalid-feedback">Por favor, informe o peso do animal.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Terceira linha: Data/Hora e Medicamento -->
+                    <div class="row mb-3">
+                        <div class="col-md-6 mb-3">
+                            <label for="dataHora" class="form-label form-label-custom required">Data e Hora</label>
+                            <input type="datetime-local" id="dataHora" name="dataHora" class="form-control form-control-custom" required>
+                            <div class="invalid-feedback">Por favor, selecione uma data e hora.</div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="medicamento" class="form-label form-label-custom">Medicamento</label>
+                            <input type="text" id="medicamento" name="medicamento" class="form-control form-control-custom" 
+                                   placeholder="Ex: Antibiótico, Vermífugo...">
+                        </div>
+                    </div>
+                    
+                    <!-- Diagnóstico -->
+                    <div class="mb-3">
+                        <label for="diagnostico" class="form-label form-label-custom required">Diagnóstico</label>
+                        <textarea id="diagnostico" name="diagnostico" class="form-control form-control-custom" 
+                                  rows="4" placeholder="Descreva o diagnóstico detalhado..." required></textarea>
+                        <div class="invalid-feedback">Por favor, informe o diagnóstico.</div>
+                    </div>
+                    
+                    <!-- Observações -->
+                    <div class="mb-4">
+                        <label for="observacao" class="form-label form-label-custom">Observações</label>
+                        <textarea id="observacao" name="observacao" class="form-control form-control-custom" 
+                                  rows="3" placeholder="Observações adicionais (opcional)..."></textarea>
+                    </div>
+                    
+                    <!-- Botões de Ação -->
+                    <div class="d-flex flex-column flex-md-row justify-content-end gap-2">
+                        <button type="button" id="btn-cancelar" class="btn btn-clear">
+                            <i class="fas fa-eraser me-2"></i>
+                            Limpar Formulário
+                        </button>
+                        <button type="submit" class="btn btn-save">
+                            <i class="fas fa-save me-2"></i>
+                            Salvar Atendimento
+                        </button>
+                    </div>
+                </form>
             </div>
-            
-            <div class="form-group">
-                <label for="diagnostico" class="required">Diagnóstico</label>
-                <textarea id="diagnostico" name="diagnostico" required></textarea>
-                <div class="invalid-feedback">Por favor, informe o diagnóstico.</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="observacao">Observação</label>
-                <textarea id="observacao" name="observacao"></textarea>
-            </div>
-            
-            <div class="form-actions">
-                <button type="button" id="btn-cancelar" class="btn-secondary"><i class="fas fa-eraser"></i> Limpar Formulário</button>
-                <button type="submit" class="btn-primary">Salvar</button>
-            </div>
-        </form>
+        </div>
     </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Ação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-question-circle text-warning" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p id="modal-message">Tem certeza que deseja realizar esta ação?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-confirm-action">
+                        <i class="fas fa-check me-2"></i>Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
         // Dados de exemplo para carregar os selects
@@ -97,15 +174,17 @@
             { id: 102, nome: "Luna", especie: "Gato", raca: "Siamês" },
             { id: 103, nome: "Milo", especie: "Cachorro", raca: "Bulldog" },
             { id: 104, nome: "Bella", especie: "Cachorro", raca: "Golden Retriever" },
-            { id: 105, nome: "Thor", especie: "Cachorro", raca: "Pastor Alemão" }
+            { id: 105, nome: "Thor", especie: "Cachorro", raca: "Pastor Alemão" },
+            { id: 106, nome: "Nina", especie: "Gato", raca: "Persa" },
+            { id: 107, nome: "Max", especie: "Cachorro", raca: "Golden Retriever" }
         ];
         
         const colaboradores = [
-            { id: 201, nome: "Dr. Carlos Silva", cargo: "Veterinário(a)" },
-            { id: 202, nome: "Dra. Ana Oliveira", cargo: "Veterinário(a)" },
-            { id: 203, nome: "Dr. Marcos Santos", cargo: "Veterinário(a)" },
-            { id: 204, nome: "Juliana Costa", cargo: "Auxiliar Veterinário" },
-            { id: 205, nome: "Roberto Almeida", cargo: "Recepcionista" }
+            { id: 201, nome: "Dr. Carlos Silva", cargo: "Veterinário" },
+            { id: 202, nome: "Dra. Ana Oliveira", cargo: "Veterinário" },
+            { id: 203, nome: "Dr. Marcos Santos", cargo: "Veterinário" },
+            { id: 204, nome: "Dra. Juliana Costa", cargo: "Veterinário" },
+            { id: 205, nome: "Dr. Roberto Almeida", cargo: "Veterinário" }
         ];
         
         const usuarios = [
@@ -113,9 +192,32 @@
             { id: 302, nome: "João Pereira", telefone: "(11) 91234-5678" },
             { id: 303, nome: "Fernanda Costa", telefone: "(11) 99876-5432" },
             { id: 304, nome: "Luciana Mendes", telefone: "(11) 94567-8901" },
-            { id: 305, nome: "Ricardo Souza", telefone: "(11) 92345-6789" }
+            { id: 305, nome: "Ricardo Souza", telefone: "(11) 92345-6789" },
+            { id: 306, nome: "Ana Sousa", telefone: "(11) 96666-6666" },
+            { id: 307, nome: "Carlos Ferreira", telefone: "(11) 95555-5555" }
         ];
-        
+
+        // Elementos DOM
+        const alertBox = document.getElementById('alert');
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        let pendingAction = null;
+
+        // Mostrar alerta
+        function showAlert(message, type) {
+            alertBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'times-circle'} me-2"></i>
+                ${message}
+            `;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.classList.remove('d-none');
+            
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+            }, 4000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         // Função para carregar os selects com os dados
         function carregarSelects() {
             const selectPet = document.getElementById('pet');
@@ -167,6 +269,11 @@
         function validarFormulario(form) {
             let formValido = true;
             
+            // Limpar validações anteriores
+            form.querySelectorAll('.is-invalid').forEach(campo => {
+                campo.classList.remove('is-invalid');
+            });
+            
             // Verificar campos obrigatórios
             form.querySelectorAll('[required]').forEach(campo => {
                 if (!campo.value.trim()) {
@@ -181,7 +288,8 @@
             const pesoInput = form.querySelector('#peso');
             if (pesoInput.value && parseFloat(pesoInput.value) <= 0) {
                 pesoInput.classList.add('is-invalid');
-                pesoInput.nextElementSibling.textContent = "O peso deve ser maior que zero.";
+                const feedback = pesoInput.nextElementSibling;
+                feedback.textContent = "O peso deve ser maior que zero.";
                 formValido = false;
             }
             
@@ -190,8 +298,11 @@
         
         // Função para salvar o atendimento
         function salvarAtendimento(form) {
-            // Aqui você implementaria a lógica para enviar os dados para o servidor
-            // Por enquanto, apenas simularemos o envio
+            // Mostrar loading
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
+            submitBtn.disabled = true;
             
             // Coletar os dados do formulário
             const formData = new FormData(form);
@@ -204,18 +315,36 @@
                 medicamento: formData.get('medicamento'),
                 diagnostico: formData.get('diagnostico'),
                 observacao: formData.get('observacao'),
-                dataCadastro: new Date().toISOString() // Data atual
+                dataCadastro: new Date().toISOString()
             };
             
             // Simular o envio para o servidor
             console.log('Atendimento a ser salvo:', atendimento);
             
-            // Simular sucesso após 1 segundo
+            // Simular sucesso após 2 segundos
             setTimeout(() => {
-                alert('Atendimento cadastrado com sucesso!');
-                // Redirecionar para a página de listagem
-                window.location.href = 'index.html';
-            }, 1000);
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                showAlert('Atendimento cadastrado com sucesso!', 'success');
+                
+                // Limpar formulário após sucesso
+                setTimeout(() => {
+                    form.reset();
+                    definirDataHoraAtual();
+                    showAlert('Pronto para um novo atendimento!', 'success');
+                }, 1500);
+            }, 2000);
+        }
+
+        // Função para confirmar ação
+        function confirmarAcao(message, callback) {
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('btn-confirm-action').onclick = () => {
+                confirmModal.hide();
+                callback();
+            };
+            confirmModal.show();
         }
         
         // Event listeners
@@ -230,14 +359,25 @@
                 event.preventDefault();
                 
                 if (validarFormulario(form)) {
-                    salvarAtendimento(form);
+                    confirmarAcao('Tem certeza que deseja salvar este atendimento?', () => {
+                        salvarAtendimento(form);
+                    });
+                } else {
+                    showAlert('Por favor, corrija os campos destacados em vermelho.', 'danger');
                 }
             });
             
             // Listener para o botão de limpar formulário
             document.getElementById('btn-cancelar').addEventListener('click', () => {
-                form.reset();
-                alert('Formulário limpo com sucesso!');
+                confirmarAcao('Tem certeza que deseja limpar todos os campos do formulário?', () => {
+                    form.reset();
+                    definirDataHoraAtual();
+                    // Remover classes de validação
+                    form.querySelectorAll('.is-invalid').forEach(campo => {
+                        campo.classList.remove('is-invalid');
+                    });
+                    showAlert('Formulário limpo com sucesso!', 'success');
+                });
             });
             
             // Validação em tempo real ao sair do campo
@@ -249,6 +389,13 @@
                         campo.classList.remove('is-invalid');
                     }
                 });
+                
+                // Remover validação ao digitar
+                campo.addEventListener('input', () => {
+                    if (campo.classList.contains('is-invalid') && campo.value.trim()) {
+                        campo.classList.remove('is-invalid');
+                    }
+                });
             });
             
             // Validação específica para o campo de peso
@@ -256,7 +403,8 @@
             pesoInput.addEventListener('blur', () => {
                 if (pesoInput.value && parseFloat(pesoInput.value) <= 0) {
                     pesoInput.classList.add('is-invalid');
-                    pesoInput.nextElementSibling.textContent = "O peso deve ser maior que zero.";
+                    const feedback = pesoInput.nextElementSibling;
+                    feedback.textContent = "O peso deve ser maior que zero.";
                 }
             });
         });

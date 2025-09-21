@@ -3,62 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Associação 4 Patas - Histórico de Atendimentos Admin</title>
+    <title>Associação 4 Patas - Histórico de Atendimentos</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/historico_atendimento_admin.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="css/historico_atendimento_admin.css"/>
+    
+
 </head>
 <body>
+    <!-- Decorative paws -->
     <div class="paws paw1">🐾</div>
     <div class="paws paw2">🐾</div>
     <div class="paws paw3">🐾</div>
-    <div class="container">
-        <header>
-            <h1><img src="assets/logo.png.png" alt="Logo 4 Patas" style="width: 40px; height: 40px; margin-right: 10px;">Listagem de Atendimentos</h1>
-            <div class="buttons-container">
-                <button id="voltar-menu" onclick="window.location.href='index.html';"><i class="fas fa-home"></i> Voltar ao Menu</button>
-                <button id="novo-atendimento" onclick="window.location.href='cadastro_atendimento.html';"><i class="fas fa-plus"></i> Novo Atendimento</button>
-                <button id="exportar-pdf"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="main-container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-placeholder">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Histórico de Atendimentos</h1>
+                        <p class="header-subtitle">Associação 4 Patas</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-custom-secondary me-2" onclick="window.location.href='index.html';">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar ao Menu
+                    </button>
+                    <button class="btn btn-custom-primary me-2" onclick="window.location.href='cadastro_atendimento.html';">
+                        <i class="fas fa-plus me-2"></i>
+                        Novo Atendimento
+                    </button>
+                    <button class="btn btn-custom-secondary" onclick="exportToPDF()">
+                        <i class="fas fa-download me-2"></i>
+                        Exportar PDF
+                    </button>
+                </div>
             </div>
-        </header>
-        
-        <div class="search-container">
-            <input type="text" id="pesquisar" placeholder="Pesquisar por pet, dono ou diagnóstico...">
-            <button id="btn-pesquisar">Buscar</button>
         </div>
-        
-        <table id="tabela-atendimentos">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Pet</th>
-                    <th>Colaborador</th>
-                    <th>Usuário</th>
-                    <th>Peso (kg)</th>
-                    <th>Data/Hora</th>
-                    <th>Medicamento</th>
-                    <th>Diagnóstico</th>
-                    <th>Observação</th>
-                    <th>Data Cadastro</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Dados serão preenchidos via JavaScript -->
-            </tbody>
-        </table>
-        
-        <div class="pagination">
-            <button id="prev-page">&laquo;</button>
-            <button class="page-number active">1</button>
-            <button class="page-number">2</button>
-            <button class="page-number">3</button>
-            <button id="next-page">&raquo;</button>
+    </header>
+
+    <div class="main-container">
+        <!-- Alert -->
+        <div id="alert" class="alert d-none mt-3" role="alert"></div>
+
+        <!-- Search -->
+        <div class="search-section">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" id="search-input" class="form-control search-input border-start-0" 
+                               placeholder="Buscar por pet, responsável, colaborador, diagnóstico...">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-custom-primary w-100" onclick="filterAppointments()">
+                        <i class="fas fa-search me-2"></i>
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DESKTOP VIEW: Table -->
+        <div class="appointments-container-desktop">
+            <div class="appointments-table">
+                <div class="table-header">
+                    <h3>
+                        <i class="fas fa-clipboard-list"></i>
+                        Registros de Atendimentos
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Pet</th>
+                                <th>Veterinário</th>
+                                <th>Responsável</th>
+                                <th>Peso (kg)</th>
+                                <th>Data/Hora</th>
+                                <th>Diagnóstico</th>
+                                <th width="120">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="appointments-table-body">
+                            <!-- Dados serão inseridos via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MOBILE VIEW: Cards -->
+        <div class="appointments-container-mobile">
+            <div id="appointments-cards-container">
+                <!-- Cards serão inseridos via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" id="prev-page"><i class="fas fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#" class="page-number">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" class="page-number">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" class="page-number">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#" id="next-page"><i class="fas fa-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Modal Detalhes do Atendimento -->
+    <div class="modal fade" id="appointmentModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Detalhes do Atendimento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-primary-custom fw-bold">ID do Atendimento</label>
+                            <p id="detail-id" class="form-control-static"></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-primary-custom fw-bold">Data/Hora</label>
+                            <p id="detail-datetime" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-primary-custom fw-bold">Pet</label>
+                            <p id="detail-pet" class="form-control-static"></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-primary-custom fw-bold">Peso</label>
+                            <p id="detail-weight" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-primary-custom fw-bold">Veterinário</label>
+                            <p id="detail-collaborator" class="form-control-static"></p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-primary-custom fw-bold">Responsável</label>
+                            <p id="detail-user" class="form-control-static"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-primary-custom fw-bold">Medicamento</label>
+                        <p id="detail-medication" class="form-control-static"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-primary-custom fw-bold">Diagnóstico</label>
+                        <p id="detail-diagnosis" class="form-control-static"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-primary-custom fw-bold">Observações</label>
+                        <p id="detail-observation" class="form-control-static"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-primary-custom fw-bold">Data de Cadastro</label>
+                        <p id="detail-created" class="form-control-static"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Fechar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-edit-appointment">
+                        <i class="fas fa-edit me-2"></i>Editar Atendimento
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Tem certeza que deseja excluir este atendimento?</p>
+                    <p class="text-muted">Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btn-confirm-delete">
+                        <i class="fas fa-trash me-2"></i>Confirmar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Dados de exemplo para a listagem
-        const atendimentos = [
+        // Dados simulados de atendimentos
+        const appointmentsMockData = [
             {
                 id: 1,
                 idPet: 101,
@@ -133,158 +310,252 @@
                 diagnostico: "Anemia leve",
                 observacao: "Incluir suplemento na dieta diária",
                 dataCadastro: "2025-05-17T14:50:00"
+            },
+            {
+                id: 6,
+                idPet: 106,
+                nomePet: "Nina",
+                idColaborador: 204,
+                nomeColaborador: "Dra. Juliana Costa",
+                idUsuario: 306,
+                nomeUsuario: "Ana Sousa",
+                peso: 4.1,
+                dataHora: "2025-05-19T11:00:00",
+                medicamento: "Colírio oftálmico",
+                diagnostico: "Conjuntivite",
+                observacao: "Aplicar 2x ao dia por 5 dias",
+                dataCadastro: "2025-05-18T10:30:00"
             }
         ];
-        
-        // Função para formatar a data
-        function formatarData(dataString) {
-            const data = new Date(dataString);
-            return data.toLocaleString('pt-BR');
+
+        // Elementos DOM
+        const searchInput = document.getElementById('search-input');
+        const alertBox = document.getElementById('alert');
+        const appointmentsTableBody = document.getElementById('appointments-table-body');
+        const appointmentsCardsContainer = document.getElementById('appointments-cards-container');
+        const appointmentModal = new bootstrap.Modal(document.getElementById('appointmentModal'));
+        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        const btnConfirmDelete = document.getElementById('btn-confirm-delete');
+
+        let currentDeleteId = null;
+
+        // Formatação da data
+        function formatDateTime(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleString('pt-BR');
         }
-        
-        // Função para preencher a tabela com os dados
-        function preencherTabela(dados) {
-            const tbody = document.querySelector('#tabela-atendimentos tbody');
-            tbody.innerHTML = '';
+
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        // Mostrar alerta
+        function showAlert(message, type) {
+            alertBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                ${message}
+            `;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.classList.remove('d-none');
             
-            dados.forEach(atendimento => {
-                const tr = document.createElement('tr');
-                
-                tr.innerHTML = `
-                    <td>${atendimento.id}</td>
-                    <td>${atendimento.nomePet}</td>
-                    <td>${atendimento.nomeColaborador}</td>
-                    <td>${atendimento.nomeUsuario}</td>
-                    <td>${atendimento.peso.toFixed(2)}</td>
-                    <td>${formatarData(atendimento.dataHora)}</td>
-                    <td>${atendimento.medicamento}</td>
-                    <td>${atendimento.diagnostico}</td>
-                    <td>${atendimento.observacao}</td>
-                    <td>${formatarData(atendimento.dataCadastro)}</td>
-                    <td class="actions">
-                        <button class="view-btn" onclick="visualizarAtendimento(${atendimento.id})"><i class="fas fa-eye"></i> Ver</button>
-                        <button class="edit-btn" onclick="editarAtendimento(${atendimento.id})"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="delete-btn" onclick="excluirAtendimento(${atendimento.id})"><i class="fas fa-trash"></i></button>
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+            }, 4000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Renderizar tabela (Desktop)
+        function renderAppointmentsTable(appointments) {
+            appointmentsTableBody.innerHTML = '';
+            
+            appointments.forEach(appointment => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>#${appointment.id}</strong></td>
+                    <td>${appointment.nomePet}</td>
+                    <td>${appointment.nomeColaborador}</td>
+                    <td>${appointment.nomeUsuario}</td>
+                    <td>${appointment.peso.toFixed(1)} kg</td>
+                    <td>${formatDateTime(appointment.dataHora)}</td>
+                    <td><span class="text-truncate-custom" title="${appointment.diagnostico}">${appointment.diagnostico}</span></td>
+                    <td>
+                        <button class="action-btn btn-view" onclick="viewAppointment(${appointment.id})" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn btn-edit" onclick="editAppointment(${appointment.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${appointment.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </td>
                 `;
-                
-                tbody.appendChild(tr);
-            });
-            
-            // Adicionar listeners aos botões de ação
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', () => visualizarAtendimento(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => editarAtendimento(btn.dataset.id));
-            });
-            
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => excluirAtendimento(btn.dataset.id));
+                appointmentsTableBody.appendChild(row);
             });
         }
-        
-        // Função para pesquisar atendimentos
-        function pesquisarAtendimentos() {
-            const termoPesquisa = document.getElementById('pesquisar').value.toLowerCase();
+
+        // Renderizar cards (Mobile)
+        function renderAppointmentsCards(appointments) {
+            appointmentsCardsContainer.innerHTML = '';
             
-            if (termoPesquisa.trim() === '') {
-                preencherTabela(atendimentos);
+            appointments.forEach(appointment => {
+                const card = document.createElement('div');
+                card.className = 'appointment-card-mobile';
+                card.innerHTML = `
+                    <div class="appointment-header-mobile">
+                        <h4 class="appointment-id-mobile">Atendimento #${appointment.id}</h4>
+                        <small class="text-muted">${formatDate(appointment.dataHora)}</small>
+                    </div>
+                    
+                    <div class="appointment-details-mobile">
+                        <div class="appointment-detail-mobile">
+                            <span class="appointment-detail-label-mobile">Pet</span>
+                            <span class="appointment-detail-value-mobile">${appointment.nomePet}</span>
+                        </div>
+                        <div class="appointment-detail-mobile">
+                            <span class="appointment-detail-label-mobile">Veterinário</span>
+                            <span class="appointment-detail-value-mobile">${appointment.nomeColaborador}</span>
+                        </div>
+                        <div class="appointment-detail-mobile">
+                            <span class="appointment-detail-label-mobile">Responsável</span>
+                            <span class="appointment-detail-value-mobile">${appointment.nomeUsuario}</span>
+                        </div>
+                        <div class="appointment-detail-mobile">
+                            <span class="appointment-detail-label-mobile">Peso</span>
+                            <span class="appointment-detail-value-mobile">${appointment.peso.toFixed(1)} kg</span>
+                        </div>
+                        <div class="appointment-detail-mobile">
+                            <span class="appointment-detail-label-mobile">Medicamento</span>
+                            <span class="appointment-detail-value-mobile">${appointment.medicamento}</span>
+                        </div>
+                        <div class="appointment-detail-mobile">
+                            <span class="appointment-detail-label-mobile">Diagnóstico</span>
+                            <span class="appointment-detail-value-mobile">${appointment.diagnostico}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="appointment-actions-mobile">
+                        <button class="action-btn btn-view" onclick="viewAppointment(${appointment.id})" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn btn-edit" onclick="editAppointment(${appointment.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${appointment.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                appointmentsCardsContainer.appendChild(card);
+            });
+        }
+
+        // Renderizar atendimentos (ambas as views)
+        function renderAppointments(appointments = appointmentsMockData) {
+            renderAppointmentsTable(appointments);
+            renderAppointmentsCards(appointments);
+        }
+
+        // Filtrar atendimentos
+        function filterAppointments() {
+            const searchTerm = searchInput.value.toLowerCase();
+            
+            if (!searchTerm) {
+                renderAppointments();
                 return;
             }
             
-            const resultados = atendimentos.filter(atendimento => 
-                atendimento.nomePet.toLowerCase().includes(termoPesquisa) ||
-                atendimento.nomeUsuario.toLowerCase().includes(termoPesquisa) ||
-                atendimento.diagnostico.toLowerCase().includes(termoPesquisa)
-            );
+            const filteredAppointments = appointmentsMockData.filter(appointment => {
+                return (
+                    appointment.nomePet.toLowerCase().includes(searchTerm) ||
+                    appointment.nomeColaborador.toLowerCase().includes(searchTerm) ||
+                    appointment.nomeUsuario.toLowerCase().includes(searchTerm) ||
+                    appointment.diagnostico.toLowerCase().includes(searchTerm) ||
+                    appointment.medicamento.toLowerCase().includes(searchTerm) ||
+                    appointment.id.toString().includes(searchTerm)
+                );
+            });
             
-            preencherTabela(resultados);
-        }
-        
-        // Funções para ações nos atendimentos
-        function visualizarAtendimento(id) {
-            alert(`Visualizando detalhes do atendimento ID: ${id}`);
-            // Aqui você adicionaria código para abrir uma modal ou redirecionar para a página de detalhes
-        }
-        
-        function editarAtendimento(id) {
-            alert(`Editando atendimento ID: ${id}`);
-            // Aqui você adicionaria código para abrir formulário de edição ou redirecionar para página de edição
-        }
-        
-        function excluirAtendimento(id) {
-            if (confirm(`Tem certeza que deseja excluir o atendimento ID: ${id}?`)) {
-                // Aqui você implementaria a lógica para excluir o registro
-                alert(`Atendimento ID: ${id} excluído com sucesso!`);
-                // Remover da lista de atendimentos e atualizar a tabela
-                const index = atendimentos.findIndex(a => a.id == id);
-                if (index !== -1) {
-                    atendimentos.splice(index, 1);
-                    preencherTabela(atendimentos);
-                }
+            renderAppointments(filteredAppointments);
+            
+            if (filteredAppointments.length === 0) {
+                showAlert('Nenhum atendimento encontrado com os termos de busca informados.', 'warning');
+            } else {
+                showAlert(`${filteredAppointments.length} atendimento(s) encontrado(s).`, 'success');
             }
         }
-        
-        // Função para exportar para PDF
-        function exportarPDF() {
-            alert('Exportando dados para PDF...');
-            // Aqui seria implementada a lógica para gerar um PDF com a biblioteca adequada
-            // Como exemplo, podemos simular um alerta de sucesso
-            setTimeout(() => {
-                alert('Arquivo PDF gerado com sucesso!');
-            }, 1000);
+
+        // Visualizar atendimento
+        function viewAppointment(appointmentId) {
+            const appointment = appointmentsMockData.find(a => a.id === appointmentId);
+            if (appointment) {
+                document.getElementById('detail-id').textContent = `#${appointment.id}`;
+                document.getElementById('detail-datetime').textContent = formatDateTime(appointment.dataHora);
+                document.getElementById('detail-pet').textContent = appointment.nomePet;
+                document.getElementById('detail-weight').textContent = `${appointment.peso.toFixed(1)} kg`;
+                document.getElementById('detail-collaborator').textContent = appointment.nomeColaborador;
+                document.getElementById('detail-user').textContent = appointment.nomeUsuario;
+                document.getElementById('detail-medication').textContent = appointment.medicamento;
+                document.getElementById('detail-diagnosis').textContent = appointment.diagnostico;
+                document.getElementById('detail-observation').textContent = appointment.observacao;
+                document.getElementById('detail-created').textContent = formatDateTime(appointment.dataCadastro);
+                
+                document.getElementById('btn-edit-appointment').onclick = () => {
+                    appointmentModal.hide();
+                    editAppointment(appointmentId);
+                };
+                
+                appointmentModal.show();
+            }
         }
-        
-        // Função para adicionar novo atendimento
-        function novoAtendimento() {
-            window.location.href = 'cadastro_atendimento.html';
+
+        // Editar atendimento
+        function editAppointment(appointmentId) {
+            // Redirecionar para página de edição
+            window.location.href = `cadastro_atendimento.html?id=${appointmentId}`;
         }
-        
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', () => {
-            preencherTabela(atendimentos);
-            
-            document.getElementById('btn-pesquisar').addEventListener('click', pesquisarAtendimentos);
-            document.getElementById('pesquisar').addEventListener('keyup', event => {
-                if (event.key === 'Enter') {
-                    pesquisarAtendimentos();
-                }
-            });
-            
-            document.getElementById('exportar-pdf').addEventListener('click', exportarPDF);
-            document.getElementById('novo-atendimento').addEventListener('click', novoAtendimento);
-            
-            // Paginação (simplificada para demonstração)
-            document.querySelectorAll('.page-number').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    document.querySelector('.page-number.active').classList.remove('active');
-                    this.classList.add('active');
-                    // Aqui você implementaria a lógica para carregar a página correspondente
-                });
-            });
-            
-            document.getElementById('prev-page').addEventListener('click', () => {
-                const activePage = document.querySelector('.page-number.active');
-                const prevPage = activePage.previousElementSibling;
-                if (prevPage && prevPage.classList.contains('page-number')) {
-                    activePage.classList.remove('active');
-                    prevPage.classList.add('active');
-                    // Aqui você implementaria a lógica para carregar a página anterior
-                }
-            });
-            
-            document.getElementById('next-page').addEventListener('click', () => {
-                const activePage = document.querySelector('.page-number.active');
-                const nextPage = activePage.nextElementSibling;
-                if (nextPage && nextPage.classList.contains('page-number')) {
-                    activePage.classList.remove('active');
-                    nextPage.classList.add('active');
-                    // Aqui você implementaria a lógica para carregar a próxima página
-                }
-            });
+
+        // Mostrar confirmação de exclusão
+        function showDeleteConfirmation(appointmentId) {
+            currentDeleteId = appointmentId;
+            confirmDeleteModal.show();
+        }
+
+        // Excluir atendimento
+        function deleteAppointment(appointmentId) {
+            const index = appointmentsMockData.findIndex(a => a.id === appointmentId);
+            if (index !== -1) {
+                const appointmentInfo = `#${appointmentsMockData[index].id} - ${appointmentsMockData[index].nomePet}`;
+                appointmentsMockData.splice(index, 1);
+                renderAppointments();
+                showAlert(`Atendimento ${appointmentInfo} excluído com sucesso!`, 'success');
+            }
+        }
+
+        // Exportar para PDF
+        function exportToPDF() {
+            showAlert('Funcionalidade de exportação para PDF acionada! Em breve será implementada.', 'success');
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                filterAppointments();
+            }
         });
+
+        btnConfirmDelete.addEventListener('click', () => {
+            if (currentDeleteId !== null) {
+                deleteAppointment(currentDeleteId);
+                confirmDeleteModal.hide();
+                currentDeleteId = null;
+            }
+        });
+
+        // Inicializar
+        renderAppointments();
     </script>
 </body>
 </html>

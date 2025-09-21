@@ -1,261 +1,388 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Associação 4 Patas - Cadastro de Pets</title>
+    <title>Associação 4 Patas - Cadastro de Pet</title>
+    
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/cadastro_pet.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+                <link rel="stylesheet" type="text/css" href="css/cadastro_pet.css"/>
+    
 </head>
 <body>
-    <button class="close-btn" onclick="window.location.href='index.html';">
-        <i class="fas fa-times"></i>
-    </button>
+    <!-- Decorative paws -->
+    <div class="paws paw1">🐾</div>
+    <div class="paws paw2">🐾</div>
+    <div class="paws paw3">🐾</div>
 
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="main-card mx-auto">
-                    <div class="header">
-                        <i class="fas fa-paw fa-2x mb-2"></i>
-                        <h1>Cadastro de Pet</h1>
-                        <p class="mb-0">Preencha as informações do seu pet</p>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="main-container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-placeholder">
+                        <i class="fas fa-paw"></i>
                     </div>
-
-                    <div class="progress-section">
-                        <div class="step-indicator">
-                            <div class="step active" id="step-1">1</div>
-                            <div class="step-line" id="line-1"></div>
-                            <div class="step" id="step-2">2</div>
-                        </div>
-                        <div class="text-center mt-2">
-                            <small id="step-text">Dados do Pet</small>
-                        </div>
+                    <div>
+                        <h1 class="header-title">Cadastro de Pet</h1>
+                        <p class="header-subtitle">Associação 4 Patas</p>
                     </div>
-                    <div id="message-area"></div>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-custom-secondary" onclick="window.location.href='pets.html';">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar à Lista
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
 
-                    <div class="form-content">
-                        <form id="petForm">
-                            <div class="form-step active" id="form-step-1">
-                                <h5 class="mb-3">
-                                    <i class="fas fa-paw text-primary me-2"></i>
-                                    Informações do Pet
-                                </h5>
+    <div class="main-container">
+        <!-- Alert -->
+        <div id="alert" class="alert d-none mt-3" role="alert"></div>
 
-                                <div class="photo-upload">
-                                    <div class="photo-preview" id="photo-preview" onclick="document.getElementById('photo-input').click()">
-                                        <div id="photo-placeholder">
-                                            <i class="fas fa-camera fa-2x text-muted mb-2"></i>
-                                            <div>Adicionar foto</div>
-                                        </div>
-                                        <img id="photo-img" alt="Preview">
-                                    </div>
-                                    <input type="file" id="photo-input" accept="image/*" style="display: none;">
-                                    <small class="text-muted">Clique para adicionar uma foto</small>
-                                </div>
+        <!-- Formulário de Cadastro -->
+        <div class="content-card">
+            <div class="card-header-custom">
+                <h3>
+                    <i class="fas fa-plus-circle"></i>
+                    Novo Pet na Associação
+                </h3>
+            </div>
 
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label required">Nome do Pet</label>
-                                        <input type="text" id="pet-name" class="form-control" placeholder="Nome do pet" required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="step-indicator">
+                    <div class="step active" id="step-1">1</div>
+                    <div class="step-line" id="line-1"></div>
+                    <div class="step" id="step-2">2</div>
+                </div>
+                <div class="step-text" id="step-text">Dados do Pet</div>
+            </div>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label required">Espécie</label>
-                                        <select id="pet-species" class="form-select" required>
-                                            <option value="">Selecione</option>
-                                            <option value="cachorro">Cachorro</option>
-                                            <option value="gato">Gato</option>
-                                            <option value="ave">Ave</option>
-                                            <option value="reptil">Réptil</option>
-                                            <option value="roedor">Roedor</option>
-                                            <option value="outro">Outro</option>
-                                        </select>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
+            <div class="card-body-custom">
+                <form id="petForm" novalidate>
+                    <!-- STEP 1: Dados do Pet -->
+                    <div class="form-step active" id="form-step-1">
+                        <h5 class="mb-4 text-primary-custom">
+                            <i class="fas fa-paw me-2"></i>
+                            Informações do Pet
+                        </h5>
 
-                                    <div class="col-md-6">
-                                        <label class="form-label">Raça</label>
-                                        <input type="text" id="pet-breed" class="form-control" placeholder="Raça">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">Idade</label>
-                                        <input type="text" id="pet-age" class="form-control" placeholder="Ex: 2 anos">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">Peso (kg)</label>
-                                        <input type="number" id="pet-weight" class="form-control" placeholder="0.0" step="0.1">
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">Cor</label>
-                                        <input type="text" id="pet-color" class="form-control" placeholder="Cor predominante">
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Sexo</label>
-                                        <div class="radio-group">
-                                            <label class="radio-option selected" for="male">
-                                                <input type="radio" name="petGender" id="male" value="macho" checked>
-                                                Macho
-                                            </label>
-                                            <label class="radio-option" for="female">
-                                                <input type="radio" name="petGender" id="female" value="femea">
-                                                Fêmea
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label class="form-label">Observações</label>
-                                        <textarea id="pet-notes" class="form-control" rows="3" placeholder="Características, comportamento, cuidados especiais..."></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="button-group">
-                                    <div></div>
-                                    <button type="button" class="btn-custom btn-primary-custom" onclick="nextStep()">
-                                        Próximo <i class="fas fa-arrow-right ms-1"></i>
-                                    </button>
-                                </div>
+                        <!-- Informações Básicas -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="pet-name" class="form-label form-label-custom required">Nome do Pet</label>
+                                <input type="text" id="pet-name" name="petName" class="form-control form-control-custom" 
+                                       placeholder="Digite o nome do pet" required>
+                                <div class="invalid-feedback">Nome é obrigatório</div>
                             </div>
-
-                            <div class="form-step" id="form-step-2">
-                                <h5 class="mb-3">
-                                    <i class="fas fa-user text-primary me-2"></i>
-                                    Dados do Tutor
-                                </h5>
-
-                                <div class="row g-3">
-                                    <div class="col-md-8">
-                                        <label class="form-label required">Nome Completo</label>
-                                        <input type="text" id="tutor-name" class="form-control" placeholder="Nome completo" required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="col-md-4">
-                                        <label class="form-label required">CPF</label>
-                                        <input type="text" id="tutor-cpf" class="form-control" placeholder="000.000.000-00" required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label required">Telefone</label>
-                                        <input type="tel" id="tutor-phone" class="form-control" placeholder="(00) 00000-0000" required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label">E-mail</label>
-                                        <input type="email" id="tutor-email" class="form-control" placeholder="email@exemplo.com">
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <label class="form-label required">CEP</label>
-                                        <input type="text" id="tutor-cep" class="form-control" placeholder="00000-000" required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label required">Endereço</label>
-                                        <input type="text" id="tutor-address" class="form-control" placeholder="Rua, Avenida..." required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="col-md-3">
-                                        <label class="form-label required">Número</label>
-                                        <input type="text" id="tutor-number" class="form-control" placeholder="Nº" required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label required">Cidade</label>
-                                        <input type="text" id="tutor-city" class="form-control" placeholder="Cidade" required>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label required">Estado</label>
-                                        <select id="tutor-state" class="form-select" required>
-                                            <option value="">Selecione</option>
-                                            <option value="AC">Acre</option>
-                                            <option value="AL">Alagoas</option>
-                                            <option value="AM">Amazonas</option>
-                                            <option value="BA">Bahia</option>
-                                            <option value="CE">Ceará</option>
-                                            <option value="ES">Espírito Santo</option>
-                                            <option value="GO">Goiás</option>
-                                            <option value="MG">Minas Gerais</option>
-                                            <option value="MT">Mato Grosso</option>
-                                            <option value="MS">Mato Grosso do Sul</option>
-                                            <option value="PA">Pará</option>
-                                            <option value="PR">Paraná</option>
-                                            <option value="RJ">Rio de Janeiro</option>
-                                            <option value="RN">Rio Grande do Norte</option>
-                                            <option value="RS">Rio Grande do Sul</option>
-                                            <option value="SC">Santa Catarina</option>
-                                            <option value="SP">São Paulo</option>
-                                            <option value="Other">Outro</option>
-                                        </select>
-                                        <div class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-
-                                <div class="button-group">
-                                    <button type="button" class="btn-custom btn-secondary-custom" onclick="previousStep()">
-                                        <i class="fas fa-arrow-left me-1"></i> Voltar
-                                    </button>
-                                    <div>
-                                        <button type="button" class="btn-custom btn-outline-custom me-2" onclick="resetForm()">
-                                            <i class="fas fa-undo me-1"></i> Limpar
-                                        </button>
-                                        <button type="submit" class="btn-custom btn-primary-custom" id="submit-btn">
-                                            <i class="fas fa-save me-1"></i> Cadastrar
-                                        </button>
-                                    </div>
-                                </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="pet-species" class="form-label form-label-custom required">Espécie</label>
+                                <select id="pet-species" name="petSpecies" class="form-control form-control-custom" required>
+                                    <option value="">Selecione a espécie</option>
+                                    <option value="cachorro">Cachorro</option>
+                                    <option value="gato">Gato</option>
+                                    <option value="ave">Ave</option>
+                                    <option value="reptil">Réptil</option>
+                                    <option value="roedor">Roedor</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                                <div class="invalid-feedback">Espécie é obrigatória</div>
                             </div>
-                        </form>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="pet-breed" class="form-label form-label-custom">Raça</label>
+                                <input type="text" id="pet-breed" name="petBreed" class="form-control form-control-custom" 
+                                       placeholder="Ex: Labrador, SRD, Siamês...">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="pet-age" class="form-label form-label-custom">Idade (meses)</label>
+                                <input type="number" id="pet-age" name="petAge" class="form-control form-control-custom" 
+                                       placeholder="Ex: 24" min="0">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="pet-weight" class="form-label form-label-custom">Peso (kg)</label>
+                                <input type="number" id="pet-weight" name="petWeight" class="form-control form-control-custom" 
+                                       placeholder="Ex: 12.5" step="0.1" min="0">
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="pet-color" class="form-label form-label-custom">Cor</label>
+                                <input type="text" id="pet-color" name="petColor" class="form-control form-control-custom" 
+                                       placeholder="Ex: Caramelo, Preto, Branco...">
+                            </div>
+                        </div>
+
+                        <!-- Sexo -->
+                        <div class="mb-3">
+                            <label class="form-label form-label-custom">Sexo</label>
+                            <div class="radio-group">
+                                <label class="radio-option selected" for="male">
+                                    <input type="radio" name="petGender" id="male" value="M" checked>
+                                    Macho
+                                </label>
+                                <label class="radio-option" for="female">
+                                    <input type="radio" name="petGender" id="female" value="F">
+                                    Fêmea
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Castrado -->
+                        <div class="mb-3">
+                            <label class="form-label form-label-custom">Castrado</label>
+                            <div class="radio-group">
+                                <label class="radio-option" for="castrated-yes">
+                                    <input type="radio" name="petCastrated" id="castrated-yes" value="S">
+                                    Sim
+                                </label>
+                                <label class="radio-option selected" for="castrated-no">
+                                    <input type="radio" name="petCastrated" id="castrated-no" value="N" checked>
+                                    Não
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Status de Adoção -->
+                        <div class="mb-3">
+                            <label for="pet-status" class="form-label form-label-custom required">Status de Adoção</label>
+                            <select id="pet-status" name="petStatus" class="form-control form-control-custom" required>
+                                <option value="">Selecione o status</option>
+                                <option value="Disponível">Disponível para Adoção</option>
+                                <option value="Adotado">Adotado</option>
+                                <option value="Tratamento">Em Tratamento</option>
+                                <option value="Quarentena">Em Quarentena</option>
+                            </select>
+                            <div class="invalid-feedback">Status é obrigatório</div>
+                        </div>
+
+                        <!-- Características -->
+                        <div class="mb-4">
+                            <label for="pet-characteristics" class="form-label form-label-custom">Características</label>
+                            <textarea id="pet-characteristics" name="petCharacteristics" class="form-control form-control-custom" 
+                                      rows="3" placeholder="Descreva o comportamento, personalidade, cuidados especiais..."></textarea>
+                        </div>
+
+                        <!-- Opção sem tutor -->
+                        <div class="toggle-container">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="no-tutor" name="noTutor">
+                                <span class="slider"></span>
+                            </label>
+                            <div>
+                                <div class="toggle-label">Pet sem tutor (resgate/abandono)</div>
+                                <small class="text-muted">Marque se o pet não possui tutor cadastrado</small>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+                            <div></div>
+                            <button type="button" class="btn btn-next" onclick="nextStep()">
+                                Próximo
+                                <i class="fas fa-arrow-right ms-2"></i>
+                            </button>
+                        </div>
                     </div>
+
+                    <!-- STEP 2: Dados do Tutor -->
+                    <div class="form-step" id="form-step-2">
+                        <h5 class="mb-4 text-primary-custom">
+                            <i class="fas fa-user me-2"></i>
+                            Dados do Tutor
+                        </h5>
+
+                        <!-- Dados Pessoais -->
+                        <div class="row mb-3">
+                            <div class="col-md-8 mb-3">
+                                <label for="tutor-name" class="form-label form-label-custom required">Nome Completo</label>
+                                <input type="text" id="tutor-name" name="tutorName" class="form-control form-control-custom" 
+                                       placeholder="Nome completo do tutor" required>
+                                <div class="invalid-feedback">Nome é obrigatório</div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <label for="tutor-cpf" class="form-label form-label-custom required">CPF</label>
+                                <input type="text" id="tutor-cpf" name="tutorCpf" class="form-control form-control-custom" 
+                                       placeholder="000.000.000-00" required>
+                                <div class="invalid-feedback">CPF é obrigatório</div>
+                            </div>
+                        </div>
+
+                        <!-- Contato -->
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <label for="tutor-phone" class="form-label form-label-custom required">Telefone</label>
+                                <input type="tel" id="tutor-phone" name="tutorPhone" class="form-control form-control-custom" 
+                                       placeholder="(00) 00000-0000" required>
+                                <div class="invalid-feedback">Telefone é obrigatório</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="tutor-email" class="form-label form-label-custom">E-mail</label>
+                                <input type="email" id="tutor-email" name="tutorEmail" class="form-control form-control-custom" 
+                                       placeholder="email@exemplo.com">
+                            </div>
+                        </div>
+
+                        <!-- Endereço -->
+                        <div class="row mb-3">
+                            <div class="col-md-3 mb-3">
+                                <label for="tutor-cep" class="form-label form-label-custom required">CEP</label>
+                                <input type="text" id="tutor-cep" name="tutorCep" class="form-control form-control-custom" 
+                                       placeholder="00000-000" required>
+                                <div class="invalid-feedback">CEP é obrigatório</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="tutor-address" class="form-label form-label-custom required">Endereço</label>
+                                <input type="text" id="tutor-address" name="tutorAddress" class="form-control form-control-custom" 
+                                       placeholder="Rua, Avenida..." required>
+                                <div class="invalid-feedback">Endereço é obrigatório</div>
+                            </div>
+                            
+                            <div class="col-md-3 mb-3">
+                                <label for="tutor-number" class="form-label form-label-custom required">Número</label>
+                                <input type="text" id="tutor-number" name="tutorNumber" class="form-control form-control-custom" 
+                                       placeholder="Nº" required>
+                                <div class="invalid-feedback">Número é obrigatório</div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6 mb-3">
+                                <label for="tutor-city" class="form-label form-label-custom required">Cidade</label>
+                                <input type="text" id="tutor-city" name="tutorCity" class="form-control form-control-custom" 
+                                       placeholder="Cidade" required>
+                                <div class="invalid-feedback">Cidade é obrigatória</div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="tutor-state" class="form-label form-label-custom required">Estado</label>
+                                <select id="tutor-state" name="tutorState" class="form-control form-control-custom" required>
+                                    <option value="">Selecione o estado</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                                <div class="invalid-feedback">Estado é obrigatório</div>
+                            </div>
+                        </div>
+
+                        <!-- Botões -->
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-2">
+                            <button type="button" class="btn btn-clear" onclick="previousStep()">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Voltar
+                            </button>
+                            <div class="d-flex flex-column flex-md-row gap-2">
+                                <button type="button" class="btn btn-clear" onclick="resetForm()">
+                                    <i class="fas fa-eraser me-2"></i>
+                                    Limpar Formulário
+                                </button>
+                                <button type="submit" class="btn btn-save" id="submit-btn">
+                                    <i class="fas fa-save me-2"></i>
+                                    Cadastrar Pet
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Ação</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <i class="fas fa-question-circle text-warning" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p id="modal-message">Tem certeza que deseja realizar esta ação?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-confirm-action">
+                        <i class="fas fa-check me-2"></i>Confirmar
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
         let currentStep = 1;
-        function showMessage(message, type) {
-            const messageArea = document.getElementById('message-area');
-            messageArea.innerHTML = `
-                <div class="alert-custom alert-${type}">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
-                    ${message}
-                </div>
+        
+        // Elementos DOM
+        const alertBox = document.getElementById('alert');
+        const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        
+        // Mostrar alerta
+        function showAlert(message, type) {
+            alertBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'times-circle'} me-2"></i>
+                ${message}
             `;
-            setTimeout(() => messageArea.innerHTML = '', 5000);
+            alertBox.className = `alert alert-${type}`;
+            alertBox.classList.remove('d-none');
+            
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+            }, 4000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function nextStep() {
-            if (validateStep1()) {
-                currentStep = 2;
-                updateStep();
-                showMessage('Próxima etapa: dados do tutor', 'success');
-            }
-        }
-
-        function previousStep() {
-            currentStep = 1;
-            updateStep();
-        }
-
+        // Atualizar indicador de passos
         function updateStep() {
+            // Remover classes ativas
             document.querySelectorAll('.form-step').forEach(step => step.classList.remove('active'));
             document.getElementById(`form-step-${currentStep}`).classList.add('active');
             
@@ -274,170 +401,249 @@
             }
         }
 
+        // Próximo passo
+        function nextStep() {
+            if (validateStep1()) {
+                // Verificar se é "sem tutor"
+                const noTutor = document.getElementById('no-tutor').checked;
+                if (noTutor) {
+                    // Pular para submissão direta
+                    confirmarAcao('Pet sem tutor cadastrado. Deseja finalizar o cadastro?', () => {
+                        submitForm(true);
+                    });
+                } else {
+                    currentStep = 2;
+                    updateStep();
+                    showAlert('Próxima etapa: dados do tutor', 'success');
+                }
+            }
+        }
+
+        // Passo anterior
+        function previousStep() {
+            currentStep = 1;
+            updateStep();
+        }
+
+        // Validar primeiro passo
         function validateStep1() {
             const name = document.getElementById('pet-name');
             const species = document.getElementById('pet-species');
+            const status = document.getElementById('pet-status');
             let isValid = true;
 
+            // Limpar validações anteriores
+            document.querySelectorAll('.is-invalid').forEach(field => {
+                field.classList.remove('is-invalid');
+            });
+
             if (!name.value.trim()) {
-                setInvalid(name, 'Nome é obrigatório');
+                name.classList.add('is-invalid');
                 isValid = false;
-            } else {
-                setValid(name);
             }
 
             if (!species.value) {
-                setInvalid(species, 'Espécie é obrigatória');
+                species.classList.add('is-invalid');
                 isValid = false;
-            } else {
-                setValid(species);
+            }
+
+            if (!status.value) {
+                status.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                showAlert('Por favor, preencha todos os campos obrigatórios.', 'danger');
             }
 
             return isValid;
         }
 
+        // Validar segundo passo
         function validateStep2() {
-            const fields = [
-                { id: 'tutor-name', message: 'Nome é obrigatório' },
-                { id: 'tutor-cpf', message: 'CPF é obrigatório' },
-                { id: 'tutor-phone', message: 'Telefone é obrigatório' },
-                { id: 'tutor-cep', message: 'CEP é obrigatório' },
-                { id: 'tutor-address', message: 'Endereço é obrigatório' },
-                { id: 'tutor-number', message: 'Número é obrigatório' },
-                { id: 'tutor-city', message: 'Cidade é obrigatória' },
-                { id: 'tutor-state', message: 'Estado é obrigatório' }
+            const requiredFields = [
+                'tutor-name', 'tutor-cpf', 'tutor-phone', 'tutor-cep',
+                'tutor-address', 'tutor-number', 'tutor-city', 'tutor-state'
             ];
 
             let isValid = true;
-            fields.forEach(field => {
-                const element = document.getElementById(field.id);
-                if (!element.value.trim()) {
-                    setInvalid(element, field.message);
+
+            // Limpar validações anteriores
+            document.querySelectorAll('.is-invalid').forEach(field => {
+                field.classList.remove('is-invalid');
+            });
+
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
                     isValid = false;
-                } else {
-                    setValid(element);
                 }
             });
+
+            if (!isValid) {
+                showAlert('Por favor, preencha todos os campos obrigatórios do tutor.', 'danger');
+            }
 
             return isValid;
         }
 
-        function setValid(field) {
-            field.classList.remove('is-invalid');
-            field.classList.add('is-valid');
-            const feedback = field.nextElementSibling;
-            if (feedback && feedback.classList.contains('invalid-feedback')) {
-                feedback.textContent = '';
-            }
+        // Submeter formulário
+        function submitForm(noTutor = false) {
+            const submitBtn = document.getElementById('submit-btn');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Cadastrando...';
+            submitBtn.disabled = true;
+
+            // Simular envio
+            setTimeout(() => {
+                const petId = 'PET' + Math.floor(10000 + Math.random() * 90000);
+                const message = noTutor ? 
+                    `Pet sem tutor cadastrado com sucesso! ID: ${petId}` :
+                    `Pet cadastrado com sucesso! ID: ${petId}`;
+                
+                showAlert(message, 'success');
+                
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Limpar formulário após sucesso
+                setTimeout(() => {
+                    resetForm();
+                }, 2000);
+            }, 2000);
         }
 
-        function setInvalid(field, message) {
-            field.classList.remove('is-valid');
-            field.classList.add('is-invalid');
-            const feedback = field.nextElementSibling;
-            if (feedback && feedback.classList.contains('invalid-feedback')) {
-                feedback.textContent = message;
-            }
+        // Confirmar ação
+        function confirmarAcao(message, callback) {
+            document.getElementById('modal-message').textContent = message;
+            document.getElementById('btn-confirm-action').onclick = () => {
+                confirmModal.hide();
+                callback();
+            };
+            confirmModal.show();
         }
 
-        document.getElementById('photo-input').addEventListener('change', function(e) {
-            if (e.target.files && e.target.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = document.getElementById('photo-img');
-                    const placeholder = document.getElementById('photo-placeholder');
-                    const preview = document.getElementById('photo-preview');
-                    
-                    img.src = event.target.result;
-                    img.style.display = 'block';
-                    placeholder.style.display = 'none';
-                    preview.classList.add('has-image');
-                };
-                reader.readAsDataURL(e.target.files[0]);
-            }
-        });
-
-        document.getElementById('tutor-phone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 10) {
-                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-            } else {
-                value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
-            }
-            e.target.value = value;
-        });
-
-        document.getElementById('tutor-cpf').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2}).*/, '$1.$2.$3-$4');
-            e.target.value = value;
-        });
-
-        document.getElementById('tutor-cep').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            value = value.replace(/^(\d{5})(\d{0,3}).*/, '$1-$2');
-            e.target.value = value;
-        });
-
-        document.getElementById('tutor-cep').addEventListener('blur', function() {
-            const cep = this.value.replace(/\D/g, '');
-            if (cep.length === 8) {
-                fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!data.erro) {
-                            document.getElementById('tutor-address').value = data.logradouro;
-                            document.getElementById('tutor-city').value = data.localidade;
-                            document.getElementById('tutor-state').value = data.uf;
-                        }
-                    });
-            }
-        });
-
-        document.querySelectorAll('input[name="petGender"]').forEach(radio => {
-            radio.addEventListener('change', function() {
+        // Limpar formulário
+        function resetForm() {
+            confirmarAcao('Tem certeza que deseja limpar todos os campos?', () => {
+                document.getElementById('petForm').reset();
+                
+                // Resetar validações
+                document.querySelectorAll('.is-invalid').forEach(field => {
+                    field.classList.remove('is-invalid');
+                });
+                
+                // Resetar radio buttons
                 document.querySelectorAll('.radio-option').forEach(option => {
                     option.classList.remove('selected');
                 });
-                this.parentElement.classList.add('selected');
-            });
-        });
-
-        document.getElementById('petForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            if (!validateStep2()) {
-                showMessage('Por favor, corrija os erros antes de continuar', 'error');
-                return;
-            }
-
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Cadastrando...';
-            submitBtn.disabled = true;
-
-            setTimeout(() => {
-                const petId = 'PET' + Math.floor(10000 + Math.random() * 90000);
-                showMessage(`Pet cadastrado com sucesso! ID: ${petId}`, 'success');
-                submitBtn.innerHTML = '<i class="fas fa-save me-1"></i> Cadastrar';
-                submitBtn.disabled = false;
-            }, 2000);
-        });
-
-        function resetForm() {
-            if (confirm('Limpar todos os dados?')) {
-                document.getElementById('petForm').reset();
-                document.getElementById('photo-img').style.display = 'none';
-                document.getElementById('photo-placeholder').style.display = 'block';
-                document.getElementById('photo-preview').classList.remove('has-image');
-                document.querySelectorAll('.form-control, .form-select').forEach(field => {
-                    field.classList.remove('is-valid', 'is-invalid');
-                });
-                document.querySelector('input[name="petGender"][value="macho"]').parentElement.classList.add('selected');
+                document.querySelector('input[name="petGender"][value="M"]').parentElement.classList.add('selected');
+                document.querySelector('input[name="petCastrated"][value="N"]').parentElement.classList.add('selected');
+                
+                // Voltar ao primeiro passo
                 currentStep = 1;
                 updateStep();
-                showMessage('Formulário limpo!', 'success');
-            }
+                
+                showAlert('Formulário limpo com sucesso!', 'success');
+            });
         }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            // Radio buttons
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const name = this.name;
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                        r.parentElement.classList.remove('selected');
+                    });
+                    this.parentElement.classList.add('selected');
+                });
+            });
+
+            // Toggle sem tutor
+            document.getElementById('no-tutor').addEventListener('change', function() {
+                if (this.checked) {
+                    showAlert('Pet marcado como "sem tutor". Você poderá finalizar diretamente.', 'warning');
+                }
+            });
+
+            // Máscaras
+            document.getElementById('tutor-phone').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 10) {
+                    value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+                } else {
+                    value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+                }
+                e.target.value = value;
+            });
+
+            document.getElementById('tutor-cpf').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{0,2}).*/, '$1.$2.$3-$4');
+                e.target.value = value;
+            });
+
+            document.getElementById('tutor-cep').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                value = value.replace(/^(\d{5})(\d{0,3}).*/, '$1-$2');
+                e.target.value = value;
+            });
+
+            // Buscar CEP
+            document.getElementById('tutor-cep').addEventListener('blur', function() {
+                const cep = this.value.replace(/\D/g, '');
+                if (cep.length === 8) {
+                    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.erro) {
+                                document.getElementById('tutor-address').value = data.logradouro;
+                                document.getElementById('tutor-city').value = data.localidade;
+                                document.getElementById('tutor-state').value = data.uf;
+                                showAlert('Endereço preenchido automaticamente!', 'success');
+                            }
+                        })
+                        .catch(() => {
+                            showAlert('Erro ao buscar CEP. Preencha manualmente.', 'warning');
+                        });
+                }
+            });
+
+            // Submit do formulário
+            document.getElementById('petForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (currentStep === 1) {
+                    nextStep();
+                } else {
+                    if (validateStep2()) {
+                        confirmarAcao('Tem certeza que deseja cadastrar este pet?', () => {
+                            submitForm(false);
+                        });
+                    }
+                }
+            });
+
+            // Validação em tempo real
+            document.querySelectorAll('input, select, textarea').forEach(field => {
+                field.addEventListener('blur', () => {
+                    if (field.hasAttribute('required') && !field.value.trim()) {
+                        field.classList.add('is-invalid');
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+
+                field.addEventListener('input', () => {
+                    if (field.classList.contains('is-invalid') && field.value.trim()) {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+            });
+        });
     </script>
 </body>
 </html>

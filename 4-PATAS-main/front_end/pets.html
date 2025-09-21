@@ -4,187 +4,145 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Associação 4 Patas - Gerenciamento de Pets</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="css/pets.css"/>
 
-    <link rel="stylesheet" type="text/css" href="css/pets.css"/>
 </head>
 <body>
     <div class="paws paw1">🐾</div>
     <div class="paws paw2">🐾</div>
     <div class="paws paw3">🐾</div>
-    <header>
-        <div class="header-container">
-            <div class="left-side">
-                <div class="logo">
-                    <img src="assets/logo.png.png" alt="Logo 4 Patas" style="width: 50px; height: 50px; object-fit: contain;">
+
+    <header class="main-header">
+        <div class="main-container">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-placeholder">
+                        <i class="fas fa-paw"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Gerenciamento de Pets</h1>
+                        <p class="header-subtitle">Associação 4 Patas</p>
+                    </div>
                 </div>
-                <button class="back-btn" id="backBtn">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                    </svg>
-                    Voltar ao Menu
-                </button>
-            </div>
-            <div class="right-side">
-                <div class="action-buttons">
-                    <a href="cadastro_pet.html" class="add-btn" id="addPetBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                        </svg>
+                <div class="header-actions">
+                    <button class="btn btn-custom-secondary me-2" onclick="window.location.href='index.html';">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar ao Menu
+                    </button>
+                    <button class="btn btn-custom-primary me-2" onclick="window.location.href='cadastro_pet.html';">
+                        <i class="fas fa-plus me-2"></i>
                         Adicionar Pet
-                    </a>
-                    <button class="export-btn" id="exportPdfBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                            <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                            <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>
-                        </svg>
+                    </button>
+                    <button class="btn btn-custom-secondary" onclick="exportToPDF()">
+                        <i class="fas fa-download me-2"></i>
                         Exportar PDF
                     </button>
-                </div>
-                <div class="user-info">
-                    <span class="user-name">Olá, Usuário</span>
-                    <button class="logout-btn">Sair</button>
                 </div>
             </div>
         </div>
     </header>
-    
-    <main>
-        <div class="search-bar">
-            <input type="text" class="search-input" placeholder="Buscar pet por nome, espécie, raça...">
-            <button class="filter-btn" id="filterBtn">Filtrar</button>
-        </div>
-        
-        <div class="pets-grid" id="petsGrid">
-            <!-- Os cartões de pets serão gerados dinamicamente pelo JavaScript -->
-        </div>
-        
-        <div class="pagination" id="pagination">
-            <button>1</button>
-            <button class="active">2</button>
-            <button>3</button>
-            <button>></button>
-        </div>
-    </main>
-    
-    <!-- Modal para adicionar/editar pet -->
-    <div class="modal" id="petModal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModal">&times;</button>
-            <h2 class="modal-title" id="modalTitle">Adicionar Novo Pet</h2>
-            <form id="petForm">
-                <input type="hidden" id="petId">
-                <div class="form-group">
-                    <label class="form-label" for="petName">Nome</label>
-                    <input type="text" class="form-control" id="petName" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petSpecies">Espécie</label>
-                    <select class="form-select" id="petSpecies" required>
-                        <option value="">Selecione</option>
-                        <option value="Cachorro">Cachorro</option>
-                        <option value="Gato">Gato</option>
-                        <option value="Ave">Ave</option>
-                        <option value="Roedor">Roedor</option>
-                        <option value="Outro">Outro</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petBreed">Raça</label>
-                    <input type="text" class="form-control" id="petBreed">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petColor">Cor</label>
-                    <input type="text" class="form-control" id="petColor">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petSize">Porte</label>
-                    <select class="form-select" id="petSize" required>
-                        <option value="">Selecione</option>
-                        <option value="P">Pequeno</option>
-                        <option value="M">Médio</option>
-                        <option value="G">Grande</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petAge">Idade (em meses)</label>
-                    <input type="number" class="form-control" id="petAge" min="0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petWeight">Peso (kg)</label>
-                    <input type="number" class="form-control" id="petWeight" step="0.01" min="0">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petCharacteristics">Características</label>
-                    <textarea class="form-control" id="petCharacteristics" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petAdoptionStatus">Situação de Adoção</label>
-                    <select class="form-select" id="petAdoptionStatus" required>
-                        <option value="">Selecione</option>
-                        <option value="Disponível">Disponível para adoção</option>
-                        <option value="Adotado">Já adotado</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petNeutered">Castrado</label>
-                    <select class="form-select" id="petNeutered">
-                        <option value="S">Sim</option>
-                        <option value="N">Não</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petSex">Sexo</label>
-                    <select class="form-select" id="petSex" required>
-                        <option value="">Selecione</option>
-                        <option value="M">Macho</option>
-                        <option value="F">Fêmea</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label" for="petOrigin">Origem</label>
-                    <input type="text" class="form-control" id="petOrigin">
-                </div>
-               
-                <div class="form-group">
-                    <label class="form-label">Endereço</label>
-                    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
-                        <input type="text" class="form-control" id="petAddress" placeholder="Logradouro">
-                        <input type="text" class="form-control" id="petNumber" placeholder="Número">
+
+    <div class="main-container">
+        <div id="alert" class="alert d-none mt-3" role="alert"></div>
+        <div class="search-section">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="fas fa-search text-muted"></i>
+                        </span>
+                        <input type="text" id="search-input" class="form-control search-input border-start-0" 
+                               placeholder="Buscar pet por nome, espécie, raça, responsável...">
                     </div>
                 </div>
-                <div class="form-group">
-                    <input type="text" class="form-control" id="petComplement" placeholder="Complemento">
+                <div class="col-md-2">
+                    <button class="btn btn-custom-primary w-100" onclick="filterPets()">
+                        <i class="fas fa-search me-2"></i>
+                        Buscar
+                    </button>
                 </div>
-                <div class="form-group">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
-                        <input type="text" class="form-control" id="petNeighborhood" placeholder="Bairro">
-                        <input type="text" class="form-control" id="petCity" placeholder="Cidade">
-                        <input type="text" class="form-control" id="petState" placeholder="Estado">
-                    </div>
+            </div>
+        </div>
+        <div class="pets-container-desktop">
+            <div class="pets-table">
+                <div class="table-header">
+                    <h3>
+                        <i class="fas fa-list"></i>
+                        Lista de Pets Cadastrados
+                    </h3>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="petPhone">Telefone</label>
-                    <input type="text" class="form-control" id="petPhone" placeholder="(00) 00000-0000">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Espécie</th>
+                                <th>Raça</th>
+                                <th>Idade</th>
+                                <th>Responsável</th>
+                                <th>Status</th>
+                                <th width="120">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pets-table-body">
+                        </tbody>
+                    </table>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="petResponsible">Responsável</label>
-                    <input type="text" class="form-control" id="petResponsible">
+            </div>
+        </div>
+        <div class="pets-container-mobile">
+            <div id="pets-cards-container">
+            </div>
+        </div>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link" href="#">1</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">2</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">3</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="form-buttons">
-                    <button type="button" class="btn-cancel" id="cancelBtn">Cancelar</button>
-                    <button type="submit" class="btn-save">Salvar</button>
+                <div class="modal-body text-center">
+                    <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                    <p>Tem certeza que deseja excluir este pet?</p>
+                    <p class="text-muted">Esta ação não pode ser desfeita.</p>
                 </div>
-            </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btn-confirm-delete">
+                        <i class="fas fa-trash me-2"></i>Confirmar
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <footer>
-        &copy; 2025 Sistema Pet - Todos os direitos reservados
-    </footer>
-
     <script>
-        // Dados simulados de pets (normalmente viriam do backend)
         const petsMockData = [
             {
                 id: 1,
@@ -200,13 +158,8 @@
                 castrado: "S",
                 sexo: "M",
                 origem: "Resgate",
-                numero: "123",
-                complemento: "Casa",
-                bairro: "Centro",
-                cidade: "São Paulo",
-                estado: "SP",
-                telefone: "(11) 99999-9999",
                 responsavel: "João Silva",
+                telefone: "(11) 99999-9999",
                 data_cadastro: "2025-05-15T10:30:00"
             },
             {
@@ -223,14 +176,8 @@
                 castrado: "S",
                 sexo: "F",
                 origem: "Doação",
-                logradouro: "Av. Paulista",
-                numero: "1000",
-                complemento: "Apto 101",
-                bairro: "Bela Vista",
-                cidade: "São Paulo",
-                estado: "SP",
-                telefone: "(11) 98888-8888",
                 responsavel: "Maria Oliveira",
+                telefone: "(11) 98888-8888",
                 data_cadastro: "2025-05-14T14:15:00"
             },
             {
@@ -247,14 +194,8 @@
                 castrado: "N",
                 sexo: "M",
                 origem: "Resgate",
-                logradouro: "Rua dos Pinheiros",
-                numero: "456",
-                complemento: "",
-                bairro: "Pinheiros",
-                cidade: "São Paulo",
-                estado: "SP",
-                telefone: "(11) 97777-7777",
                 responsavel: "Pedro Santos",
+                telefone: "(11) 97777-7777",
                 data_cadastro: "2025-05-13T09:45:00"
             },
             {
@@ -271,14 +212,8 @@
                 castrado: "S",
                 sexo: "F",
                 origem: "Doação",
-                logradouro: "Rua Augusta",
-                numero: "789",
-                complemento: "Casa 2",
-                bairro: "Consolação",
-                cidade: "São Paulo",
-                estado: "SP",
-                telefone: "(11) 96666-6666",
                 responsavel: "Ana Sousa",
+                telefone: "(11) 96666-6666",
                 data_cadastro: "2025-05-12T16:20:00"
             },
             {
@@ -295,14 +230,8 @@
                 castrado: "N",
                 sexo: "M",
                 origem: "Criador",
-                logradouro: "Alameda Santos",
-                numero: "222",
-                complemento: "Apto 303",
-                bairro: "Jardins",
-                cidade: "São Paulo",
-                estado: "SP",
-                telefone: "(11) 95555-5555",
                 responsavel: "Carlos Ferreira",
+                telefone: "(11) 95555-5555",
                 data_cadastro: "2025-05-10T11:10:00"
             },
             {
@@ -319,24 +248,19 @@
                 castrado: "S",
                 sexo: "F",
                 origem: "Resgate",
-                logradouro: "Rua Oscar Freire",
-                numero: "333",
-                complemento: "",
-                bairro: "Jardim Paulista",
-                cidade: "São Paulo",
-                estado: "SP",
-                telefone: "(11) 94444-4444",
                 responsavel: "Beatriz Lima",
+                telefone: "(11) 94444-4444",
                 data_cadastro: "2025-05-08T15:30:00"
             }
         ];
+        const searchInput = document.getElementById('search-input');
+        const alertBox = document.getElementById('alert');
+        const petsTableBody = document.getElementById('pets-table-body');
+        const petsCardsContainer = document.getElementById('pets-cards-container');
+        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        const btnConfirmDelete = document.getElementById('btn-confirm-delete');
 
-        // Ordenar os pets por data de cadastro (mais recentes primeiro)
-        const sortedPets = [...petsMockData].sort((a, b) => {
-            return new Date(b.data_cadastro) - new Date(a.data_cadastro);
-        });
-
-        // Formatação da idade dos pets (meses para anos/meses)
+        let currentDeleteId = null;
         function formatAge(months) {
             if (months < 12) {
                 return `${months} meses`;
@@ -350,115 +274,115 @@
                 }
             }
         }
-        
-        // Função para abrir o modal de adição de pet
-        function openAddPetModal() {
-            document.getElementById('modalTitle').textContent = 'Adicionar Novo Pet';
-            document.getElementById('petId').value = '';
-            document.getElementById('petForm').reset();
-            document.getElementById('petModal').style.display = 'flex';
+
+        function showAlert(message, type) {
+            alertBox.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                ${message}
+            `;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.classList.remove('d-none');
+            
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+            }, 4000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-        
-        // Função para abrir o modal de edição de pet
-        function openEditPetModal(petId) {
-            const pet = petsMockData.find(p => p.id === petId);
-            if (!pet) return;
+
+        function renderPetsTable(pets) {
+            petsTableBody.innerHTML = '';
             
-            document.getElementById('modalTitle').textContent = `Editar Pet: ${pet.nome}`;
-            document.getElementById('petId').value = pet.id;
-            document.getElementById('petName').value = pet.nome;
-            document.getElementById('petSpecies').value = pet.especie;
-            document.getElementById('petBreed').value = pet.raca;
-            document.getElementById('petColor').value = pet.cor;
-            document.getElementById('petSize').value = pet.porte;
-            document.getElementById('petAge').value = pet.idade;
-            document.getElementById('petWeight').value = pet.peso;
-            document.getElementById('petCharacteristics').value = pet.caracteristicas;
-            document.getElementById('petAdoptionStatus').value = pet.situacao_adocao;
-            document.getElementById('petNeutered').value = pet.castrado;
-            document.getElementById('petSex').value = pet.sexo;
-            document.getElementById('petOrigin').value = pet.origem;
-            document.getElementById('petAddress').value = pet.logradouro;
-            document.getElementById('petNumber').value = pet.numero;
-            document.getElementById('petComplement').value = pet.complemento;
-            document.getElementById('petNeighborhood').value = pet.bairro;
-            document.getElementById('petCity').value = pet.cidade;
-            document.getElementById('petState').value = pet.estado;
-            document.getElementById('petPhone').value = pet.telefone;
-            document.getElementById('petResponsible').value = pet.responsavel;
-            
-            document.getElementById('petModal').style.display = 'flex';
-        }
-        
-        // Função para fechar o modal
-        function closeModal() {
-            document.getElementById('petModal').style.display = 'none';
-        }
-        
-        // Função para salvar um pet (adicionar ou atualizar)
-        function savePet(event) {
-            event.preventDefault();
-            
-            const petId = document.getElementById('petId').value;
-            const formData = {
-                id: petId ? parseInt(petId) : petsMockData.length + 1,
-                nome: document.getElementById('petName').value,
-                especie: document.getElementById('petSpecies').value,
-                raca: document.getElementById('petBreed').value,
-                cor: document.getElementById('petColor').value,
-                porte: document.getElementById('petSize').value,
-                idade: parseInt(document.getElementById('petAge').value) || 0,
-                peso: parseFloat(document.getElementById('petWeight').value) || 0,
-                caracteristicas: document.getElementById('petCharacteristics').value,
-                situacao_adocao: document.getElementById('petAdoptionStatus').value,
-                castrado: document.getElementById('petNeutered').value,
-                sexo: document.getElementById('petSex').value,
-                origem: document.getElementById('petOrigin').value,
-                logradouro: document.getElementById('petAddress').value,
-                numero: document.getElementById('petNumber').value,
-                complemento: document.getElementById('petComplement').value,
-                bairro: document.getElementById('petNeighborhood').value,
-                cidade: document.getElementById('petCity').value,
-                estado: document.getElementById('petState').value,
-                telefone: document.getElementById('petPhone').value,
-                responsavel: document.getElementById('petResponsible').value,
-                data_cadastro: new Date().toISOString()
-            };
-            
-            // Se estiver editando, atualiza o pet existente
-            if (petId) {
-                const index = petsMockData.findIndex(p => p.id === parseInt(petId));
-                if (index !== -1) {
-                    // Preservar a data de cadastro original
-                    formData.data_cadastro = petsMockData[index].data_cadastro;
-                    petsMockData[index] = formData;
-                }
-            } else {
-                // Adicionar novo pet
-                petsMockData.push(formData);
-            }
-            
-            // Ordenar e renderizar novamente
-            const sortedPets = [...petsMockData].sort((a, b) => {
-                return new Date(b.data_cadastro) - new Date(a.data_cadastro);
+            pets.forEach(pet => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${pet.nome}</strong></td>
+                    <td>${pet.especie}</td>
+                    <td>${pet.raca}</td>
+                    <td>${formatAge(pet.idade)}</td>
+                    <td>${pet.responsavel}</td>
+                    <td>
+                        <span class="status-badge ${pet.situacao_adocao === 'Disponível' ? 'status-available' : 'status-adopted'}">
+                            ${pet.situacao_adocao}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn btn-edit" onclick="editPet(${pet.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${pet.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                petsTableBody.appendChild(row);
             });
-            
-            renderPetCards(sortedPets);
-            closeModal();
-            
-            // Feedback visual
-            alert(`Pet ${petId ? 'atualizado' : 'adicionado'} com sucesso!`);
         }
-        
-        // Função para filtrar pets
+
+        function renderPetsCards(pets) {
+            petsCardsContainer.innerHTML = '';
+            
+            pets.forEach(pet => {
+                const card = document.createElement('div');
+                card.className = 'pet-card-mobile';
+                card.innerHTML = `
+                    <div class="pet-header-mobile">
+                        <h4 class="pet-name-mobile">${pet.nome}</h4>
+                        <span class="status-badge ${pet.situacao_adocao === 'Disponível' ? 'status-available' : 'status-adopted'}">
+                            ${pet.situacao_adocao}
+                        </span>
+                    </div>
+                    
+                    <div class="pet-details-mobile">
+                        <div class="pet-detail-mobile">
+                            <span class="pet-detail-label-mobile">Espécie</span>
+                            <span class="pet-detail-value-mobile">${pet.especie}</span>
+                        </div>
+                        <div class="pet-detail-mobile">
+                            <span class="pet-detail-label-mobile">Raça</span>
+                            <span class="pet-detail-value-mobile">${pet.raca}</span>
+                        </div>
+                        <div class="pet-detail-mobile">
+                            <span class="pet-detail-label-mobile">Idade</span>
+                            <span class="pet-detail-value-mobile">${formatAge(pet.idade)}</span>
+                        </div>
+                        <div class="pet-detail-mobile">
+                            <span class="pet-detail-label-mobile">Sexo</span>
+                            <span class="pet-detail-value-mobile">${pet.sexo === 'M' ? 'Macho' : 'Fêmea'}</span>
+                        </div>
+                        <div class="pet-detail-mobile">
+                            <span class="pet-detail-label-mobile">Responsável</span>
+                            <span class="pet-detail-value-mobile">${pet.responsavel}</span>
+                        </div>
+                        <div class="pet-detail-mobile">
+                            <span class="pet-detail-label-mobile">Telefone</span>
+                            <span class="pet-detail-value-mobile">${pet.telefone}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="pet-actions-mobile">
+                        <button class="action-btn btn-edit" onclick="editPet(${pet.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${pet.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                petsCardsContainer.appendChild(card);
+            });
+        }
+
+        function renderPets(pets = petsMockData) {
+            renderPetsTable(pets);
+            renderPetsCards(pets);
+        }
+
         function filterPets() {
-            const searchTerm = document.querySelector('.search-input').value.toLowerCase();
+            const searchTerm = searchInput.value.toLowerCase();
             
             if (!searchTerm) {
-                // Se não houver termo de busca, mostrar todos os pets ordenados por data
-                renderPetCards([...petsMockData].sort((a, b) => {
-                    return new Date(b.data_cadastro) - new Date(a.data_cadastro);
-                }));
+                renderPets();
                 return;
             }
             
@@ -467,107 +391,58 @@
                     pet.nome.toLowerCase().includes(searchTerm) ||
                     pet.especie.toLowerCase().includes(searchTerm) ||
                     pet.raca.toLowerCase().includes(searchTerm) ||
-                    pet.cor.toLowerCase().includes(searchTerm) ||
-                    pet.caracteristicas.toLowerCase().includes(searchTerm) ||
-                    pet.responsavel.toLowerCase().includes(searchTerm)
+                    pet.responsavel.toLowerCase().includes(searchTerm) ||
+                    pet.caracteristicas.toLowerCase().includes(searchTerm)
                 );
             });
             
-            renderPetCards(filteredPets);
+            renderPets(filteredPets);
+            
+            if (filteredPets.length === 0) {
+                showAlert('Nenhum pet encontrado com os termos de busca informados.', 'warning');
+            } else {
+                showAlert(`${filteredPets.length} pet(s) encontrado(s).`, 'success');
+            }
         }
-        
-        // Função para exportar para PDF
+
+        function editPet(petId) {
+            window.location.href = `cadastro_pet.html?id=${petId}`;
+        }
+
+        function showDeleteConfirmation(petId) {
+            currentDeleteId = petId;
+            confirmDeleteModal.show();
+        }
+
+        function deletePet(petId) {
+            const index = petsMockData.findIndex(p => p.id === petId);
+            if (index !== -1) {
+                const petName = petsMockData[index].nome;
+                petsMockData.splice(index, 1);
+                renderPets();
+                showAlert(`Pet "${petName}" excluído com sucesso!`, 'success');
+            }
+        }
+
         function exportToPDF() {
-            alert("Funcionalidade de exportação para PDF acionada. Em um sistema real, isso geraria um PDF com os pets filtrados.");
-            // Em uma implementação real, aqui seria utilizada uma biblioteca como jsPDF ou 
-            // uma chamada para o backend gerar o PDF com os dados atuais
+            showAlert('Funcionalidade de exportação para PDF acionada! Em breve será implementada.', 'success');
         }
-        
-        // Inicialização da página
-        document.addEventListener('DOMContentLoaded', function() {
-            // Renderizar os pets iniciais
-            renderPetCards(sortedPets);
-            
-            // Event listeners
-            document.getElementById('addPetBtn').addEventListener('click', function() {
-                window.location.href = 'cadastro_pet.html';
-            });
-            document.getElementById('closeModal').addEventListener('click', closeModal);
-            document.getElementById('cancelBtn').addEventListener('click', closeModal);
-            document.getElementById('petForm').addEventListener('submit', savePet);
-            document.getElementById('filterBtn').addEventListener('click', filterPets);
-            document.getElementById('exportPdfBtn').addEventListener('click', exportToPDF);
-            
-            // Evento para tecla Enter no campo de busca
-            document.querySelector('.search-input').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    filterPets();
-                }
-            });
-            
-            // Evento para voltar ao menu
-            document.querySelector('.back-btn').addEventListener('click', function() {
-                // Em um sistema real, isso redirecionaria para a tela de menu
-                window.location.href = 'index.html';
-            });
-            
-            // Manipulação da paginação (simplificado para demonstração)
-            document.querySelectorAll('#pagination button').forEach(button => {
-                button.addEventListener('click', function() {
-                    document.querySelectorAll('#pagination button').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    // Aqui seria implementada a lógica real de paginação
-                });
-            });
-        });
-        
-        // Função para renderizar os cartões de pets
-        function renderPetCards(pets) {
-    const petsGrid = document.getElementById('petsGrid');
-    petsGrid.innerHTML = '';
-    
-    pets.forEach(pet => {
-        const petCard = document.createElement('div');
-        petCard.className = 'pet-card';
-        
-        const cadastroDate = new Date(pet.data_cadastro);
-        const formattedDate = cadastroDate.toLocaleDateString('pt-BR');
-        
-       
-        petCard.innerHTML = `
-         
-            <div class="pet-info">
-                <h3 class="pet-name">${pet.nome}</h3>
-                <div class="pet-details">
-                    <div class="pet-detail"><span class="pet-detail-label">Espécie:</span> <span>${pet.especie}</span></div>
-                    <div class="pet-detail"><span class="pet-detail-label">Raça:</span> <span>${pet.raca}</span></div>
-                    <div class="pet-detail"><span class="pet-detail-label">Idade:</span> <span>${formatAge(pet.idade)}</span></div>
-                      <div class="pet-detail"><span class="pet-detail-label">Sexo:</span> <span>${pet.sexo}</span></div>
-                    <div class="pet-detail"><span class="pet-detail-label">Cadastro:</span> <span>${formattedDate}</span></div>
-                </div>
-            </div>
-        `;
-        
-        // 🔑 Agora o card inteiro é clicável
-        petCard.addEventListener('click', () => {
-            openEditPetModal(pet.id);
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                filterPets();
+            }
         });
 
-        petsGrid.appendChild(petCard);
-    });
-}
-            
-            // Adicionar event listeners às imagens dos pets
-            document.querySelectorAll('.pet-image').forEach(img => {
-                img.addEventListener('click', function() {
-                    const petId = parseInt(this.getAttribute('data-id'));
-                    openEditPetModal(petId);
-                });
-            });
-        
+        btnConfirmDelete.addEventListener('click', () => {
+            if (currentDeleteId !== null) {
+                deletePet(currentDeleteId);
+                confirmDeleteModal.hide();
+                currentDeleteId = null;
+            }
+        });
+
+        renderPets();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
+</body>
 </html>

@@ -4,123 +4,301 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário - Associação 4 Patas</title>
-    <link rel="stylesheet" type="text/css" href="css/cadastro_usuario.css"/>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="css/cadastro_usuario.css"/>
+    
 </head>
 <body>
+    <!-- Decorative paws -->
     <div class="paws paw1">🐾</div>
     <div class="paws paw2">🐾</div>
     <div class="paws paw3">🐾</div>
-    
-    <div class="container">
-        <button class="btn-close" onclick="window.location.href='index.html'">&times;</button>
-        <div class="logo">
-            <img src="assets/logo.png.png" alt="Associação 4 Patas Logo" style="width: 120px; height: auto; object-fit: contain;">
-        </div>
-        <h1>Cadastro - Associação 4 Patas</h1>
-        <form id="registerForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="firstName">Nome</label>
-                    <input type="text" id="firstName" name="firstName" required>
+    <div class="paws paw4">🐾</div>
+
+    <div class="register-container">
+        <div class="register-card">
+            <!-- Header -->
+            <div class="register-header">
+                <div class="logo-container">
+                    <div class="logo-placeholder">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="lastName">Sobrenome</label>
-                    <input type="text" id="lastName" name="lastName" required>
-                </div>
+                <h1 class="register-title">Criar Conta</h1>
+                <p class="register-subtitle">Associação 4 Patas</p>
             </div>
-            
-            <div class="form-group full-width">
-                <label for="email">E-mail</label>
-                <input type="email" id="email" name="email" required placeholder="seu@email.com">
+
+            <!-- Body -->
+            <div class="register-body">
+                <!-- Alert -->
+                <div id="alert" class="alert d-none" role="alert"></div>
+
+                <form id="registerForm">
+                    <!-- Nome e Sobrenome -->
+                    <div class="form-row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="firstName" class="form-label">
+                                        <i class="fas fa-user"></i> Nome
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="firstName" name="firstName" 
+                                               placeholder="Seu nome" required>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="lastName" class="form-label">
+                                        <i class="fas fa-user"></i> Sobrenome
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-user"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="lastName" name="lastName" 
+                                               placeholder="Seu sobrenome" required>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="fas fa-envelope"></i> E-mail
+                        </label>
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-at"></i>
+                            </span>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="seu@email.com" required>
+                        </div>
+                        <div class="invalid-feedback"></div>
+                    </div>
+
+                    <!-- Senhas -->
+                    <div class="form-row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock"></i> Senha
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-key"></i>
+                                        </span>
+                                        <input type="password" class="form-control" id="password" name="password" 
+                                               placeholder="••••••••" required minlength="6">
+                                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                        </button>
+                                    </div>
+                                    <div class="password-strength" id="passwordStrength" style="display: none;">
+                                        <div class="strength-bar">
+                                            <div class="strength-fill" id="strengthFill"></div>
+                                        </div>
+                                        <div class="strength-text" id="strengthText"></div>
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="confirmPassword" class="form-label">
+                                        <i class="fas fa-lock"></i> Confirmar Senha
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-check"></i>
+                                        </span>
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" 
+                                               placeholder="••••••••" required minlength="6">
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Telefone e CPF -->
+                    <div class="form-row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="phone" class="form-label">
+                                        <i class="fas fa-phone"></i> Telefone
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-phone"></i>
+                                        </span>
+                                        <input type="tel" class="form-control" id="phone" name="phone" 
+                                               placeholder="(xx) xxxxx-xxxx">
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="document" class="form-label">
+                                        <i class="fas fa-id-card"></i> CPF
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-id-card"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="document" name="document" 
+                                               placeholder="xxx.xxx.xxx-xx">
+                                    </div>
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões -->
+                    <div class="form-row">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-cancel" onclick="handleCancel()">
+                                    <i class="fas fa-times me-2"></i>
+                                    Cancelar
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-register" id="registerBtn">
+                                    <i class="fas fa-user-plus me-2"></i>
+                                    Cadastrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" name="password" required minlength="6">
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirmar Senha</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6">
-                </div>
+
+            <!-- Links -->
+            <div class="register-links">
+                <a href="login.html" class="register-link">
+                    <i class="fas fa-sign-in-alt me-1"></i>
+                    Já tem uma conta? Faça login
+                </a>
             </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="phone">Telefone</label>
-                    <input type="tel" id="phone" name="phone" placeholder="(xx) xxxxx-xxxx">
-                </div>
-                <div class="form-group">
-                    <label for="document">CPF</label>
-                    <input type="text" id="document" name="document" placeholder="xxx.xxx.xxx-xx">
-                </div>
-            </div>
-            
-            <div class="btn-group">
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='login.html'">Cancelar</button>
-                <button type="submit" class="btn">Cadastrar</button>
-            </div>
-        </form>
-        
-        <div class="links">
-            <a href="login.html">Já tem uma conta? Faça login</a>
         </div>
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        // Validação do formulário
-        document.getElementById('registerForm').addEventListener('submit', function(event) {
-            event.preventDefault();
+        // ========== ELEMENTOS DOM ==========
+        const registerForm = document.getElementById('registerForm');
+        const alertBox = document.getElementById('alert');
+        const registerBtn = document.getElementById('registerBtn');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const togglePasswordIcon = document.getElementById('togglePasswordIcon');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const phoneInput = document.getElementById('phone');
+        const documentInput = document.getElementById('document');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const strengthFill = document.getElementById('strengthFill');
+        const strengthText = document.getElementById('strengthText');
+
+        // ========== SISTEMA DE ALERTAS ==========
+        function showAlert(message, type = 'success') {
+            const icons = {
+                success: 'check-circle',
+                danger: 'exclamation-triangle',
+                warning: 'exclamation-triangle'
+            };
+
+            alertBox.innerHTML = `
+                <i class="fas fa-${icons[type] || 'info-circle'} me-2"></i>
+                ${message}
+            `;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.classList.remove('d-none');
+
+            // Auto-hide após 5 segundos
+            setTimeout(() => {
+                alertBox.classList.add('d-none');
+            }, 5000);
+        }
+
+        function hideAlert() {
+            alertBox.classList.add('d-none');
+        }
+
+        // ========== TOGGLE PASSWORD VISIBILITY ==========
+        togglePasswordBtn.addEventListener('click', () => {
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
             
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            
-            // Validação básica
-            if (!firstName || !lastName || !email || !password) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                alert('As senhas não coincidem!');
-                return;
-            }
-            
-            // Formatação do telefone
-            const phone = document.getElementById('phone').value;
-            const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
-            if (phone && !phoneRegex.test(phone)) {
-                alert('Por favor, insira um número de telefone válido no formato (xx) xxxxx-xxxx');
-                return;
-            }
-            
-            // Validação do CPF
-            const cpf = document.getElementById('document').value;
-            const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-            if (cpf && !cpfRegex.test(cpf)) {
-                alert('Por favor, insira um CPF válido no formato xxx.xxx.xxx-xx');
-                return;
-            }
-            
-            // Em um cenário real, você enviaria esta requisição para o backend
-            console.log('Cadastro de usuário:', { 
-                firstName, 
-                lastName, 
-                email, 
-                phone, 
-                document: cpf 
-            });
-            
-            // Simulando cadastro bem-sucedido
-            alert('Cadastro realizado com sucesso!');
-            window.location.href = 'login.html';
+            togglePasswordIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
         });
-        
-        // Formatação do telefone enquanto digita
-        document.getElementById('phone').addEventListener('input', function(e) {
+
+        // ========== PASSWORD STRENGTH CHECKER ==========
+        function checkPasswordStrength(password) {
+            let strength = 0;
+            let feedback = '';
+
+            if (password.length >= 8) strength++;
+            if (/[a-z]/.test(password)) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+            strengthFill.className = 'strength-fill';
+            
+            if (strength < 3) {
+                strengthFill.classList.add('strength-weak');
+                feedback = 'Fraca';
+                strengthText.style.color = 'var(--danger-color)';
+            } else if (strength < 4) {
+                strengthFill.classList.add('strength-medium');
+                feedback = 'Média';
+                strengthText.style.color = 'var(--warning-color)';
+            } else {
+                strengthFill.classList.add('strength-strong');
+                feedback = 'Forte';
+                strengthText.style.color = 'var(--success-color)';
+            }
+
+            strengthText.textContent = `Força da senha: ${feedback}`;
+            
+            return strength;
+        }
+
+        passwordInput.addEventListener('input', () => {
+            const password = passwordInput.value;
+            
+            if (password.length > 0) {
+                passwordStrength.style.display = 'block';
+                checkPasswordStrength(password);
+            } else {
+                passwordStrength.style.display = 'none';
+            }
+        });
+
+        // ========== FORMATAÇÃO DE CAMPOS ==========
+        // Formatação do telefone
+        phoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 0) {
                 value = '(' + value;
@@ -136,9 +314,9 @@
             }
             e.target.value = value;
         });
-        
-        // Formatação do CPF enquanto digita
-        document.getElementById('document').addEventListener('input', function(e) {
+
+        // Formatação do CPF
+        documentInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 0) {
                 value = value.replace(/^(\d{3})(\d)/, '$1.$2');
@@ -149,6 +327,206 @@
                 }
             }
             e.target.value = value;
+        });
+
+        // ========== VALIDAÇÃO EM TEMPO REAL ==========
+        function validateEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function validatePhone(phone) {
+            const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
+            return !phone || phoneRegex.test(phone);
+        }
+
+        function validateCPF(cpf) {
+            const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
+            return !cpf || cpfRegex.test(cpf);
+        }
+
+        function setFieldValidation(field, isValid, message = '') {
+            const feedback = field.parentNode.parentNode.querySelector('.invalid-feedback');
+            
+            if (isValid) {
+                field.classList.remove('is-invalid');
+                field.classList.add('is-valid');
+                if (feedback) feedback.textContent = '';
+            } else {
+                field.classList.remove('is-valid');
+                field.classList.add('is-invalid');
+                if (feedback) feedback.textContent = message;
+            }
+        }
+
+        // Validação em tempo real
+        function setupRealTimeValidation() {
+            const fields = [
+                {
+                    element: document.getElementById('firstName'),
+                    validate: (value) => value.trim().length >= 2,
+                    message: 'Nome deve ter pelo menos 2 caracteres'
+                },
+                {
+                    element: document.getElementById('lastName'),
+                    validate: (value) => value.trim().length >= 2,
+                    message: 'Sobrenome deve ter pelo menos 2 caracteres'
+                },
+                {
+                    element: document.getElementById('email'),
+                    validate: validateEmail,
+                    message: 'E-mail inválido'
+                },
+                {
+                    element: passwordInput,
+                    validate: (value) => value.length >= 6,
+                    message: 'Senha deve ter pelo menos 6 caracteres'
+                },
+                {
+                    element: confirmPasswordInput,
+                    validate: (value) => value === passwordInput.value,
+                    message: 'Senhas não coincidem'
+                },
+                {
+                    element: phoneInput,
+                    validate: validatePhone,
+                    message: 'Formato inválido: (xx) xxxxx-xxxx'
+                },
+                {
+                    element: documentInput,
+                    validate: validateCPF,
+                    message: 'Formato inválido: xxx.xxx.xxx-xx'
+                }
+            ];
+
+            fields.forEach(field => {
+                field.element.addEventListener('blur', () => {
+                    if (field.element.value.trim()) {
+                        const isValid = field.validate(field.element.value);
+                        setFieldValidation(field.element, isValid, field.message);
+                    }
+                });
+
+                field.element.addEventListener('input', () => {
+                    field.element.classList.remove('is-valid', 'is-invalid');
+                });
+            });
+
+            // Validação especial para confirmação de senha
+            passwordInput.addEventListener('input', () => {
+                if (confirmPasswordInput.value) {
+                    const isValid = confirmPasswordInput.value === passwordInput.value;
+                    setFieldValidation(confirmPasswordInput, isValid, 'Senhas não coincidem');
+                }
+            });
+        }
+
+        // ========== SUBMIT DO FORMULÁRIO ==========
+        registerForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            hideAlert();
+
+            const formData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                password: passwordInput.value,
+                confirmPassword: confirmPasswordInput.value,
+                phone: phoneInput.value,
+                document: documentInput.value
+            };
+
+            // Validação completa
+            if (!validateForm(formData)) {
+                return;
+            }
+
+            // Mostrar loading
+            registerBtn.classList.add('btn-loading');
+            registerBtn.disabled = true;
+
+            try {
+                // Simular requisição para API
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Simular cadastro bem-sucedido
+                console.log('Cadastro de usuário:', formData);
+                
+                showAlert('Cadastro realizado com sucesso! Redirecionando para login...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+
+            } catch (error) {
+                showAlert('Erro ao realizar cadastro. Tente novamente.', 'danger');
+            } finally {
+                registerBtn.classList.remove('btn-loading');
+                registerBtn.disabled = false;
+            }
+        });
+
+        function validateForm(data) {
+            let isValid = true;
+
+            // Validar campos obrigatórios
+            if (!data.firstName || data.firstName.length < 2) {
+                setFieldValidation(document.getElementById('firstName'), false, 'Nome é obrigatório (mín. 2 caracteres)');
+                isValid = false;
+            }
+
+            if (!data.lastName || data.lastName.length < 2) {
+                setFieldValidation(document.getElementById('lastName'), false, 'Sobrenome é obrigatório (mín. 2 caracteres)');
+                isValid = false;
+            }
+
+            if (!data.email || !validateEmail(data.email)) {
+                setFieldValidation(document.getElementById('email'), false, 'E-mail válido é obrigatório');
+                isValid = false;
+            }
+
+            if (!data.password || data.password.length < 6) {
+                setFieldValidation(passwordInput, false, 'Senha deve ter pelo menos 6 caracteres');
+                isValid = false;
+            }
+
+            if (data.password !== data.confirmPassword) {
+                setFieldValidation(confirmPasswordInput, false, 'Senhas não coincidem');
+                isValid = false;
+            }
+
+            if (data.phone && !validatePhone(data.phone)) {
+                setFieldValidation(phoneInput, false, 'Formato de telefone inválido');
+                isValid = false;
+            }
+
+            if (data.document && !validateCPF(data.document)) {
+                setFieldValidation(documentInput, false, 'Formato de CPF inválido');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                showAlert('Por favor, corrija os erros no formulário.', 'danger');
+            }
+
+            return isValid;
+        }
+
+        // ========== FUNÇÃO DE CANCELAR ==========
+        function handleCancel() {
+            if (confirm('Tem certeza que deseja cancelar? Os dados preenchidos serão perdidos.')) {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            setupRealTimeValidation();
+            
+            // Foco inicial no campo nome
+            document.getElementById('firstName').focus();
+
+            console.log('Página de cadastro carregada com sucesso');
         });
     </script>
 </body>
