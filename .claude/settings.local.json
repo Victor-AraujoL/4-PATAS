@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill:*)",
+      "Bash(nul)",
+      "Bash(node index.js:*)",
+      "Bash(curl:*)",
+      "Bash(python -m json.tool:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

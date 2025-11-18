@@ -19,7 +19,7 @@ const Atendimento = sequelize.define('Atendimento', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'colaborador', 
+      model: 'colaborador',
       key: 'IDCOLABORADOR'
     }
   },

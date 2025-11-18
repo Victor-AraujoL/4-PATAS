@@ -3,16 +3,22 @@ const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJSDoc = require('swagger-jsdoc');
 
+// Configurar dotenv PRIMEIRO
+dotenv.config();
+
+// Importar DB
+const db = require('./src/config/db');
+
+// IMPORTANTE: Importar models com relacionamentos configurados ANTES das rotas
+const models = require('./src/Models/index');
+
+// AGORA sim importar as rotas (que usam os models com relacionamentos já configurados)
 const PetRoutes = require('./src/Routes/petRoutes');
 const ColaboradorRoutes = require('./src/Routes/colaboradorRoutes');
 const VacinaRoutes = require('./src/Routes/vacinaRoutes');
 const UsuarioRoutes = require('./src/Routes/usuarioRoutes');
 const AtendimentoRoutes = require('./src/Routes/atendimentoRoutes');
 const PDFRoutes = require('./src/Routes/pdfRoutes');
-
-const db = require('./src/config/db'); 
-
-dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -94,7 +100,7 @@ app.get('/api-docs.json', (req, res) => {
 });
 
 // Suas rotas da API
-app.use('/api/pets', PetRoutes); 
+app.use('/api/pets', PetRoutes);
 app.use('/api/colaboradores', ColaboradorRoutes);
 app.use('/api/vacinas', VacinaRoutes);
 app.use('/api/usuarios', UsuarioRoutes);
