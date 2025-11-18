@@ -115,22 +115,8 @@
 
         <!-- Pagination -->
         <nav>
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" id="prev-page"><i class="fas fa-chevron-left"></i></a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#" class="page-number">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" class="page-number">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" class="page-number">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" id="next-page"><i class="fas fa-chevron-right"></i></a>
-                </li>
+            <ul class="pagination" id="pagination-container">
+                <!-- Paginação será gerada dinamicamente -->
             </ul>
         </nav>
     </div>
@@ -186,13 +172,47 @@
 
                         <!-- CRMV e Status -->
                         <div class="row mb-3">
-                            <div class="col-md-6 mb-3">
-                                <label for="crmv" class="form-label">CRMV</label>
-                                <input type="text" id="crmv" name="crmv" class="form-control" 
-                                       placeholder="CRMV-SP 12345">
+                            <div class="col-md-2 mb-3" id="crmv-estado-container" style="display: none;">
+                                <label for="crmv-estado" class="form-label">CRMV UF</label>
+                                <select id="crmv-estado" name="crmvEstado" class="form-control">
+                                    <option value="">UF</option>
+                                    <option value="AC">AC</option>
+                                    <option value="AL">AL</option>
+                                    <option value="AP">AP</option>
+                                    <option value="AM">AM</option>
+                                    <option value="BA">BA</option>
+                                    <option value="CE">CE</option>
+                                    <option value="DF">DF</option>
+                                    <option value="ES">ES</option>
+                                    <option value="GO">GO</option>
+                                    <option value="MA">MA</option>
+                                    <option value="MT">MT</option>
+                                    <option value="MS">MS</option>
+                                    <option value="MG">MG</option>
+                                    <option value="PA">PA</option>
+                                    <option value="PB">PB</option>
+                                    <option value="PR">PR</option>
+                                    <option value="PE">PE</option>
+                                    <option value="PI">PI</option>
+                                    <option value="RJ">RJ</option>
+                                    <option value="RN">RN</option>
+                                    <option value="RS">RS</option>
+                                    <option value="RO">RO</option>
+                                    <option value="RR">RR</option>
+                                    <option value="SC">SC</option>
+                                    <option value="SP">SP</option>
+                                    <option value="SE">SE</option>
+                                    <option value="TO">TO</option>
+                                </select>
+                                <small class="text-muted">Estado</small>
+                            </div>
+                            <div class="col-md-4 mb-3" id="crmv-numero-container" style="display: none;">
+                                <label for="crmv-numero" class="form-label">CRMV Número</label>
+                                <input type="text" id="crmv-numero" name="crmvNumero" class="form-control"
+                                       placeholder="Ex: 12345">
                                 <small class="text-muted">Apenas para veterinários</small>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="mb-3" id="status-container">
                                 <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                                 <select id="status" name="status" class="form-control" required>
                                     <option value="Ativo">Ativo</option>
@@ -210,10 +230,88 @@
                             </div>
                         </div>
 
+                        <!-- Endereço -->
+                        <h6 class="mb-3 text-secondary">
+                            <i class="fas fa-map-marker-alt me-2"></i>Endereço
+                        </h6>
+
+                        <div class="row mb-3">
+                            <div class="col-md-3 mb-3">
+                                <label for="cep" class="form-label">CEP</label>
+                                <div class="input-group">
+                                    <input type="text" id="cep" name="cep" class="form-control"
+                                           placeholder="00000-000">
+                                    <button class="btn btn-outline-secondary" type="button" id="btn-buscar-cep" title="Buscar CEP">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="logradouro" class="form-label">Endereço</label>
+                                <input type="text" id="logradouro" name="logradouro" class="form-control"
+                                       placeholder="Rua, Avenida...">
+                            </div>
+
+                            <div class="col-md-3 mb-3">
+                                <label for="numero" class="form-label">Número</label>
+                                <input type="text" id="numero" name="numero" class="form-control"
+                                       placeholder="Nº">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 mb-3">
+                                <label for="bairro" class="form-label">Bairro</label>
+                                <input type="text" id="bairro" name="bairro" class="form-control"
+                                       placeholder="Bairro">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="cidade" class="form-label">Cidade</label>
+                                <input type="text" id="cidade" name="cidade" class="form-control"
+                                       placeholder="Cidade">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select id="estado" name="estado" class="form-control">
+                                    <option value="">Selecione o estado</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Observações -->
                         <div class="mb-3">
                             <label for="observacoes" class="form-label">Observações</label>
-                            <textarea id="observacoes" name="observacoes" class="form-control" rows="3" 
+                            <textarea id="observacoes" name="observacoes" class="form-control" rows="3"
                                       placeholder="Informações adicionais sobre o colaborador"></textarea>
                         </div>
                     </form>
@@ -259,81 +357,23 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Dados simulados de colaboradores
-        const collaboratorsMockData = [
-            {
-                id: 1,
-                nome: "Dr. Carlos Silva",
-                funcao: "Veterinário(a)",
-                crmv: "CRMV-SP 12345",
-                telefone: "(11) 98765-4321",
-                email: "carlos.silva@4patas.com",
-                dataCadastro: "2024-10-15T14:30:00",
-                status: "Ativo",
-                observacoes: "Especialista em cirurgias de pequenos animais"
-            },
-            {
-                id: 2,
-                nome: "Dra. Ana Oliveira",
-                funcao: "Veterinário(a)",
-                crmv: "CRMV-SP 23456",
-                telefone: "(11) 97654-3210",
-                email: "ana.oliveira@4patas.com",
-                dataCadastro: "2024-11-03T09:15:00",
-                status: "Ativo",
-                observacoes: "Especialista em dermatologia veterinária"
-            },
-            {
-                id: 3,
-                nome: "Dr. Marcos Santos",
-                funcao: "Veterinário(a)",
-                crmv: "CRMV-SP 34567",
-                telefone: "(11) 96543-2109",
-                email: "marcos.santos@4patas.com",
-                dataCadastro: "2024-12-10T11:45:00",
-                status: "Ativo",
-                observacoes: "Especialista em animais exóticos"
-            },
-            {
-                id: 4,
-                nome: "Juliana Costa",
-                funcao: "Auxiliar Veterinário",
-                crmv: "",
-                telefone: "(11) 95432-1098",
-                email: "juliana.costa@4patas.com",
-                dataCadastro: "2025-01-20T10:30:00",
-                status: "Ativo",
-                observacoes: "Experiência em cuidados intensivos"
-            },
-            {
-                id: 5,
-                nome: "Roberto Almeida",
-                funcao: "Recepcionista",
-                crmv: "",
-                telefone: "(11) 94321-0987",
-                email: "roberto.almeida@4patas.com",
-                dataCadastro: "2025-02-15T13:00:00",
-                status: "Ativo",
-                observacoes: "Atendimento bilíngue (português/inglês)"
-            },
-            {
-                id: 106,
-                nome: "Maria Santos",
-                funcao: "Tosador(a)",
-                crmv: "",
-                telefone: "(11) 93210-8765",
-                email: "maria.santos@4patas.com",
-                dataCadastro: "2025-01-10T08:00:00",
-                status: "Inativo",
-                observacoes: "Especializada em tosa de cães de pelo longo"
-            }
-        ];
+        // API URL
+        const API_URL = 'http://localhost:3000/api/colaboradores';
+
+        // Array para armazenar dados carregados da API
+        let collaboratorsData = [];
+        let filteredCollaborators = [];
+
+        // Paginação
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         // Elementos DOM
         const searchInput = document.getElementById('search-input');
         const alertBox = document.getElementById('alert');
         const collaboratorsTableBody = document.getElementById('collaborators-table-body');
         const collaboratorsCardsContainer = document.getElementById('collaborators-cards-container');
+        const paginationContainer = document.getElementById('pagination-container');
         const collaboratorModal = new bootstrap.Modal(document.getElementById('collaboratorModal'));
         const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
         const btnConfirmDelete = document.getElementById('btn-confirm-delete');
@@ -341,8 +381,88 @@
         let currentDeleteId = null;
         let editingId = null;
 
+        // Carregar colaboradores da API
+        async function loadCollaborators() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    collaboratorsData = await response.json();
+                    filteredCollaborators = collaboratorsData;
+                    currentPage = 1;
+                    renderCollaborators();
+                    renderPagination();
+                } else {
+                    showAlert('Erro ao carregar colaboradores do servidor', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
+                collaboratorsData = [];
+                filteredCollaborators = [];
+            }
+        }
+
+        // Renderizar paginação
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredCollaborators.length / itemsPerPage);
+            paginationContainer.innerHTML = '';
+
+            if (totalPages <= 1) return;
+
+            // Botão anterior
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>`;
+            prevLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderCollaborators();
+                    renderPagination();
+                }
+            });
+            paginationContainer.appendChild(prevLi);
+
+            // Números das páginas
+            const maxPagesToShow = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+            if (endPage - startPage < maxPagesToShow - 1) {
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageLi.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = i;
+                    renderCollaborators();
+                    renderPagination();
+                });
+                paginationContainer.appendChild(pageLi);
+            }
+
+            // Botão próximo
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>`;
+            nextLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderCollaborators();
+                    renderPagination();
+                }
+            });
+            paginationContainer.appendChild(nextLi);
+        }
+
         // Formatação da data
         function formatDate(dateString) {
+            if (!dateString) return '-';
             const date = new Date(dateString);
             return date.toLocaleDateString('pt-BR');
         }
@@ -355,7 +475,7 @@
             `;
             alertBox.className = `alert alert-${type}`;
             alertBox.classList.remove('d-none');
-            
+
             setTimeout(() => {
                 alertBox.classList.add('d-none');
             }, 4000);
@@ -366,28 +486,45 @@
         // Renderizar tabela (Desktop)
         function renderCollaboratorsTable(collaborators) {
             collaboratorsTableBody.innerHTML = '';
-            
-            collaborators.forEach(collaborator => {
+
+            if (collaborators.length === 0) {
+                collaboratorsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>Nenhum colaborador cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Aplicar paginação
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedCollaborators = collaborators.slice(startIndex, endIndex);
+
+            paginatedCollaborators.forEach(collaborator => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><strong>${collaborator.id}</strong></td>
-                    <td>${collaborator.nome}</td>
-                    <td>${collaborator.funcao}</td>
-                    <td>${collaborator.crmv || '-'}</td>
-                    <td>${formatDate(collaborator.dataCadastro)}</td>
+                    <td><strong>${collaborator.IDCOLABORADOR}</strong></td>
+                    <td>${collaborator.NOME || collaborator.nome}</td>
+                    <td>${collaborator.CARGO || collaborator.funcao || '-'}</td>
+                    <td>${collaborator.CRMV || collaborator.crmv || '-'}</td>
+                    <td>${formatDate(collaborator.DATACAD || collaborator.dataCadastro)}</td>
                     <td>
-                        <span class="status-badge status-${collaborator.status.toLowerCase()}">
-                            ${collaborator.status}
+                        <span class="status-badge status-${(collaborator.ATIVO === 'S' || collaborator.status === 'Ativo') ? 'ativo' : 'inativo'}">
+                            ${collaborator.ATIVO === 'S' || collaborator.status === 'Ativo' ? 'Ativo' : 'Inativo'}
                         </span>
                     </td>
                     <td>
-                        <button class="action-btn btn-view" onclick="viewCollaborator(${collaborator.id})" title="Visualizar">
+                        <button class="action-btn btn-view" onclick="viewCollaborator(${collaborator.IDCOLABORADOR})" title="Visualizar">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="action-btn btn-edit" onclick="editCollaborator(${collaborator.id})" title="Editar">
+                        <button class="action-btn btn-edit" onclick="editCollaborator(${collaborator.IDCOLABORADOR})" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${collaborator.id})" title="Excluir">
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${collaborator.IDCOLABORADOR})" title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -399,53 +536,68 @@
         // Renderizar cards (Mobile)
         function renderCollaboratorsCards(collaborators) {
             collaboratorsCardsContainer.innerHTML = '';
-            
-            collaborators.forEach(collaborator => {
+
+            if (collaborators.length === 0) {
+                collaboratorsCardsContainer.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>Nenhum colaborador cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Aplicar paginação
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedCollaborators = collaborators.slice(startIndex, endIndex);
+
+            paginatedCollaborators.forEach(collaborator => {
                 const card = document.createElement('div');
                 card.className = 'collaborator-card-mobile';
                 card.innerHTML = `
                     <div class="collaborator-header-mobile">
-                        <h4 class="collaborator-name-mobile">${collaborator.nome}</h4>
-                        <span class="status-badge status-${collaborator.status.toLowerCase()}">
-                            ${collaborator.status}
+                        <h4 class="collaborator-name-mobile">${collaborator.NOME || collaborator.nome}</h4>
+                        <span class="status-badge status-${(collaborator.ATIVO === 'S' || collaborator.status === 'Ativo') ? 'ativo' : 'inativo'}">
+                            ${collaborator.ATIVO === 'S' || collaborator.status === 'Ativo' ? 'Ativo' : 'Inativo'}
                         </span>
                     </div>
-                    
+
                     <div class="collaborator-details-mobile">
                         <div class="collaborator-detail-mobile">
                             <span class="collaborator-detail-label-mobile">ID</span>
-                            <span class="collaborator-detail-value-mobile">${collaborator.id}</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.IDCOLABORADOR}</span>
                         </div>
                         <div class="collaborator-detail-mobile">
                             <span class="collaborator-detail-label-mobile">Função</span>
-                            <span class="collaborator-detail-value-mobile">${collaborator.funcao}</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.CARGO || collaborator.funcao || '-'}</span>
                         </div>
                         <div class="collaborator-detail-mobile">
                             <span class="collaborator-detail-label-mobile">CRMV</span>
-                            <span class="collaborator-detail-value-mobile">${collaborator.crmv || '-'}</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.CRMV || collaborator.crmv || '-'}</span>
                         </div>
                         <div class="collaborator-detail-mobile">
                             <span class="collaborator-detail-label-mobile">Telefone</span>
-                            <span class="collaborator-detail-value-mobile">${collaborator.telefone}</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.TELEFONE || collaborator.telefone || '-'}</span>
                         </div>
                         <div class="collaborator-detail-mobile">
                             <span class="collaborator-detail-label-mobile">E-mail</span>
-                            <span class="collaborator-detail-value-mobile">${collaborator.email || '-'}</span>
+                            <span class="collaborator-detail-value-mobile">${collaborator.EMAIL || collaborator.email || '-'}</span>
                         </div>
                         <div class="collaborator-detail-mobile">
                             <span class="collaborator-detail-label-mobile">Data Cadastro</span>
-                            <span class="collaborator-detail-value-mobile">${formatDate(collaborator.dataCadastro)}</span>
+                            <span class="collaborator-detail-value-mobile">${formatDate(collaborator.DATACAD || collaborator.dataCadastro)}</span>
                         </div>
                     </div>
-                    
+
                     <div class="collaborator-actions-mobile">
-                        <button class="action-btn btn-view" onclick="viewCollaborator(${collaborator.id})" title="Visualizar">
+                        <button class="action-btn btn-view" onclick="viewCollaborator(${collaborator.IDCOLABORADOR})" title="Visualizar">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="action-btn btn-edit" onclick="editCollaborator(${collaborator.id})" title="Editar">
+                        <button class="action-btn btn-edit" onclick="editCollaborator(${collaborator.IDCOLABORADOR})" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${collaborator.id})" title="Excluir">
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${collaborator.IDCOLABORADOR})" title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -455,7 +607,7 @@
         }
 
         // Renderizar colaboradores (ambas as views)
-        function renderCollaborators(collaborators = collaboratorsMockData) {
+        function renderCollaborators(collaborators = filteredCollaborators) {
             renderCollaboratorsTable(collaborators);
             renderCollaboratorsCards(collaborators);
         }
@@ -463,23 +615,33 @@
         // Filtrar colaboradores
         function filterCollaborators() {
             const searchTerm = searchInput.value.toLowerCase();
-            
+
             if (!searchTerm) {
+                filteredCollaborators = collaboratorsData;
+                currentPage = 1;
                 renderCollaborators();
+                renderPagination();
                 return;
             }
-            
-            const filteredCollaborators = collaboratorsMockData.filter(collaborator => {
+
+            filteredCollaborators = collaboratorsData.filter(collaborator => {
+                const nome = collaborator.NOME || collaborator.nome || '';
+                const funcao = collaborator.CARGO || collaborator.funcao || '';
+                const crmv = collaborator.CRMV || collaborator.crmv || '';
+                const id = (collaborator.IDCOLABORADOR || '').toString();
+
                 return (
-                    collaborator.nome.toLowerCase().includes(searchTerm) ||
-                    collaborator.funcao.toLowerCase().includes(searchTerm) ||
-                    collaborator.id.toString().includes(searchTerm) ||
-                    (collaborator.crmv && collaborator.crmv.toLowerCase().includes(searchTerm))
+                    nome.toLowerCase().includes(searchTerm) ||
+                    funcao.toLowerCase().includes(searchTerm) ||
+                    id.includes(searchTerm) ||
+                    crmv.toLowerCase().includes(searchTerm)
                 );
             });
-            
-            renderCollaborators(filteredCollaborators);
-            
+
+            currentPage = 1;
+            renderCollaborators();
+            renderPagination();
+
             if (filteredCollaborators.length === 0) {
                 showAlert('Nenhum colaborador encontrado com os termos de busca informados.', 'warning');
             } else {
@@ -505,48 +667,90 @@
         }
 
         // Visualizar colaborador
-        function viewCollaborator(collaboratorId) {
-            const collaborator = collaboratorsMockData.find(c => c.id === collaboratorId);
-            if (collaborator) {
-                document.getElementById('modal-title').textContent = 'Detalhes do Colaborador';
-                fillForm(collaborator);
-                
-                // Desabilitar todos os campos para visualização
-                disableFormFields();
-                
-                collaboratorModal.show();
+        async function viewCollaborator(collaboratorId) {
+            try {
+                const response = await fetch(`${API_URL}/${collaboratorId}`);
+                if (response.ok) {
+                    const collaborator = await response.json();
+                    document.getElementById('modal-title').textContent = 'Detalhes do Colaborador';
+                    fillForm(collaborator);
+
+                    // Desabilitar todos os campos para visualização
+                    disableFormFields();
+
+                    collaboratorModal.show();
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao carregar dados do colaborador.', 'danger');
             }
         }
 
         // Editar colaborador
-        function editCollaborator(collaboratorId) {
-            const collaborator = collaboratorsMockData.find(c => c.id === collaboratorId);
-            if (collaborator) {
-                document.getElementById('modal-title').textContent = 'Editar Colaborador';
-                fillForm(collaborator);
-                
-                // Habilitar campos exceto data de cadastro
-                enableFormFields();
-                document.getElementById('data-cadastro').readOnly = true;
-                
-                editingId = collaboratorId;
-                collaboratorModal.show();
+        async function editCollaborator(collaboratorId) {
+            try {
+                const response = await fetch(`${API_URL}/${collaboratorId}`);
+                if (response.ok) {
+                    const collaborator = await response.json();
+                    document.getElementById('modal-title').textContent = 'Editar Colaborador';
+                    fillForm(collaborator);
+
+                    // Habilitar campos exceto data de cadastro
+                    enableFormFields();
+                    document.getElementById('data-cadastro').readOnly = true;
+
+                    editingId = collaboratorId;
+                    collaboratorModal.show();
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao carregar dados do colaborador.', 'danger');
             }
         }
 
         // Preencher formulário
         function fillForm(collaborator) {
-            document.getElementById('colaborador-id').value = collaborator.id;
-            document.getElementById('nome').value = collaborator.nome;
-            document.getElementById('funcao').value = collaborator.funcao;
-            document.getElementById('crmv').value = collaborator.crmv;
-            document.getElementById('telefone').value = collaborator.telefone;
-            document.getElementById('email').value = collaborator.email;
-            document.getElementById('status').value = collaborator.status;
-            document.getElementById('observacoes').value = collaborator.observacoes;
-            
-            const date = new Date(collaborator.dataCadastro);
-            document.getElementById('data-cadastro').value = date.toISOString().split('T')[0];
+            document.getElementById('colaborador-id').value = collaborator.IDCOLABORADOR || collaborator.id;
+            document.getElementById('nome').value = collaborator.NOME || collaborator.nome || '';
+            document.getElementById('funcao').value = collaborator.CARGO || collaborator.funcao || '';
+
+            // Atualizar visibilidade dos campos CRMV
+            toggleCRMVFields();
+
+            // Separar CRMV
+            const crmv = collaborator.CRMV || collaborator.crmv || '';
+            if (crmv) {
+                const crmvMatch = crmv.match(/CRMV-([A-Z]{2})\s*(\d+)/);
+                if (crmvMatch) {
+                    document.getElementById('crmv-estado').value = crmvMatch[1];
+                    document.getElementById('crmv-numero').value = crmvMatch[2];
+                } else {
+                    document.getElementById('crmv-estado').value = '';
+                    document.getElementById('crmv-numero').value = crmv;
+                }
+            }
+
+            document.getElementById('telefone').value = collaborator.TELEFONE || collaborator.telefone || '';
+            document.getElementById('email').value = collaborator.EMAIL || collaborator.email || '';
+
+            const ativo = collaborator.ATIVO === 'S' || collaborator.status === 'Ativo';
+            document.getElementById('status').value = ativo ? 'Ativo' : 'Inativo';
+
+            // Preencher endereço
+            document.getElementById('cep').value = collaborator.CEP || '';
+            document.getElementById('logradouro').value = collaborator.LOGRADOURO || '';
+            document.getElementById('numero').value = collaborator.NUMERO || '';
+            document.getElementById('bairro').value = collaborator.BAIRRO || '';
+            document.getElementById('cidade').value = collaborator.CIDADE || '';
+            document.getElementById('estado').value = collaborator.ESTADO || '';
+
+            document.getElementById('observacoes').value = collaborator.OBSERVACOES || collaborator.observacoes || '';
+
+            const dataCad = collaborator.DATACAD || collaborator.dataCadastro;
+            if (dataCad) {
+                const date = new Date(dataCad);
+                document.getElementById('data-cadastro').value = date.toISOString().split('T')[0];
+            }
         }
 
         // Habilitar campos do formulário
@@ -572,20 +776,29 @@
         }
 
         // Excluir colaborador
-        function deleteCollaborator(collaboratorId) {
-            const index = collaboratorsMockData.findIndex(c => c.id === collaboratorId);
-            if (index !== -1) {
-                const collaboratorName = collaboratorsMockData[index].nome;
-                collaboratorsMockData.splice(index, 1);
-                renderCollaborators();
-                showAlert(`Colaborador "${collaboratorName}" excluído com sucesso!`, 'success');
+        async function deleteCollaborator(collaboratorId) {
+            try {
+                const response = await fetch(`${API_URL}/${collaboratorId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Colaborador excluído com sucesso!', 'success');
+                    await loadCollaborators();
+                } else {
+                    const result = await response.json();
+                    showAlert(result.message || 'Erro ao excluir colaborador', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor.', 'danger');
             }
         }
 
         // Salvar colaborador
-        function saveCollaborator() {
+        async function saveCollaborator() {
             const form = document.getElementById('form-colaborador');
-            
+
             // Validação simples
             if (!validateForm(form)) {
                 showAlert('Por favor, preencha todos os campos obrigatórios.', 'danger');
@@ -593,35 +806,79 @@
             }
 
             const formData = new FormData(form);
-            const collaborator = {
-                id: editingId || Math.max(...collaboratorsMockData.map(c => c.id)) + 1,
-                nome: formData.get('nome'),
-                funcao: formData.get('funcao'),
-                crmv: formData.get('crmv') || '',
-                telefone: formData.get('telefone'),
-                email: formData.get('email') || '',
-                dataCadastro: editingId ? 
-                    collaboratorsMockData.find(c => c.id === editingId).dataCadastro :
-                    new Date().toISOString(),
-                status: formData.get('status'),
-                observacoes: formData.get('observacoes') || ''
-            };
 
-            if (editingId) {
-                // Atualizar colaborador existente
-                const index = collaboratorsMockData.findIndex(c => c.id === editingId);
-                if (index !== -1) {
-                    collaboratorsMockData[index] = collaborator;
-                    showAlert('Colaborador atualizado com sucesso!', 'success');
-                }
-            } else {
-                // Adicionar novo colaborador
-                collaboratorsMockData.push(collaborator);
-                showAlert('Colaborador cadastrado com sucesso!', 'success');
+            // Combinar CRMV estado + número
+            const crmvEstado = formData.get('crmvEstado');
+            const crmvNumero = formData.get('crmvNumero');
+            let crmv = null;
+            if (crmvEstado && crmvNumero) {
+                crmv = `CRMV-${crmvEstado} ${crmvNumero}`;
+            } else if (crmvNumero) {
+                crmv = crmvNumero;
             }
 
-            renderCollaborators();
-            collaboratorModal.hide();
+            const collaboratorData = {
+                NOME: formData.get('nome'),
+                CARGO: formData.get('funcao'),
+                CRMV: crmv,
+                TELEFONE: formData.get('telefone'),
+                EMAIL: formData.get('email') || null,
+                ATIVO: formData.get('status') === 'Ativo' ? 'S' : 'N',
+                CEP: formData.get('cep') || null,
+                LOGRADOURO: formData.get('logradouro') || null,
+                NUMERO: formData.get('numero') || null,
+                BAIRRO: formData.get('bairro') || null,
+                CIDADE: formData.get('cidade') || null,
+                ESTADO: formData.get('estado') || null,
+                OBSERVACOES: formData.get('observacoes') || null,
+                DATACAD: editingId ? undefined : new Date().toISOString()
+            };
+
+            // Remove DATACAD if editing
+            if (editingId) {
+                delete collaboratorData.DATACAD;
+            }
+
+            const btnSalvar = document.getElementById('btn-salvar');
+            const originalText = btnSalvar.innerHTML;
+            btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
+            btnSalvar.disabled = true;
+
+            try {
+                let response;
+                if (editingId) {
+                    // Atualizar
+                    response = await fetch(`${API_URL}/${editingId}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(collaboratorData)
+                    });
+                } else {
+                    // Criar
+                    response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(collaboratorData)
+                    });
+                }
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert(editingId ? 'Colaborador atualizado com sucesso!' : 'Colaborador cadastrado com sucesso!', 'success');
+                    collaboratorModal.hide();
+                    await loadCollaborators();
+                    editingId = null;
+                } else {
+                    showAlert(result.message || 'Erro ao salvar colaborador', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor.', 'danger');
+            } finally {
+                btnSalvar.innerHTML = originalText;
+                btnSalvar.disabled = false;
+            }
         }
 
         // Validar formulário
@@ -676,8 +933,101 @@
             e.target.value = value;
         });
 
+        // Máscara para CEP
+        document.getElementById('cep').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/^(\d{5})(\d{0,3}).*/, '$1-$2');
+            e.target.value = value;
+        });
+
+        // Função para buscar CEP
+        async function buscarCEP() {
+            const cepInput = document.getElementById('cep');
+            const cep = cepInput.value.replace(/\D/g, '');
+
+            if (cep.length !== 8) {
+                showAlert('CEP inválido. Digite 8 dígitos.', 'warning');
+                return;
+            }
+
+            const btnBuscarCep = document.getElementById('btn-buscar-cep');
+            const originalBtnText = btnBuscarCep.innerHTML;
+            btnBuscarCep.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            btnBuscarCep.disabled = true;
+
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data = await response.json();
+
+                if (data.erro) {
+                    showAlert('CEP não encontrado.', 'warning');
+                } else {
+                    document.getElementById('logradouro').value = data.logradouro || '';
+                    document.getElementById('bairro').value = data.bairro || '';
+                    document.getElementById('cidade').value = data.localidade || '';
+                    document.getElementById('estado').value = data.uf || '';
+
+                    // Focar no campo número
+                    document.getElementById('numero').focus();
+
+                    showAlert('Endereço preenchido automaticamente!', 'success');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao buscar CEP. Verifique sua conexão e tente novamente.', 'danger');
+            } finally {
+                btnBuscarCep.innerHTML = originalBtnText;
+                btnBuscarCep.disabled = false;
+            }
+        }
+
+        // Buscar CEP ao clicar no botão
+        document.getElementById('btn-buscar-cep').addEventListener('click', buscarCEP);
+
+        // Buscar CEP ao sair do campo (blur)
+        document.getElementById('cep').addEventListener('blur', function() {
+            const cep = this.value.replace(/\D/g, '');
+            if (cep.length === 8) {
+                buscarCEP();
+            }
+        });
+
+        // Buscar CEP ao pressionar Enter
+        document.getElementById('cep').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarCEP();
+            }
+        });
+
+        // Mostrar/ocultar campos CRMV baseado na função
+        function toggleCRMVFields() {
+            const funcaoSelect = document.getElementById('funcao');
+            const crmvEstadoContainer = document.getElementById('crmv-estado-container');
+            const crmvNumeroContainer = document.getElementById('crmv-numero-container');
+            const statusContainer = document.getElementById('status-container');
+
+            const isVeterinario = funcaoSelect.value === 'Veterinário(a)';
+
+            if (isVeterinario) {
+                crmvEstadoContainer.style.display = 'block';
+                crmvNumeroContainer.style.display = 'block';
+                statusContainer.className = 'col-md-6 mb-3';
+            } else {
+                crmvEstadoContainer.style.display = 'none';
+                crmvNumeroContainer.style.display = 'none';
+                statusContainer.className = 'mb-3';
+                // Limpar valores quando não for veterinário
+                document.getElementById('crmv-estado').value = '';
+                document.getElementById('crmv-numero').value = '';
+            }
+        }
+
+        // Event listener para mudança de função
+        document.getElementById('funcao').addEventListener('change', toggleCRMVFields);
+
         // Inicializar
-        renderCollaborators();
+        loadCollaborators();
     </script>
 </body>
 </html>

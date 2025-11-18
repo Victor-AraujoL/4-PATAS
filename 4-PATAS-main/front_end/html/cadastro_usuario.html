@@ -3,216 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro de Usuário - Associação 4 Patas</title>
-    
+    <title>Usuários - Associação 4 Patas</title>
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-            <link rel="stylesheet" type="text/css" href="../css/cadastro_usuario.css"/>
-    
+    <link rel="stylesheet" type="text/css" href="../css/colaboradores.css"/>
+
 </head>
 <body>
     <!-- Decorative paws -->
     <div class="paws paw1">🐾</div>
     <div class="paws paw2">🐾</div>
     <div class="paws paw3">🐾</div>
-    <div class="paws paw4">🐾</div>
 
-    <div class="register-container">
-        <div class="register-card">
-            <!-- Header -->
-            <div class="register-header">
-                <div class="logo-container">
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container-fluid">
+            <div class="header-content">
+                <div class="logo-section">
                     <div class="logo-placeholder">
-                        <i class="fas fa-user-plus"></i>
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div>
+                        <h1 class="header-title">Gerenciamento de Usuários</h1>
+                        <p class="header-subtitle">Associação 4 Patas</p>
                     </div>
                 </div>
-                <h1 class="register-title">Criar Usuario</h1>
-                <p class="register-subtitle">Associação 4 Patas</p>
+                <div class="header-actions">
+                    <button class="btn btn-custom-secondary" onclick="window.location.href='index.html';">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Voltar ao Menu
+                    </button>
+                </div>
             </div>
+        </div>
+    </header>
 
-            <!-- Body -->
-            <div class="register-body">
-                <!-- Alert -->
-                <div id="alert" class="alert d-none" role="alert"></div>
+    <div class="container-fluid main-container mt-4">
+        <!-- Alert -->
+        <div id="alert" class="alert d-none mb-3" role="alert"></div>
 
-                <form id="registerForm">
-                    <!-- Nome e Sobrenome -->
-                    <div class="form-row">
-                        <div class="row">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white">
+                            <i class="fas fa-search"></i>
+                        </span>
+                        <input type="text" class="form-control search-input" id="search-input"
+                               placeholder="Buscar por nome, e-mail, CPF ou ID...">
+                    </div>
+                </div>
+                <div class="col-md-4 text-end mt-3 mt-md-0">
+                    <button class="btn btn-custom-primary" id="novo-usuario">
+                        <i class="fas fa-user-plus me-2"></i>
+                        Novo Usuário
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desktop Table View -->
+        <div class="collaborators-container-desktop">
+            <div class="collaborators-table">
+                <div class="table-header">
+                    <h3>
+                        <i class="fas fa-users me-2"></i>
+                        Usuários do Sistema
+                    </h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th width="80">ID</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>CPF</th>
+                                <th width="120">Tipo</th>
+                                <th width="150" class="text-center">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usuarios-table-body">
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    <i class="fas fa-spinner fa-spin fa-2x mb-3"></i>
+                                    <p>Carregando usuários...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Cards View -->
+        <div class="collaborators-container-mobile">
+            <div id="usuarios-cards-container">
+                <!-- Cards serão inseridos via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav>
+            <ul class="pagination" id="pagination-container">
+                <!-- Paginação será gerada dinamicamente -->
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Modal Usuário -->
+    <div class="modal fade" id="usuarioModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-title">Novo Usuário</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="usuarioForm" novalidate>
+                        <input type="hidden" id="usuario-id">
+
+                        <!-- Nome Completo -->
+                        <div class="row mb-3">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="firstName" class="form-label">
-                                        <i class="fas fa-user"></i> Nome
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-user"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="firstName" name="firstName" 
-                                               placeholder="Seu nome" required>
-                                    </div>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                                <label for="nome" class="form-label">Nome <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nome" name="nome"
+                                       placeholder="Nome" required>
+                                <div class="invalid-feedback">Nome é obrigatório</div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="lastName" class="form-label">
-                                        <i class="fas fa-user"></i> Sobrenome
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-user"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="lastName" name="lastName" 
-                                               placeholder="Seu sobrenome" required>
-                                    </div>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                                <label for="sobrenome" class="form-label">Sobrenome <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="sobrenome" name="sobrenome"
+                                       placeholder="Sobrenome" required>
+                                <div class="invalid-feedback">Sobrenome é obrigatório</div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Email -->
-                    <div class="form-group">
-                        <label for="email" class="form-label">
-                            <i class="fas fa-envelope"></i> E-mail
-                        </label>
-                        <div class="input-group">
-                            <span class="input-group-text">
-                                <i class="fas fa-at"></i>
-                            </span>
-                            <input type="email" class="form-control" id="email" name="email" 
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email"
                                    placeholder="seu@email.com" required>
+                            <div class="invalid-feedback">E-mail válido é obrigatório</div>
                         </div>
-                        <div class="invalid-feedback"></div>
-                    </div>
 
-                    <!-- Senhas -->
-                    <div class="form-row">
-                        <div class="row">
+                        <!-- Senhas -->
+                        <div class="row mb-3">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="password" class="form-label">
-                                        <i class="fas fa-lock"></i> Senha
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-key"></i>
-                                        </span>
-                                        <input type="password" class="form-control" id="password" name="password" 
-                                               placeholder="••••••••" required minlength="6">
-                                        <button type="button" class="btn btn-outline-secondary" id="togglePassword">
-                                            <i class="fas fa-eye" id="togglePasswordIcon"></i>
-                                        </button>
-                                    </div>
-                                    <div class="password-strength" id="passwordStrength" style="display: none;">
-                                        <div class="strength-bar">
-                                            <div class="strength-fill" id="strengthFill"></div>
-                                        </div>
-                                        <div class="strength-text" id="strengthText"></div>
-                                    </div>
-                                    <div class="invalid-feedback"></div>
+                                <label for="senha" class="form-label">Senha <span class="text-danger" id="senha-required">*</span></label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control" id="senha" name="senha"
+                                           placeholder="••••••••" minlength="6">
+                                    <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+                                        <i class="fas fa-eye" id="togglePasswordIcon"></i>
+                                    </button>
                                 </div>
+                                <small class="text-muted" id="senha-hint">Mínimo 6 caracteres</small>
+                                <div class="invalid-feedback">Senha deve ter pelo menos 6 caracteres</div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="confirmPassword" class="form-label">
-                                        <i class="fas fa-lock"></i> Confirmar Senha
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-check"></i>
-                                        </span>
-                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" 
-                                               placeholder="••••••••" required minlength="6">
-                                    </div>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                                <label for="confirmarSenha" class="form-label">Confirmar Senha <span class="text-danger" id="confirmar-required">*</span></label>
+                                <input type="password" class="form-control" id="confirmarSenha" name="confirmarSenha"
+                                       placeholder="••••••••" minlength="6">
+                                <div class="invalid-feedback">Senhas não coincidem</div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Telefone e CPF -->
-                    <div class="form-row">
-                        <div class="row">
+                        <!-- Telefone e CPF -->
+                        <div class="row mb-3">
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="phone" class="form-label">
-                                        <i class="fas fa-phone"></i> Telefone
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-phone"></i>
-                                        </span>
-                                        <input type="tel" class="form-control" id="phone" name="phone" 
-                                               placeholder="(xx) xxxxx-xxxx">
-                                    </div>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                                <label for="telefone" class="form-label">Telefone</label>
+                                <input type="tel" class="form-control" id="telefone" name="telefone"
+                                       placeholder="(00) 00000-0000">
+                                <div class="invalid-feedback">Formato inválido</div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="document" class="form-label">
-                                        <i class="fas fa-id-card"></i> CPF
-                                    </label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">
-                                            <i class="fas fa-id-card"></i>
-                                        </span>
-                                        <input type="text" class="form-control" id="document" name="document" 
-                                               placeholder="xxx.xxx.xxx-xx">
-                                    </div>
-                                    <div class="invalid-feedback"></div>
-                                </div>
+                                <label for="cpf" class="form-label">CPF</label>
+                                <input type="text" class="form-control" id="cpf" name="cpf"
+                                       placeholder="000.000.000-00">
+                                <div class="invalid-feedback">Formato inválido</div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Botões -->
-                    <div class="form-row">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-cancel" onclick="handleCancel()">
-                                    <i class="fas fa-times me-2"></i>
-                                    Cancelar
-                                </button>
-                            </div>
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-register" id="registerBtn">
-                                    <i class="fas fa-user-plus me-2"></i>
-                                    Cadastrar
-                                </button>
+                        <!-- Admin -->
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="admin" name="admin">
+                                <label class="form-check-label" for="admin">
+                                    <strong>Administrador</strong>
+                                    <small class="text-muted d-block">Usuários administradores têm acesso completo ao sistema</small>
+                                </label>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-salvar">
+                        <i class="fas fa-save me-2"></i>Salvar
+                    </button>
+                </div>
             </div>
+        </div>
+    </div>
 
-
+    <!-- Modal Confirmação Delete -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        Confirmar Exclusão
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Tem certeza que deseja excluir este usuário? Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-danger" id="btn-confirm-delete">
+                        <i class="fas fa-trash me-2"></i>Excluir
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <script>
-        // ========== ELEMENTOS DOM ==========
-        const registerForm = document.getElementById('registerForm');
+        // API URL
+        const API_URL = 'http://localhost:3000/api/usuarios';
+
+        // Array para armazenar dados carregados da API
+        let usuariosData = [];
+        let filteredUsuarios = [];
+
+        // Paginação
+        let currentPage = 1;
+        const itemsPerPage = 10;
+
+        // Elementos DOM
+        const searchInput = document.getElementById('search-input');
         const alertBox = document.getElementById('alert');
-        const registerBtn = document.getElementById('registerBtn');
+        const usuariosTableBody = document.getElementById('usuarios-table-body');
+        const usuariosCardsContainer = document.getElementById('usuarios-cards-container');
+        const paginationContainer = document.getElementById('pagination-container');
+        const usuarioModal = new bootstrap.Modal(document.getElementById('usuarioModal'));
+        const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+        const btnConfirmDelete = document.getElementById('btn-confirm-delete');
+        const btnSalvar = document.getElementById('btn-salvar');
         const togglePasswordBtn = document.getElementById('togglePassword');
         const togglePasswordIcon = document.getElementById('togglePasswordIcon');
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const phoneInput = document.getElementById('phone');
-        const documentInput = document.getElementById('document');
-        const passwordStrength = document.getElementById('passwordStrength');
-        const strengthFill = document.getElementById('strengthFill');
-        const strengthText = document.getElementById('strengthText');
+        const senhaInput = document.getElementById('senha');
+        const confirmarSenhaInput = document.getElementById('confirmarSenha');
+
+        let currentDeleteId = null;
+        let editingId = null;
 
         // ========== SISTEMA DE ALERTAS ==========
         function showAlert(message, type = 'success') {
@@ -229,7 +290,6 @@
             alertBox.className = `alert alert-${type}`;
             alertBox.classList.remove('d-none');
 
-            // Auto-hide após 5 segundos
             setTimeout(() => {
                 alertBox.classList.add('d-none');
             }, 5000);
@@ -241,262 +301,426 @@
 
         // ========== TOGGLE PASSWORD VISIBILITY ==========
         togglePasswordBtn.addEventListener('click', () => {
-            const type = passwordInput.type === 'password' ? 'text' : 'password';
-            passwordInput.type = type;
-            
+            const type = senhaInput.type === 'password' ? 'text' : 'password';
+            senhaInput.type = type;
+            confirmarSenhaInput.type = type;
+
             togglePasswordIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
         });
 
-        // ========== PASSWORD STRENGTH CHECKER ==========
-        function checkPasswordStrength(password) {
-            let strength = 0;
-            let feedback = '';
-
-            if (password.length >= 8) strength++;
-            if (/[a-z]/.test(password)) strength++;
-            if (/[A-Z]/.test(password)) strength++;
-            if (/[0-9]/.test(password)) strength++;
-            if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-            strengthFill.className = 'strength-fill';
-            
-            if (strength < 3) {
-                strengthFill.classList.add('strength-weak');
-                feedback = 'Fraca';
-                strengthText.style.color = 'var(--danger-color)';
-            } else if (strength < 4) {
-                strengthFill.classList.add('strength-medium');
-                feedback = 'Média';
-                strengthText.style.color = 'var(--warning-color)';
-            } else {
-                strengthFill.classList.add('strength-strong');
-                feedback = 'Forte';
-                strengthText.style.color = 'var(--success-color)';
-            }
-
-            strengthText.textContent = `Força da senha: ${feedback}`;
-            
-            return strength;
-        }
-
-        passwordInput.addEventListener('input', () => {
-            const password = passwordInput.value;
-            
-            if (password.length > 0) {
-                passwordStrength.style.display = 'block';
-                checkPasswordStrength(password);
-            } else {
-                passwordStrength.style.display = 'none';
-            }
-        });
-
-        // ========== FORMATAÇÃO DE CAMPOS ==========
-        // Formatação do telefone
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                value = '(' + value;
-                if (value.length > 3) {
-                    value = value.substring(0, 3) + ') ' + value.substring(3);
+        // ========== CARREGAR USUÁRIOS ==========
+        async function loadUsuarios() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    usuariosData = await response.json();
+                    filteredUsuarios = usuariosData;
+                    currentPage = 1;
+                    renderUsuarios();
+                    renderPagination();
+                } else {
+                    showAlert('Erro ao carregar usuários do servidor', 'danger');
                 }
-                if (value.length > 10) {
-                    value = value.substring(0, 10) + '-' + value.substring(10);
-                }
-                if (value.length > 15) {
-                    value = value.substring(0, 15);
-                }
-            }
-            e.target.value = value;
-        });
-
-        // Formatação do CPF
-        documentInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 0) {
-                value = value.replace(/^(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/^(\d{3})\.(\d{3})(\d)/, '$1.$2.$3');
-                value = value.replace(/\.(\d{3})(\d)/, '.$1-$2');
-                if (value.length > 14) {
-                    value = value.substring(0, 14);
-                }
-            }
-            e.target.value = value;
-        });
-
-        // ========== VALIDAÇÃO EM TEMPO REAL ==========
-        function validateEmail(email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            return emailRegex.test(email);
-        }
-
-        function validatePhone(phone) {
-            const phoneRegex = /^\(\d{2}\) \d{5}-\d{4}$/;
-            return !phone || phoneRegex.test(phone);
-        }
-
-        function validateCPF(cpf) {
-            const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
-            return !cpf || cpfRegex.test(cpf);
-        }
-
-        function setFieldValidation(field, isValid, message = '') {
-            const feedback = field.parentNode.parentNode.querySelector('.invalid-feedback');
-            
-            if (isValid) {
-                field.classList.remove('is-invalid');
-                field.classList.add('is-valid');
-                if (feedback) feedback.textContent = '';
-            } else {
-                field.classList.remove('is-valid');
-                field.classList.add('is-invalid');
-                if (feedback) feedback.textContent = message;
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
+                usuariosData = [];
+                filteredUsuarios = [];
             }
         }
 
-        // Validação em tempo real
-        function setupRealTimeValidation() {
-            const fields = [
-                {
-                    element: document.getElementById('firstName'),
-                    validate: (value) => value.trim().length >= 2,
-                    message: 'Nome deve ter pelo menos 2 caracteres'
-                },
-                {
-                    element: document.getElementById('lastName'),
-                    validate: (value) => value.trim().length >= 2,
-                    message: 'Sobrenome deve ter pelo menos 2 caracteres'
-                },
-                {
-                    element: document.getElementById('email'),
-                    validate: validateEmail,
-                    message: 'E-mail inválido'
-                },
-                {
-                    element: passwordInput,
-                    validate: (value) => value.length >= 6,
-                    message: 'Senha deve ter pelo menos 6 caracteres'
-                },
-                {
-                    element: confirmPasswordInput,
-                    validate: (value) => value === passwordInput.value,
-                    message: 'Senhas não coincidem'
-                },
-                {
-                    element: phoneInput,
-                    validate: validatePhone,
-                    message: 'Formato inválido: (xx) xxxxx-xxxx'
-                },
-                {
-                    element: documentInput,
-                    validate: validateCPF,
-                    message: 'Formato inválido: xxx.xxx.xxx-xx'
+        // ========== PAGINAÇÃO ==========
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredUsuarios.length / itemsPerPage);
+            paginationContainer.innerHTML = '';
+
+            if (totalPages <= 1) return;
+
+            // Botão anterior
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `<a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>`;
+            prevLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderUsuarios();
+                    renderPagination();
                 }
-            ];
-
-            fields.forEach(field => {
-                field.element.addEventListener('blur', () => {
-                    if (field.element.value.trim()) {
-                        const isValid = field.validate(field.element.value);
-                        setFieldValidation(field.element, isValid, field.message);
-                    }
-                });
-
-                field.element.addEventListener('input', () => {
-                    field.element.classList.remove('is-valid', 'is-invalid');
-                });
             });
+            paginationContainer.appendChild(prevLi);
 
-            // Validação especial para confirmação de senha
-            passwordInput.addEventListener('input', () => {
-                if (confirmPasswordInput.value) {
-                    const isValid = confirmPasswordInput.value === passwordInput.value;
-                    setFieldValidation(confirmPasswordInput, isValid, 'Senhas não coincidem');
+            // Números das páginas
+            const maxPagesToShow = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2));
+            let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
+
+            if (endPage - startPage < maxPagesToShow - 1) {
+                startPage = Math.max(1, endPage - maxPagesToShow + 1);
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+                pageLi.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    currentPage = i;
+                    renderUsuarios();
+                    renderPagination();
+                });
+                paginationContainer.appendChild(pageLi);
+            }
+
+            // Botão próximo
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `<a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>`;
+            nextLi.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderUsuarios();
+                    renderPagination();
                 }
+            });
+            paginationContainer.appendChild(nextLi);
+        }
+
+        // ========== RENDERIZAR TABELA ==========
+        function renderUsuariosTable(usuarios = filteredUsuarios) {
+            usuariosTableBody.innerHTML = '';
+
+            if (usuarios.length === 0) {
+                usuariosTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>Nenhum usuário cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Aplicar paginação
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedUsuarios = usuarios.slice(startIndex, endIndex);
+
+            paginatedUsuarios.forEach(usuario => {
+                const row = document.createElement('tr');
+                const isAdmin = usuario.ADMIN === 'S' || usuario.admin === 'S';
+
+                row.innerHTML = `
+                    <td><strong>#${usuario.IDUSUARIO || usuario.id}</strong></td>
+                    <td>${usuario.NOME || usuario.nome || '-'}</td>
+                    <td><small>${usuario.EMAIL || usuario.email || '-'}</small></td>
+                    <td>${usuario.TELEFONE || usuario.telefone || '-'}</td>
+                    <td>${usuario.CPF || usuario.cpf || '-'}</td>
+                    <td>
+                        <span class="status-badge ${isAdmin ? 'status-inativo' : 'status-ativo'}">
+                            <i class="fas fa-${isAdmin ? 'user-shield' : 'user'}"></i>
+                            ${isAdmin ? 'Admin' : 'Usuário'}
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <button class="action-btn btn-edit" onclick="editarUsuario(${usuario.IDUSUARIO || usuario.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="confirmarExclusao(${usuario.IDUSUARIO || usuario.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                usuariosTableBody.appendChild(row);
             });
         }
 
-        // ========== SUBMIT DO FORMULÁRIO ==========
-        registerForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
+        // ========== RENDERIZAR CARDS (MOBILE) ==========
+        function renderUsuariosCards(usuarios = filteredUsuarios) {
+            usuariosCardsContainer.innerHTML = '';
+
+            if (usuarios.length === 0) {
+                usuariosCardsContainer.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>Nenhum usuário cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Aplicar paginação
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedUsuarios = usuarios.slice(startIndex, endIndex);
+
+            paginatedUsuarios.forEach(usuario => {
+                const card = document.createElement('div');
+                card.className = 'collaborator-card-mobile';
+                const isAdmin = usuario.ADMIN === 'S' || usuario.admin === 'S';
+
+                card.innerHTML = `
+                    <div class="collaborator-header-mobile">
+                        <h4 class="collaborator-name-mobile">${usuario.NOME || usuario.nome}</h4>
+                        <span class="status-badge ${isAdmin ? 'status-inativo' : 'status-ativo'}">
+                            ${isAdmin ? 'Admin' : 'Usuário'}
+                        </span>
+                    </div>
+                    <div class="collaborator-details-mobile">
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">ID</span>
+                            <span class="collaborator-detail-value-mobile">#${usuario.IDUSUARIO || usuario.id}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">E-mail</span>
+                            <span class="collaborator-detail-value-mobile">${usuario.EMAIL || usuario.email || '-'}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">Telefone</span>
+                            <span class="collaborator-detail-value-mobile">${usuario.TELEFONE || usuario.telefone || '-'}</span>
+                        </div>
+                        <div class="collaborator-detail-mobile">
+                            <span class="collaborator-detail-label-mobile">CPF</span>
+                            <span class="collaborator-detail-value-mobile">${usuario.CPF || usuario.cpf || '-'}</span>
+                        </div>
+                    </div>
+                    <div class="collaborator-actions-mobile">
+                        <button class="action-btn btn-edit" onclick="editarUsuario(${usuario.IDUSUARIO || usuario.id})" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn btn-delete" onclick="confirmarExclusao(${usuario.IDUSUARIO || usuario.id})" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                usuariosCardsContainer.appendChild(card);
+            });
+        }
+
+        // ========== RENDERIZAR USUARIOS (AMBAS AS VIEWS) ==========
+        function renderUsuarios(usuarios = filteredUsuarios) {
+            renderUsuariosTable(usuarios);
+            renderUsuariosCards(usuarios);
+        }
+
+        // ========== FILTRAR USUÁRIOS ==========
+        function filterUsuarios() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            if (!searchTerm) {
+                filteredUsuarios = usuariosData;
+                currentPage = 1;
+                renderUsuarios();
+                renderPagination();
+                return;
+            }
+
+            filteredUsuarios = usuariosData.filter(usuario => {
+                const nome = usuario.NOME || usuario.nome || '';
+                const email = usuario.EMAIL || usuario.email || '';
+                const cpf = usuario.CPF || usuario.cpf || '';
+                const id = (usuario.IDUSUARIO || '').toString();
+
+                return (
+                    nome.toLowerCase().includes(searchTerm) ||
+                    email.toLowerCase().includes(searchTerm) ||
+                    cpf.toLowerCase().includes(searchTerm) ||
+                    id.includes(searchTerm)
+                );
+            });
+
+            currentPage = 1;
+            renderUsuarios();
+            renderPagination();
+
+            if (filteredUsuarios.length === 0) {
+                showAlert('Nenhum usuário encontrado com os termos de busca informados.', 'warning');
+            } else {
+                showAlert(`${filteredUsuarios.length} usuário(s) encontrado(s).`, 'success');
+            }
+        }
+
+        // Event listener para busca
+        searchInput.addEventListener('input', filterUsuarios);
+
+        // ========== ABRIR MODAL NOVO USUÁRIO ==========
+        function openNewUserModal() {
+            document.getElementById('modal-title').textContent = 'Novo Usuário';
+            document.getElementById('usuarioForm').reset();
+            document.getElementById('usuario-id').value = '';
+            document.getElementById('admin').checked = false;
+
+            // Senha obrigatória para novo usuário
+            senhaInput.required = true;
+            confirmarSenhaInput.required = true;
+            document.getElementById('senha-required').style.display = 'inline';
+            document.getElementById('confirmar-required').style.display = 'inline';
+            document.getElementById('senha-hint').textContent = 'Mínimo 6 caracteres';
+
+            // Remover validações
+            document.querySelectorAll('.is-valid, .is-invalid').forEach(field => {
+                field.classList.remove('is-valid', 'is-invalid');
+            });
+
+            editingId = null;
+            usuarioModal.show();
+        }
+
+        // ========== EDITAR USUÁRIO ==========
+        async function editarUsuario(id) {
+            try {
+                const response = await fetch(`${API_URL}/${id}`);
+                if (response.ok) {
+                    const usuario = await response.json();
+
+                    document.getElementById('modal-title').textContent = 'Editar Usuário';
+                    document.getElementById('usuario-id').value = usuario.IDUSUARIO || usuario.id;
+
+                    // Separar nome e sobrenome
+                    const nomeCompleto = (usuario.NOME || usuario.nome || '').split(' ');
+                    document.getElementById('nome').value = nomeCompleto[0] || '';
+                    document.getElementById('sobrenome').value = nomeCompleto.slice(1).join(' ') || '';
+
+                    document.getElementById('email').value = usuario.EMAIL || usuario.email || '';
+                    document.getElementById('telefone').value = usuario.TELEFONE || usuario.telefone || '';
+                    document.getElementById('cpf').value = usuario.CPF || usuario.cpf || '';
+
+                    const isAdmin = usuario.ADMIN === 'S' || usuario.admin === 'S';
+                    document.getElementById('admin').checked = isAdmin;
+
+                    // Senha opcional na edição
+                    senhaInput.value = '';
+                    confirmarSenhaInput.value = '';
+                    senhaInput.required = false;
+                    confirmarSenhaInput.required = false;
+                    document.getElementById('senha-required').style.display = 'none';
+                    document.getElementById('confirmar-required').style.display = 'none';
+                    document.getElementById('senha-hint').textContent = 'Deixe em branco para manter a senha atual';
+
+                    // Remover validações
+                    document.querySelectorAll('.is-valid, .is-invalid').forEach(field => {
+                        field.classList.remove('is-valid', 'is-invalid');
+                    });
+
+                    editingId = id;
+                    usuarioModal.show();
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao carregar dados do usuário.', 'danger');
+            }
+        }
+
+        // ========== SALVAR USUÁRIO ==========
+        async function saveUsuario() {
             hideAlert();
 
             const formData = {
-                firstName: document.getElementById('firstName').value.trim(),
-                lastName: document.getElementById('lastName').value.trim(),
+                nome: document.getElementById('nome').value.trim(),
+                sobrenome: document.getElementById('sobrenome').value.trim(),
                 email: document.getElementById('email').value.trim(),
-                password: passwordInput.value,
-                confirmPassword: confirmPasswordInput.value,
-                phone: phoneInput.value,
-                document: documentInput.value
+                senha: senhaInput.value,
+                confirmarSenha: confirmarSenhaInput.value,
+                telefone: document.getElementById('telefone').value,
+                cpf: document.getElementById('cpf').value,
+                admin: document.getElementById('admin').checked
             };
 
-            // Validação completa
+            // Validação
             if (!validateForm(formData)) {
                 return;
             }
 
             // Mostrar loading
-            registerBtn.classList.add('btn-loading');
-            registerBtn.disabled = true;
+            btnSalvar.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
+            btnSalvar.disabled = true;
 
             try {
-                // Simular requisição para API
-                await new Promise(resolve => setTimeout(resolve, 2000));
+                const userData = {
+                    NOME: `${formData.nome} ${formData.sobrenome}`,
+                    EMAIL: formData.email,
+                    TELEFONE: formData.telefone || null,
+                    CPF: formData.cpf || null,
+                    ADMIN: formData.admin ? 'S' : 'N'
+                };
 
-                // Simular cadastro bem-sucedido
-                console.log('Cadastro de usuário:', formData);
-                
-                showAlert('Cadastro realizado com sucesso! Redirecionando para login...', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
+                // Apenas incluir senha se foi preenchida
+                if (formData.senha) {
+                    userData.SENHA = formData.senha;
+                }
+
+                const url = editingId ? `${API_URL}/${editingId}` : API_URL;
+                const method = editingId ? 'PUT' : 'POST';
+
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert(editingId ? 'Usuário atualizado com sucesso!' : 'Usuário cadastrado com sucesso!', 'success');
+
+                    // Fechar modal
+                    usuarioModal.hide();
+
+                    // Recarregar lista
+                    await loadUsuarios();
+
+                    editingId = null;
+                } else {
+                    showAlert(result.message || 'Erro ao salvar usuário.', 'danger');
+                }
 
             } catch (error) {
-                showAlert('Erro ao realizar cadastro. Tente novamente.', 'danger');
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
             } finally {
-                registerBtn.classList.remove('btn-loading');
-                registerBtn.disabled = false;
+                btnSalvar.innerHTML = '<i class="fas fa-save me-2"></i>Salvar';
+                btnSalvar.disabled = false;
             }
-        });
+        }
 
+        // ========== VALIDAÇÃO DO FORM ==========
         function validateForm(data) {
             let isValid = true;
 
-            // Validar campos obrigatórios
-            if (!data.firstName || data.firstName.length < 2) {
-                setFieldValidation(document.getElementById('firstName'), false, 'Nome é obrigatório (mín. 2 caracteres)');
+            // Validar nome
+            if (!data.nome || data.nome.length < 2) {
+                document.getElementById('nome').classList.add('is-invalid');
                 isValid = false;
             }
 
-            if (!data.lastName || data.lastName.length < 2) {
-                setFieldValidation(document.getElementById('lastName'), false, 'Sobrenome é obrigatório (mín. 2 caracteres)');
+            // Validar sobrenome
+            if (!data.sobrenome || data.sobrenome.length < 2) {
+                document.getElementById('sobrenome').classList.add('is-invalid');
                 isValid = false;
             }
 
-            if (!data.email || !validateEmail(data.email)) {
-                setFieldValidation(document.getElementById('email'), false, 'E-mail válido é obrigatório');
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!data.email || !emailRegex.test(data.email)) {
+                document.getElementById('email').classList.add('is-invalid');
                 isValid = false;
             }
 
-            if (!data.password || data.password.length < 6) {
-                setFieldValidation(passwordInput, false, 'Senha deve ter pelo menos 6 caracteres');
-                isValid = false;
-            }
+            // Validar senha (apenas se for novo usuário ou se foi preenchida na edição)
+            if (!editingId || data.senha) {
+                if (!data.senha || data.senha.length < 6) {
+                    senhaInput.classList.add('is-invalid');
+                    isValid = false;
+                }
 
-            if (data.password !== data.confirmPassword) {
-                setFieldValidation(confirmPasswordInput, false, 'Senhas não coincidem');
-                isValid = false;
-            }
-
-            if (data.phone && !validatePhone(data.phone)) {
-                setFieldValidation(phoneInput, false, 'Formato de telefone inválido');
-                isValid = false;
-            }
-
-            if (data.document && !validateCPF(data.document)) {
-                setFieldValidation(documentInput, false, 'Formato de CPF inválido');
-                isValid = false;
+                if (data.senha !== data.confirmarSenha) {
+                    confirmarSenhaInput.classList.add('is-invalid');
+                    isValid = false;
+                }
             }
 
             if (!isValid) {
@@ -506,21 +730,70 @@
             return isValid;
         }
 
-        // ========== FUNÇÃO DE CANCELAR ==========
-        function handleCancel() {
-            if (confirm('Tem certeza que deseja cancelar? Os dados preenchidos serão perdidos.')) {
-                window.location.href = 'login.html';
-            }
+        // ========== CONFIRMAR EXCLUSÃO ==========
+        function confirmarExclusao(id) {
+            currentDeleteId = id;
+            confirmDeleteModal.show();
         }
+
+        // ========== EXCLUIR USUÁRIO ==========
+        async function excluirUsuario() {
+            if (!currentDeleteId) return;
+
+            try {
+                const response = await fetch(`${API_URL}/${currentDeleteId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Usuário excluído com sucesso!', 'success');
+                    confirmDeleteModal.hide();
+                    await loadUsuarios();
+                } else {
+                    const result = await response.json();
+                    showAlert(result.message || 'Erro ao excluir usuário', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor.', 'danger');
+            }
+
+            currentDeleteId = null;
+        }
+
+        // ========== MÁSCARAS ==========
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 10) {
+                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else {
+                value = value.replace(/^(\d{2})(\d{5})(\d{0,4}).*/, '($1) $2-$3');
+            }
+            e.target.value = value;
+        });
+
+        document.getElementById('cpf').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/^(\d{3})(\d{3})(\d{3})(\d{2}).*/, '$1.$2.$3-$4');
+            e.target.value = value;
+        });
+
+        // ========== EVENT LISTENERS ==========
+        document.getElementById('novo-usuario').addEventListener('click', openNewUserModal);
+        btnSalvar.addEventListener('click', saveUsuario);
+        btnConfirmDelete.addEventListener('click', excluirUsuario);
+
+        // Remover validações ao digitar
+        ['nome', 'sobrenome', 'email', 'senha', 'confirmarSenha'].forEach(fieldId => {
+            document.getElementById(fieldId).addEventListener('input', function() {
+                this.classList.remove('is-invalid');
+            });
+        });
 
         // ========== INICIALIZAÇÃO ==========
         document.addEventListener('DOMContentLoaded', function() {
-            setupRealTimeValidation();
-            
-            // Foco inicial no campo nome
-            document.getElementById('firstName').focus();
-
-            console.log('Página de cadastro carregada com sucesso');
+            loadUsuarios();
+            console.log('Página de gerenciamento de usuários carregada com sucesso');
         });
     </script>
 </body>

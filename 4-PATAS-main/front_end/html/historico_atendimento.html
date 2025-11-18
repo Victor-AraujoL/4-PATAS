@@ -4,15 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Associação 4 Patas - Meus Atendimentos</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-            <link rel="stylesheet" type="text/css" href="../css/historico_atendimento.css"/>
+    <link rel="stylesheet" type="text/css" href="../css/historico_atendimento.css"/>
 </head>
 <body>
     <!-- Decorative paws -->
@@ -38,13 +37,9 @@
                         <i class="fas fa-arrow-left me-2"></i>
                         Voltar ao Menu
                     </button>
-                    <button class="btn btn-custom-primary me-2" onclick="window.location.href='cadastro_atendimento.html';">
+                    <button class="btn btn-custom-primary" onclick="window.location.href='cadastro_atendimento.html';">
                         <i class="fas fa-plus me-2"></i>
-                        Cadastrar atendimento
-                    </button>
-                    <button class="btn btn-custom-secondary" onclick="exportToPDF()">
-                        <i class="fas fa-download me-2"></i>
-                        Exportar PDF
+                        Novo Atendimento
                     </button>
                 </div>
             </div>
@@ -59,41 +54,54 @@
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
                 <div class="stats-card">
-                    <div class="stats-number" id="total-appointments">5</div>
-                    <div class="stats-label">Total de Atendimentos</div>
+                    <div class="stats-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <div>
+                        <div class="stats-number" id="total-appointments">0</div>
+                        <div class="stats-label">Total de Atendimentos</div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
                 <div class="stats-card">
-                    <div class="stats-number" id="recent-appointments">2</div>
-                    <div class="stats-label">Este Mês</div>
+                    <div class="stats-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <div class="stats-number" id="recent-appointments">0</div>
+                        <div class="stats-label">Este Mês</div>
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
                 <div class="stats-card">
-                    <div class="stats-number" id="pets-count">3</div>
-                    <div class="stats-label">Pets Atendidos</div>
+                    <div class="stats-icon">
+                        <i class="fas fa-dog"></i>
+                    </div>
+                    <div>
+                        <div class="stats-number" id="pets-count">0</div>
+                        <div class="stats-label">Pets Atendidos</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Search -->
+        <!-- Search Section -->
         <div class="search-section">
-            <div class="row">
-                <div class="col-md-10">
+            <div class="row align-items-center">
+                <div class="col-md-12">
                     <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0">
-                            <i class="fas fa-search text-muted"></i>
+                        <span class="input-group-text bg-white">
+                            <i class="fas fa-search"></i>
                         </span>
-                        <input type="text" id="search-input" class="form-control search-input border-start-0" 
-                               placeholder="Buscar por pet, veterinário, diagnóstico, medicamento...">
+                        <input type="text" id="search-input" class="form-control search-input"
+                               placeholder="Buscar por pet, veterinário, diagnóstico ou medicamento...">
+                        <button class="btn btn-custom-primary" onclick="filterAppointments()">
+                            <i class="fas fa-search me-2"></i>
+                            Buscar
+                        </button>
                     </div>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-custom-primary w-100" onclick="filterAppointments()">
-                        <i class="fas fa-search me-2"></i>
-                        Buscar
-                    </button>
                 </div>
             </div>
         </div>
@@ -106,22 +114,30 @@
                         <i class="fas fa-history"></i>
                         Histórico de Consultas Veterinárias
                     </h3>
+                    <span id="showing-info" class="text-muted"></span>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th>Data/Hora</th>
+                                <th width="150">Data/Hora</th>
                                 <th>Pet</th>
                                 <th>Veterinário</th>
-                                <th>Peso (kg)</th>
+                                <th width="80">Peso</th>
                                 <th>Diagnóstico</th>
-                                <th>Status</th>
-                                <th width="100">Ações</th>
+                                <th width="100">Status</th>
+                                <th width="120">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="appointments-table-body">
-                            <!-- Dados serão inseridos via JavaScript -->
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Carregando...</span>
+                                    </div>
+                                    <p class="mt-3 text-muted">Carregando atendimentos...</p>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -131,28 +147,19 @@
         <!-- MOBILE VIEW: Cards -->
         <div class="appointments-container-mobile">
             <div id="appointments-cards-container">
-                <!-- Cards serão inseridos via JavaScript -->
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Carregando...</span>
+                    </div>
+                    <p class="mt-3 text-muted">Carregando atendimentos...</p>
+                </div>
             </div>
         </div>
 
         <!-- Pagination -->
-        <nav>
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#" id="prev-page"><i class="fas fa-chevron-left"></i></a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#" class="page-number">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" class="page-number">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" class="page-number">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#" id="next-page"><i class="fas fa-chevron-right"></i></a>
-                </li>
+        <nav aria-label="Navegação de páginas">
+            <ul class="pagination justify-content-center" id="pagination-container">
+                <!-- Paginação será inserida via JavaScript -->
             </ul>
         </nav>
     </div>
@@ -162,49 +169,63 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detalhes da Consulta</h5>
+                    <h5 class="modal-title">
+                        <i class="fas fa-file-medical me-2"></i>
+                        Detalhes da Consulta
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-primary fw-bold">Data e Hora</label>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-primary fw-bold">
+                                <i class="fas fa-calendar me-2"></i>Data e Hora
+                            </label>
                             <p id="detail-datetime" class="form-control-static fs-5"></p>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-primary fw-bold">Pet Atendido</label>
+                        <div class="col-md-6">
+                            <label class="form-label text-primary fw-bold">
+                                <i class="fas fa-paw me-2"></i>Pet Atendido
+                            </label>
                             <p id="detail-pet" class="form-control-static fs-5"></p>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-primary fw-bold">Veterinário</label>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-primary fw-bold">
+                                <i class="fas fa-user-md me-2"></i>Veterinário
+                            </label>
                             <p id="detail-collaborator" class="form-control-static"></p>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label text-primary fw-bold">Peso na Consulta</label>
+                        <div class="col-md-6">
+                            <label class="form-label text-primary fw-bold">
+                                <i class="fas fa-weight me-2"></i>Peso na Consulta
+                            </label>
                             <p id="detail-weight" class="form-control-static"></p>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-primary fw-bold">Medicamento Prescrito</label>
+                        <label class="form-label text-primary fw-bold">
+                            <i class="fas fa-pills me-2"></i>Medicamento Prescrito
+                        </label>
                         <p id="detail-medication" class="form-control-static"></p>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-primary fw-bold">Diagnóstico</label>
+                        <label class="form-label text-primary fw-bold">
+                            <i class="fas fa-stethoscope me-2"></i>Diagnóstico
+                        </label>
                         <p id="detail-diagnosis" class="form-control-static bg-light p-3 rounded"></p>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label text-primary fw-bold">Observações e Recomendações</label>
+                        <label class="form-label text-primary fw-bold">
+                            <i class="fas fa-comment-medical me-2"></i>Observações e Recomendações
+                        </label>
                         <p id="detail-observation" class="form-control-static bg-light p-3 rounded"></p>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times me-2"></i>Fechar
-                    </button>
-                    <button type="button" class="btn btn-primary" id="btn-download-report">
-                        <i class="fas fa-download me-2"></i>Baixar Relatório
                     </button>
                 </div>
             </div>
@@ -213,109 +234,64 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Dados simulados de atendimentos do usuário
-        const appointmentsMockData = [
-            {
-                id: 1,
-                idPet: 101,
-                nomePet: "Rex",
-                idColaborador: 201,
-                nomeColaborador: "Dr. Carlos Silva",
-                peso: 12.5,
-                dataHora: "2025-05-16T14:30:00",
-                medicamento: "Antibiótico canino (Amoxicilina)",
-                diagnostico: "Infecção cutânea leve na região dorsal. Vermelhidão e irritação da pele causada por alergia sazonal.",
-                observacao: "Retorno em 7 dias para reavaliação. Aplicar pomada 2x ao dia. Evitar banhos por 3 dias. Manter ambiente limpo e seco.",
-                dataCadastro: "2025-05-16T09:15:00",
-                status: "Recente"
-            },
-            {
-                id: 2,
-                idPet: 102,
-                nomePet: "Luna",
-                idColaborador: 202,
-                nomeColaborador: "Dra. Ana Oliveira",
-                peso: 4.2,
-                dataHora: "2025-05-16T10:15:00",
-                medicamento: "Antipulgas tópico (Frontline)",
-                diagnostico: "Infestação moderada de pulgas. Presença de ovos e pulgas adultas no pelo.",
-                observacao: "Aplicar solução tópica 1x por mês. Higienizar ambiente doméstico. Lavar roupas de cama em água quente.",
-                dataCadastro: "2025-05-16T08:45:00",
-                status: "Recente"
-            },
-            {
-                id: 3,
-                idPet: 103,
-                nomePet: "Milo",
-                idColaborador: 201,
-                nomeColaborador: "Dr. Carlos Silva",
-                peso: 8.7,
-                dataHora: "2025-04-17T09:00:00",
-                medicamento: "Anti-inflamatório (Meloxicam)",
-                diagnostico: "Trauma leve na pata dianteira direita. Inchaço e sensibilidade na articulação.",
-                observacao: "Repouso recomendado por 5 dias. Evitar corridas e saltos. Compressa fria 3x ao dia por 10 minutos.",
-                dataCadastro: "2025-04-15T16:20:00",
-                status: "Histórico"
-            },
-            {
-                id: 4,
-                idPet: 104,
-                nomePet: "Bella",
-                idColaborador: 203,
-                nomeColaborador: "Dr. Marcos Santos",
-                peso: 15.3,
-                dataHora: "2025-03-18T13:45:00",
-                medicamento: "Vermífugo (Drontal Plus)",
-                diagnostico: "Verminose intestinal diagnosticada através de exame de fezes. Presença de ovos de áscaris.",
-                observacao: "Repetir dose em 15 dias. Coletar nova amostra de fezes após tratamento para confirmar eficácia.",
-                dataCadastro: "2025-03-17T11:10:00",
-                status: "Histórico"
-            },
-            {
-                id: 5,
-                idPet: 105,
-                nomePet: "Thor",
-                idColaborador: 202,
-                nomeColaborador: "Dra. Ana Oliveira",
-                peso: 25.8,
-                dataHora: "2025-02-18T16:30:00",
-                medicamento: "Suplemento vitamínico B12",
-                diagnostico: "Anemia leve detectada em exame de sangue. Níveis baixos de hemoglobina e ferro.",
-                observacao: "Incluir suplemento na dieta diária. Aumentar consumo de proteínas. Retorno em 30 dias para novo hemograma.",
-                dataCadastro: "2025-02-17T14:50:00",
-                status: "Histórico"
-            }
-        ];
 
-        // Elementos DOM
+    <script>
+        // ===========================
+        // CONFIGURAÇÕES
+        // ===========================
+        const API_BASE_URL = 'http://localhost:3000/api';
+        const API_ATENDIMENTOS_URL = `${API_BASE_URL}/atendimentos`;
+        const ITEMS_PER_PAGE = 10;
+
+        // ===========================
+        // VARIÁVEIS GLOBAIS
+        // ===========================
+        let allAppointments = [];
+        let filteredAppointments = [];
+        let currentPage = 1;
+        let totalPages = 1;
+
+        // ===========================
+        // ELEMENTOS DOM
+        // ===========================
         const searchInput = document.getElementById('search-input');
         const alertBox = document.getElementById('alert');
         const appointmentsTableBody = document.getElementById('appointments-table-body');
         const appointmentsCardsContainer = document.getElementById('appointments-cards-container');
+        const paginationContainer = document.getElementById('pagination-container');
+        const showingInfo = document.getElementById('showing-info');
         const appointmentModal = new bootstrap.Modal(document.getElementById('appointmentModal'));
 
-        // Formatação da data
+        // ===========================
+        // FUNÇÕES AUXILIARES
+        // ===========================
+
         function formatDateTime(dateString) {
+            if (!dateString) return 'N/A';
             const date = new Date(dateString);
-            return date.toLocaleString('pt-BR');
+            return date.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
         }
 
         function formatDate(dateString) {
+            if (!dateString) return 'N/A';
             const date = new Date(dateString);
             return date.toLocaleDateString('pt-BR');
         }
 
-        // Mostrar alerta
         function showAlert(message, type) {
             alertBox.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : type === 'danger' ? 'times-circle' : 'info-circle'} me-2"></i>
                 ${message}
             `;
             alertBox.className = `alert alert-${type}`;
             alertBox.classList.remove('d-none');
-            
+
             setTimeout(() => {
                 alertBox.classList.add('d-none');
             }, 4000);
@@ -323,50 +299,253 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Atualizar estatísticas
+        function getStatusByDate(dateString) {
+            if (!dateString) return 'Histórico';
+            const appointmentDate = new Date(dateString);
+            const now = new Date();
+            const diffDays = Math.floor((now - appointmentDate) / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 7) return 'Recente';
+            if (diffDays <= 30) return 'Mensal';
+            return 'Histórico';
+        }
+
+        function truncateText(text, maxLength = 50) {
+            if (!text) return 'N/A';
+            return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+        }
+
+        // ===========================
+        // CARREGAR DADOS
+        // ===========================
+
+        async function loadAppointments() {
+            try {
+                const response = await fetch(API_ATENDIMENTOS_URL);
+                if (response.ok) {
+                    allAppointments = await response.json();
+                    // Ordenar por data decrescente (mais recentes primeiro)
+                    allAppointments.sort((a, b) => new Date(b.DATAHORA) - new Date(a.DATAHORA));
+                    filteredAppointments = [...allAppointments];
+                    updateStats();
+                    updatePagination();
+                    renderCurrentPage();
+                } else {
+                    showAlert('Erro ao carregar atendimentos do servidor', 'danger');
+                    renderEmpty();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar atendimentos:', error);
+                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
+                renderEmpty();
+            }
+        }
+
+        // ===========================
+        // ESTATÍSTICAS
+        // ===========================
+
         function updateStats() {
             const currentMonth = new Date().getMonth();
             const currentYear = new Date().getFullYear();
-            
-            const recentAppointments = appointmentsMockData.filter(appointment => {
-                const appointmentDate = new Date(appointment.dataHora);
+
+            const recentAppointments = allAppointments.filter(appointment => {
+                const appointmentDate = new Date(appointment.DATAHORA);
                 return appointmentDate.getMonth() === currentMonth && appointmentDate.getFullYear() === currentYear;
             });
 
-            const uniquePets = [...new Set(appointmentsMockData.map(a => a.nomePet))];
+            const uniquePets = [...new Set(allAppointments.map(a => a.IDPET))].length;
 
-            document.getElementById('total-appointments').textContent = appointmentsMockData.length;
+            document.getElementById('total-appointments').textContent = allAppointments.length;
             document.getElementById('recent-appointments').textContent = recentAppointments.length;
-            document.getElementById('pets-count').textContent = uniquePets.length;
+            document.getElementById('pets-count').textContent = uniquePets;
         }
 
-        // Renderizar tabela (Desktop)
+        // ===========================
+        // PAGINAÇÃO
+        // ===========================
+
+        function updatePagination() {
+            totalPages = Math.ceil(filteredAppointments.length / ITEMS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = 1;
+            if (totalPages === 0) currentPage = 1;
+
+            renderPagination();
+            updateShowingInfo();
+        }
+
+        function renderPagination() {
+            paginationContainer.innerHTML = '';
+
+            if (totalPages <= 1) {
+                paginationContainer.style.display = 'none';
+                return;
+            }
+
+            paginationContainer.style.display = 'flex';
+
+            // Botão Anterior
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `
+                <a class="page-link" href="#" aria-label="Anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            `;
+            if (currentPage > 1) {
+                prevLi.querySelector('a').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    goToPage(currentPage - 1);
+                });
+            }
+            paginationContainer.appendChild(prevLi);
+
+            // Números das páginas
+            const maxVisible = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+            if (endPage - startPage < maxVisible - 1) {
+                startPage = Math.max(1, endPage - maxVisible + 1);
+            }
+
+            // Primeira página
+            if (startPage > 1) {
+                const firstLi = createPageItem(1);
+                paginationContainer.appendChild(firstLi);
+
+                if (startPage > 2) {
+                    const dotsLi = document.createElement('li');
+                    dotsLi.className = 'page-item disabled';
+                    dotsLi.innerHTML = '<a class="page-link">...</a>';
+                    paginationContainer.appendChild(dotsLi);
+                }
+            }
+
+            // Páginas do meio
+            for (let i = startPage; i <= endPage; i++) {
+                const pageLi = createPageItem(i);
+                paginationContainer.appendChild(pageLi);
+            }
+
+            // Última página
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const dotsLi = document.createElement('li');
+                    dotsLi.className = 'page-item disabled';
+                    dotsLi.innerHTML = '<a class="page-link">...</a>';
+                    paginationContainer.appendChild(dotsLi);
+                }
+
+                const lastLi = createPageItem(totalPages);
+                paginationContainer.appendChild(lastLi);
+            }
+
+            // Botão Próximo
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `
+                <a class="page-link" href="#" aria-label="Próximo">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            `;
+            if (currentPage < totalPages) {
+                nextLi.querySelector('a').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    goToPage(currentPage + 1);
+                });
+            }
+            paginationContainer.appendChild(nextLi);
+        }
+
+        function createPageItem(pageNumber) {
+            const li = document.createElement('li');
+            li.className = `page-item ${pageNumber === currentPage ? 'active' : ''}`;
+            li.innerHTML = `<a class="page-link" href="#">${pageNumber}</a>`;
+
+            if (pageNumber !== currentPage) {
+                li.querySelector('a').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    goToPage(pageNumber);
+                });
+            }
+
+            return li;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            renderCurrentPage();
+            renderPagination();
+            updateShowingInfo();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function updateShowingInfo() {
+            if (filteredAppointments.length === 0) {
+                showingInfo.textContent = '';
+                return;
+            }
+
+            const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+            const end = Math.min(currentPage * ITEMS_PER_PAGE, filteredAppointments.length);
+            showingInfo.textContent = `Mostrando ${start}-${end} de ${filteredAppointments.length} atendimentos`;
+        }
+
+        // ===========================
+        // RENDERIZAÇÃO
+        // ===========================
+
+        function renderCurrentPage() {
+            const start = (currentPage - 1) * ITEMS_PER_PAGE;
+            const end = start + ITEMS_PER_PAGE;
+            const pageAppointments = filteredAppointments.slice(start, end);
+
+            renderAppointmentsTable(pageAppointments);
+            renderAppointmentsCards(pageAppointments);
+        }
+
         function renderAppointmentsTable(appointments) {
             appointmentsTableBody.innerHTML = '';
-            
+
+            if (appointments.length === 0) {
+                appointmentsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                            <p class="mb-0">Nenhum atendimento encontrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
             appointments.forEach(appointment => {
+                const status = getStatusByDate(appointment.DATAHORA);
+                const petName = appointment.pet?.NOME || 'Pet não identificado';
+                const colaboradorName = appointment.colaborador?.NOME || 'Veterinário não identificado';
+                const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico';
+                const peso = appointment.PESO ? appointment.PESO.toFixed(1) : '0.0';
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><strong>${formatDateTime(appointment.dataHora)}</strong></td>
-                    <td>${appointment.nomePet}</td>
-                    <td>${appointment.nomeColaborador}</td>
-                    <td>${appointment.peso.toFixed(1)} kg</td>
+                    <td><strong>${formatDateTime(appointment.DATAHORA)}</strong></td>
+                    <td>${petName}</td>
+                    <td>${colaboradorName}</td>
+                    <td>${peso} kg</td>
                     <td>
-                        <span title="${appointment.diagnostico}" style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: block;">
-                            ${appointment.diagnostico}
+                        <span title="${diagnostico}">
+                            ${truncateText(diagnostico, 50)}
                         </span>
                     </td>
                     <td>
-                        <span class="status-badge status-${appointment.status.toLowerCase()}">
-                            ${appointment.status}
+                        <span class="status-badge status-${status.toLowerCase()}">
+                            ${status}
                         </span>
                     </td>
                     <td>
-                        <button class="action-btn btn-view" onclick="viewAppointment(${appointment.id})" title="Ver Detalhes">
+                        <button class="action-btn btn-view" onclick="viewAppointment(${appointment.IDATENDIMENTO})" title="Ver Detalhes">
                             <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="action-btn btn-download" onclick="downloadReport(${appointment.id})" title="Baixar Relatório">
-                            <i class="fas fa-download"></i>
                         </button>
                     </td>
                 `;
@@ -374,50 +553,73 @@
             });
         }
 
-        // Renderizar cards (Mobile)
         function renderAppointmentsCards(appointments) {
             appointmentsCardsContainer.innerHTML = '';
-            
+
+            if (appointments.length === 0) {
+                appointmentsCardsContainer.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                        <p>Nenhum atendimento encontrado</p>
+                    </div>
+                `;
+                return;
+            }
+
             appointments.forEach(appointment => {
+                const status = getStatusByDate(appointment.DATAHORA);
+                const petName = appointment.pet?.NOME || 'Pet não identificado';
+                const colaboradorName = appointment.colaborador?.NOME || 'Veterinário não identificado';
+                const medicamento = appointment.MEDICAMENTO || 'Não informado';
+                const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico';
+                const peso = appointment.PESO ? appointment.PESO.toFixed(1) : '0.0';
+
                 const card = document.createElement('div');
                 card.className = 'appointment-card-mobile';
                 card.innerHTML = `
                     <div class="appointment-header-mobile">
-                        <h4 class="appointment-title-mobile">${appointment.nomePet}</h4>
-                        <span class="status-badge status-${appointment.status.toLowerCase()}">
-                            ${appointment.status}
+                        <h4 class="appointment-title-mobile">${petName}</h4>
+                        <span class="status-badge status-${status.toLowerCase()}">
+                            ${status}
                         </span>
                     </div>
-                    
+
                     <div class="appointment-details-mobile">
                         <div class="appointment-detail-mobile">
-                            <span class="appointment-detail-label-mobile">Data/Hora</span>
-                            <span class="appointment-detail-value-mobile">${formatDateTime(appointment.dataHora)}</span>
+                            <span class="appointment-detail-label-mobile">
+                                <i class="fas fa-calendar me-2"></i>Data/Hora
+                            </span>
+                            <span class="appointment-detail-value-mobile">${formatDateTime(appointment.DATAHORA)}</span>
                         </div>
                         <div class="appointment-detail-mobile">
-                            <span class="appointment-detail-label-mobile">Veterinário</span>
-                            <span class="appointment-detail-value-mobile">${appointment.nomeColaborador}</span>
+                            <span class="appointment-detail-label-mobile">
+                                <i class="fas fa-user-md me-2"></i>Veterinário
+                            </span>
+                            <span class="appointment-detail-value-mobile">${colaboradorName}</span>
                         </div>
                         <div class="appointment-detail-mobile">
-                            <span class="appointment-detail-label-mobile">Peso</span>
-                            <span class="appointment-detail-value-mobile">${appointment.peso.toFixed(1)} kg</span>
+                            <span class="appointment-detail-label-mobile">
+                                <i class="fas fa-weight me-2"></i>Peso
+                            </span>
+                            <span class="appointment-detail-value-mobile">${peso} kg</span>
                         </div>
                         <div class="appointment-detail-mobile">
-                            <span class="appointment-detail-label-mobile">Medicamento</span>
-                            <span class="appointment-detail-value-mobile">${appointment.medicamento}</span>
+                            <span class="appointment-detail-label-mobile">
+                                <i class="fas fa-pills me-2"></i>Medicamento
+                            </span>
+                            <span class="appointment-detail-value-mobile">${medicamento}</span>
                         </div>
                         <div class="appointment-detail-mobile">
-                            <span class="appointment-detail-label-mobile">Diagnóstico</span>
-                            <span class="appointment-detail-value-mobile">${appointment.diagnostico.substring(0, 80)}...</span>
+                            <span class="appointment-detail-label-mobile">
+                                <i class="fas fa-stethoscope me-2"></i>Diagnóstico
+                            </span>
+                            <span class="appointment-detail-value-mobile">${truncateText(diagnostico, 80)}</span>
                         </div>
                     </div>
-                    
+
                     <div class="appointment-actions-mobile">
-                        <button class="action-btn btn-view" onclick="viewAppointment(${appointment.id})" title="Ver Detalhes">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="action-btn btn-download" onclick="downloadReport(${appointment.id})" title="Baixar Relatório">
-                            <i class="fas fa-download"></i>
+                        <button class="action-btn btn-view" onclick="viewAppointment(${appointment.IDATENDIMENTO})" title="Ver Detalhes">
+                            <i class="fas fa-eye me-2"></i>Ver Detalhes
                         </button>
                     </div>
                 `;
@@ -425,32 +627,60 @@
             });
         }
 
-        // Renderizar atendimentos (ambas as views)
-        function renderAppointments(appointments = appointmentsMockData) {
-            renderAppointmentsTable(appointments);
-            renderAppointmentsCards(appointments);
+        function renderEmpty() {
+            appointmentsTableBody.innerHTML = `
+                <tr>
+                    <td colspan="7" class="text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                        <p class="mb-0">Nenhum atendimento cadastrado</p>
+                    </td>
+                </tr>
+            `;
+            appointmentsCardsContainer.innerHTML = `
+                <div class="text-center text-muted py-5">
+                    <i class="fas fa-inbox fa-3x mb-3 d-block"></i>
+                    <p>Nenhum atendimento cadastrado</p>
+                </div>
+            `;
+            paginationContainer.style.display = 'none';
+            showingInfo.textContent = '';
         }
 
-        // Filtrar atendimentos
+        // ===========================
+        // FILTROS E BUSCA
+        // ===========================
+
         function filterAppointments() {
-            const searchTerm = searchInput.value.toLowerCase();
-            
+            const searchTerm = searchInput.value.toLowerCase().trim();
+
             if (!searchTerm) {
-                renderAppointments();
+                filteredAppointments = [...allAppointments];
+                currentPage = 1;
+                updatePagination();
+                renderCurrentPage();
                 return;
             }
-            
-            const filteredAppointments = appointmentsMockData.filter(appointment => {
+
+            filteredAppointments = allAppointments.filter(appointment => {
+                const petName = appointment.pet?.NOME || '';
+                const colaboradorName = appointment.colaborador?.NOME || '';
+                const diagnostico = appointment.DIAGNOSTICO || '';
+                const medicamento = appointment.MEDICAMENTO || '';
+                const observacao = appointment.OBSERVACAO || '';
+
                 return (
-                    appointment.nomePet.toLowerCase().includes(searchTerm) ||
-                    appointment.nomeColaborador.toLowerCase().includes(searchTerm) ||
-                    appointment.diagnostico.toLowerCase().includes(searchTerm) ||
-                    appointment.medicamento.toLowerCase().includes(searchTerm)
+                    petName.toLowerCase().includes(searchTerm) ||
+                    colaboradorName.toLowerCase().includes(searchTerm) ||
+                    diagnostico.toLowerCase().includes(searchTerm) ||
+                    medicamento.toLowerCase().includes(searchTerm) ||
+                    observacao.toLowerCase().includes(searchTerm)
                 );
             });
-            
-            renderAppointments(filteredAppointments);
-            
+
+            currentPage = 1;
+            updatePagination();
+            renderCurrentPage();
+
             if (filteredAppointments.length === 0) {
                 showAlert('Nenhum atendimento encontrado com os termos de busca informados.', 'warning');
             } else {
@@ -458,56 +688,54 @@
             }
         }
 
-        // Visualizar atendimento
+        // ===========================
+        // VISUALIZAR DETALHES
+        // ===========================
+
         function viewAppointment(appointmentId) {
-            const appointment = appointmentsMockData.find(a => a.id === appointmentId);
-            if (appointment) {
-                document.getElementById('detail-datetime').textContent = formatDateTime(appointment.dataHora);
-                document.getElementById('detail-pet').textContent = appointment.nomePet;
-                document.getElementById('detail-collaborator').textContent = appointment.nomeColaborador;
-                document.getElementById('detail-weight').textContent = `${appointment.peso.toFixed(1)} kg`;
-                document.getElementById('detail-medication').textContent = appointment.medicamento;
-                document.getElementById('detail-diagnosis').textContent = appointment.diagnostico;
-                document.getElementById('detail-observation').textContent = appointment.observacao;
-                
-                document.getElementById('btn-download-report').onclick = () => {
-                    downloadReport(appointmentId);
-                };
-                
-                appointmentModal.show();
-            }
+            const appointment = allAppointments.find(a => a.IDATENDIMENTO === appointmentId);
+            if (!appointment) return;
+
+            const petName = appointment.pet?.NOME || 'Pet não identificado';
+            const colaboradorName = appointment.colaborador?.NOME || 'Veterinário não identificado';
+            const medicamento = appointment.MEDICAMENTO || 'Não informado';
+            const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico';
+            const observacao = appointment.OBSERVACAO || 'Sem observações';
+            const peso = appointment.PESO ? appointment.PESO.toFixed(1) : '0.0';
+
+            document.getElementById('detail-datetime').textContent = formatDateTime(appointment.DATAHORA);
+            document.getElementById('detail-pet').textContent = petName;
+            document.getElementById('detail-collaborator').textContent = colaboradorName;
+            document.getElementById('detail-weight').textContent = `${peso} kg`;
+            document.getElementById('detail-medication').textContent = medicamento;
+            document.getElementById('detail-diagnosis').textContent = diagnostico;
+            document.getElementById('detail-observation').textContent = observacao;
+
+            appointmentModal.show();
         }
 
-        // Baixar relatório
-        function downloadReport(appointmentId) {
-            const appointment = appointmentsMockData.find(a => a.id === appointmentId);
-            if (appointment) {
-                showAlert(`Baixando relatório da consulta de ${appointment.nomePet} - ${formatDate(appointment.dataHora)}`, 'success');
-                // Aqui seria implementada a lógica real de download
-            }
-        }
+        // ===========================
+        // EVENT LISTENERS
+        // ===========================
 
-        // Exportar para PDF
-        function exportToPDF() {
-            showAlert('Exportando histórico completo para PDF...', 'info');
-            // Simular processo de exportação
-            setTimeout(() => {
-                showAlert('Histórico exportado com sucesso!', 'success');
-            }, 2000);
-        }
-
-        // Event Listeners
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 filterAppointments();
             }
         });
 
-        // Inicializar
+        searchInput.addEventListener('input', (e) => {
+            if (e.target.value === '') {
+                filterAppointments();
+            }
+        });
+
+        // ===========================
+        // INICIALIZAÇÃO
+        // ===========================
+
         document.addEventListener('DOMContentLoaded', () => {
-            updateStats();
-            renderAppointments();
-            
+            loadAppointments();
         });
     </script>
 </body>

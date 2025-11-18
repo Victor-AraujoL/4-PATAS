@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `atendimento`;
 CREATE TABLE `atendimento` (
-  `IDATENDIMENTO` int(11) NOT NULL,
+  `IDATENDIMENTO` int(11) NOT NULL AUTO_INCREMENT,
   `IDPET` int(11) DEFAULT NULL,
   `IDCOLABORADOR` int(11) DEFAULT NULL,
   `IDUSUARIO` int(11) DEFAULT NULL,
@@ -50,7 +50,11 @@ DROP TABLE IF EXISTS `colaborador`;
 CREATE TABLE `colaborador` (
   `IDCOLABORADOR` int(11) NOT NULL AUTO_INCREMENT,
   `NOME` varchar(255) DEFAULT NULL,
+  `CARGO` varchar(100) DEFAULT NULL,
+  `CRMV` varchar(50) DEFAULT NULL,
+  `EMAIL` varchar(255) DEFAULT NULL,
   `TELEFONE` varchar(20) DEFAULT NULL,
+  `CEP` varchar(10) DEFAULT NULL,
   `LOGRADOURO` varchar(255) DEFAULT NULL,
   `NUMERO` varchar(20) DEFAULT NULL,
   `COMPLEMENTO` varchar(100) DEFAULT NULL,
@@ -59,6 +63,7 @@ CREATE TABLE `colaborador` (
   `ESTADO` varchar(2) DEFAULT 'MG',
   `ATIVO` varchar(1) DEFAULT 'S',
   `DATACAD` datetime DEFAULT NULL,
+  `OBSERVACOES` text DEFAULT NULL,
   PRIMARY KEY (`IDCOLABORADOR`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -107,7 +112,7 @@ CREATE TABLE `pet` (
 -- ----------------------------
 DROP TABLE IF EXISTS `pet_vacina`;
 CREATE TABLE `pet_vacina` (
-  `IDPETVACINA` int(11) NOT NULL,
+  `IDPETVACINA` int(11) NOT NULL AUTO_INCREMENT,
   `IDPET` int(11) NOT NULL,
   `IDVACINA` int(11) NOT NULL,
   `IDUSUARIO` int(11) DEFAULT NULL,
@@ -136,7 +141,9 @@ CREATE TABLE `usuario` (
   `NOME` varchar(255) DEFAULT NULL,
   `EMAIL` varchar(255) DEFAULT NULL,
   `LOGIN` varchar(255) DEFAULT NULL,
-  `SENHA` varchar(20) DEFAULT NULL,
+  `SENHA` varchar(255) DEFAULT NULL,
+  `TELEFONE` varchar(20) DEFAULT NULL,
+  `CPF` varchar(14) DEFAULT NULL,
   `ADMIN` varchar(1) DEFAULT 'N',
   `ATIVO` varchar(1) DEFAULT 'S',
   `DATACAD` datetime DEFAULT NULL,
@@ -152,7 +159,7 @@ CREATE TABLE `usuario` (
 -- ----------------------------
 DROP TABLE IF EXISTS `vacina`;
 CREATE TABLE `vacina` (
-  `IDVACINA` int(11) NOT NULL,
+  `IDVACINA` int(11) NOT NULL AUTO_INCREMENT,
   `NOME` varchar(255) DEFAULT NULL,
   `ATIVO` varchar(1) DEFAULT 'S',
   `DATACAD` datetime DEFAULT NULL,

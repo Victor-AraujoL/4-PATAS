@@ -7,33 +7,80 @@ const Colaborador = db.define('Colaborador', {
     primaryKey: true,
     autoIncrement: true,
   },
-  nome: {
-    type: DataTypes.STRING,
-    allowNull: false,
+  NOME: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    field: 'NOME'
   },
-  telefone: {
-    type: DataTypes.STRING,
+  CARGO: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    field: 'CARGO'
   },
-  logradouro: {
-    type: DataTypes.STRING,
+  CRMV: {
+    type: DataTypes.STRING(50),
+    allowNull: true,
+    field: 'CRMV'
   },
-  numero: {
-    type: DataTypes.STRING,
+  EMAIL: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    field: 'EMAIL'
   },
-  complemento: {
-    type: DataTypes.STRING,
+  TELEFONE: {
+    type: DataTypes.STRING(20),
+    allowNull: true,
+    field: 'TELEFONE'
   },
-  bairro: {
-    type: DataTypes.STRING,
+  LOGRADOURO: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+    field: 'LOGRADOURO'
   },
-  cidade: {
-    type: DataTypes.STRING,
+  NUMERO: {
+    type: DataTypes.STRING(20),
+    allowNull: true,
+    field: 'NUMERO'
   },
-  estado: {
-    type: DataTypes.STRING,
+  COMPLEMENTO: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    field: 'COMPLEMENTO'
   },
+  BAIRRO: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    field: 'BAIRRO'
+  },
+  CIDADE: {
+    type: DataTypes.STRING(100),
+    allowNull: true,
+    field: 'CIDADE'
+  },
+  ESTADO: {
+    type: DataTypes.STRING(2),
+    allowNull: true,
+    defaultValue: 'MG',
+    field: 'ESTADO'
+  },
+  ATIVO: {
+    type: DataTypes.STRING(1),
+    allowNull: true,
+    defaultValue: 'S',
+    field: 'ATIVO'
+  },
+  OBSERVACOES: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    field: 'OBSERVACOES'
+  },
+  DATACAD: {
+    type: DataTypes.DATE,
+    allowNull: true,
+    field: 'DATACAD'
+  }
 }, {
-  tableName: 'colaborador', 
+  tableName: 'colaborador',
   timestamps: false,
 });
 

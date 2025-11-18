@@ -28,10 +28,10 @@ const createColaborador = async (req, res) => {
   const data = req.body;
   try {
     const colaborador = await Colaborador.create(data);
-    res.status(201).json({ message: 'Colaborador criado com sucesso', id: colaborador.id });
+    res.status(201).json({ message: 'Colaborador criado com sucesso', id: colaborador.IDCOLABORADOR });
   } catch (err) {
-    console.error("Erro ao criar colaborador:", err); 
-    res.status(500).json({ message: 'Erro ao criar colaborador', error: err.message }); 
+    console.error("Erro ao criar colaborador:", err);
+    res.status(500).json({ message: 'Erro ao criar colaborador', error: err.message });
   }
 };
 
@@ -43,10 +43,11 @@ const updateColaborador = async (req, res) => {
     if (!colaborador) {
       return res.status(404).json({ message: 'Colaborador não encontrado' });
     }
+
     await colaborador.update(data);
     res.json({ message: 'Colaborador atualizado com sucesso' });
   } catch (err) {
-    console.error("Erro ao atualizar colaborador:", err); 
+    console.error("Erro ao atualizar colaborador:", err);
     res.status(500).json({ message: 'Erro ao atualizar colaborador' });
   }
 };

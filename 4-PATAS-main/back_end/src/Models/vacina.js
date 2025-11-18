@@ -11,6 +11,22 @@ const Vacina = sequelize.define('vacina', {
     type: DataTypes.STRING(255),
     allowNull: true
   },
+  Lote: {
+    type: DataTypes.STRING(100),
+    allowNull: true
+  },
+  Data_validade: {
+    type: DataTypes.DATE,
+    allowNull: true
+  },
+  Fornecedor: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
+  Marca: {
+    type: DataTypes.STRING(255),
+    allowNull: true
+  },
   ATIVO: {
     type: DataTypes.STRING(1),
     defaultValue: 'S'

@@ -91,10 +91,10 @@
                             <tr>
                                 <th>Vacina</th>
                                 <th>Lote</th>
+                                <th>Marca</th>
+                                <th>Fornecedor</th>
                                 <th>Cadastro</th>
                                 <th>Validade</th>
-                                <th>Próxima</th>
-                                <th>Veterinário</th>
                                 <th>Status</th>
                                 <th width="120">Ações</th>
                             </tr>
@@ -148,31 +148,31 @@
                     <form id="vaccine-form">
                         <input type="hidden" id="vaccine-id">
                         <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="vaccine-name" class="form-label">Nome da Vacina</label>
+                            <div class="col-md-12 mb-3">
+                                <label for="vaccine-name" class="form-label">Nome da Vacina *</label>
                                 <input type="text" class="form-control" id="vaccine-name" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="vaccine-batch" class="form-label">Lote</label>
-                                <input type="text" class="form-control" id="vaccine-batch" required>
+                                <input type="text" class="form-control" id="vaccine-batch">
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="vaccine-expiry" class="form-label">Data de Validade</label>
-                                <input type="date" class="form-control" id="vaccine-expiry" required>
+                                <input type="date" class="form-control" id="vaccine-expiry">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="vaccine-next" class="form-label">Próxima Aplicação</label>
-                                <input type="date" class="form-control" id="vaccine-next" required>
+                                <label for="vaccine-brand" class="form-label">Marca</label>
+                                <input type="text" class="form-control" id="vaccine-brand">
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="vaccine-applied-by" class="form-label">Aplicado por</label>
-                                <input type="text" class="form-control" id="vaccine-applied-by" required>
+                                <label for="vaccine-supplier" class="form-label">Fornecedor</label>
+                                <input type="text" class="form-control" id="vaccine-supplier">
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="vaccine-status" class="form-label">Status</label>
+                            <div class="col-md-12 mb-3">
+                                <label for="vaccine-status" class="form-label">Status *</label>
                                 <select class="form-control" id="vaccine-status" required>
-                                    <option value="active">Ativa</option>
-                                    <option value="inactive">Inativa</option>
+                                    <option value="S">Ativa</option>
+                                    <option value="N">Inativa</option>
                                 </select>
                             </div>
                         </div>
@@ -219,69 +219,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Dados simulados de vacinas
-        const vaccinesMockData = [
-            {
-                id: 1,
-                name: "Antirrábica",
-                batch: "AR2024-045",
-                created: "2024-05-10",
-                expiry: "2025-05-10",
-                next: "2024-11-10",
-                appliedBy: "Dr. Carlos Silva",
-                status: "active"
-            },
-            {
-                id: 2,
-                name: "V10",
-                batch: "V10-2024-112",
-                created: "2024-04-15",
-                expiry: "2025-04-15",
-                next: "2024-10-15",
-                appliedBy: "Dra. Ana Oliveira",
-                status: "active"
-            },
-            {
-                id: 3,
-                name: "Giárdia",
-                batch: "GI2024-078",
-                created: "2024-06-20",
-                expiry: "2025-06-20",
-                next: "2024-12-20",
-                appliedBy: "Dr. Marcos Santos",
-                status: "inactive"
-            },
-            {
-                id: 4,
-                name: "Leishmaniose",
-                batch: "LE2024-056",
-                created: "2024-07-05",
-                expiry: "2025-07-05",
-                next: "2024-11-05",
-                appliedBy: "Dra. Luiza Costa",
-                status: "active"
-            },
-            {
-                id: 5,
-                name: "Gripe Canina",
-                batch: "GC2024-098",
-                created: "2024-08-12",
-                expiry: "2025-08-12",
-                next: "2025-02-12",
-                appliedBy: "Dr. Roberto Almeida",
-                status: "active"
-            },
-            {
-                id: 6,
-                name: "Parvovirose",
-                batch: "PV2024-134",
-                created: "2024-09-03",
-                expiry: "2025-09-03",
-                next: "2024-12-03",
-                appliedBy: "Dra. Fernanda Lima",
-                status: "active"
-            }
-        ];
+        const API_URL = 'http://localhost:3000/api/vacinas';
+        let vaccinesData = [];
 
         // Elementos DOM
         const searchInput = document.getElementById('search-input');
@@ -297,6 +236,23 @@
 
         let currentDeleteId = null;
         let isEditing = false;
+
+        // Carregar vacinas da API
+        async function loadVaccines() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    vaccinesData = await response.json();
+                    renderVaccines();
+                } else {
+                    showAlert('Erro ao carregar vacinas do servidor', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
+                vaccinesData = [];
+            }
+        }
 
         // Formatação de data
         function formatDate(dateString) {
@@ -346,35 +302,35 @@
                 `;
                 return;
             }
-            
+
             vaccines.forEach(vaccine => {
-                const expiring = isExpiring(vaccine.expiry);
-                let statusClass = vaccine.status === 'active' ? 'status-active' : 'status-inactive';
-                let statusText = vaccine.status === 'active' ? 'Ativa' : 'Inativa';
-                
-                if (expiring && vaccine.status === 'active') {
+                const expiring = vaccine.Data_validade ? isExpiring(vaccine.Data_validade) : false;
+                let statusClass = vaccine.ATIVO === 'S' ? 'status-active' : 'status-inactive';
+                let statusText = vaccine.ATIVO === 'S' ? 'Ativa' : 'Inativa';
+
+                if (expiring && vaccine.ATIVO === 'S') {
                     statusClass = 'status-expiring';
                     statusText = 'Expirando';
                 }
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><strong>${vaccine.name}</strong></td>
-                    <td><span class="batch-code">${vaccine.batch}</span></td>
-                    <td>${formatDate(vaccine.created)}</td>
-                    <td>${formatDate(vaccine.expiry)}</td>
-                    <td>${formatDate(vaccine.next)}</td>
-                    <td>${vaccine.appliedBy}</td>
+                    <td><strong>${vaccine.NOME || '-'}</strong></td>
+                    <td><span class="batch-code">${vaccine.Lote || '-'}</span></td>
+                    <td>${vaccine.Marca || '-'}</td>
+                    <td>${vaccine.Fornecedor || '-'}</td>
+                    <td>${vaccine.DATACAD ? formatDate(vaccine.DATACAD) : '-'}</td>
+                    <td>${vaccine.Data_validade ? formatDate(vaccine.Data_validade) : '-'}</td>
                     <td>
                         <span class="status-badge ${statusClass}">
                             ${statusText}
                         </span>
                     </td>
                     <td>
-                        <button class="action-btn btn-edit" onclick="editVaccine(${vaccine.id})" title="Editar">
+                        <button class="action-btn btn-edit" onclick="editVaccine(${vaccine.IDVACINA})" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${vaccine.id})" title="Excluir">
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${vaccine.IDVACINA})" title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -399,13 +355,13 @@
                 `;
                 return;
             }
-            
+
             vaccines.forEach(vaccine => {
-                const expiring = isExpiring(vaccine.expiry);
-                let statusClass = vaccine.status === 'active' ? 'status-active' : 'status-inactive';
-                let statusText = vaccine.status === 'active' ? 'Ativa' : 'Inativa';
-                
-                if (expiring && vaccine.status === 'active') {
+                const expiring = vaccine.Data_validade ? isExpiring(vaccine.Data_validade) : false;
+                let statusClass = vaccine.ATIVO === 'S' ? 'status-active' : 'status-inactive';
+                let statusText = vaccine.ATIVO === 'S' ? 'Ativa' : 'Inativa';
+
+                if (expiring && vaccine.ATIVO === 'S') {
                     statusClass = 'status-expiring';
                     statusText = 'Expirando';
                 }
@@ -414,40 +370,40 @@
                 card.className = 'vaccine-card-mobile';
                 card.innerHTML = `
                     <div class="vaccine-header-mobile">
-                        <h4 class="vaccine-name-mobile">${vaccine.name}</h4>
+                        <h4 class="vaccine-name-mobile">${vaccine.NOME || '-'}</h4>
                         <span class="status-badge ${statusClass}">
                             ${statusText}
                         </span>
                     </div>
-                    
+
                     <div class="vaccine-details-mobile">
                         <div class="vaccine-detail-mobile">
                             <span class="vaccine-detail-label-mobile">Lote</span>
-                            <span class="vaccine-detail-value-mobile"><span class="batch-code">${vaccine.batch}</span></span>
+                            <span class="vaccine-detail-value-mobile"><span class="batch-code">${vaccine.Lote || '-'}</span></span>
+                        </div>
+                        <div class="vaccine-detail-mobile">
+                            <span class="vaccine-detail-label-mobile">Marca</span>
+                            <span class="vaccine-detail-value-mobile">${vaccine.Marca || '-'}</span>
+                        </div>
+                        <div class="vaccine-detail-mobile">
+                            <span class="vaccine-detail-label-mobile">Fornecedor</span>
+                            <span class="vaccine-detail-value-mobile">${vaccine.Fornecedor || '-'}</span>
                         </div>
                         <div class="vaccine-detail-mobile">
                             <span class="vaccine-detail-label-mobile">Cadastro</span>
-                            <span class="vaccine-detail-value-mobile">${formatDate(vaccine.created)}</span>
+                            <span class="vaccine-detail-value-mobile">${vaccine.DATACAD ? formatDate(vaccine.DATACAD) : '-'}</span>
                         </div>
                         <div class="vaccine-detail-mobile">
                             <span class="vaccine-detail-label-mobile">Validade</span>
-                            <span class="vaccine-detail-value-mobile">${formatDate(vaccine.expiry)}</span>
-                        </div>
-                        <div class="vaccine-detail-mobile">
-                            <span class="vaccine-detail-label-mobile">Próxima</span>
-                            <span class="vaccine-detail-value-mobile">${formatDate(vaccine.next)}</span>
-                        </div>
-                        <div class="vaccine-detail-mobile">
-                            <span class="vaccine-detail-label-mobile">Veterinário</span>
-                            <span class="vaccine-detail-value-mobile">${vaccine.appliedBy}</span>
+                            <span class="vaccine-detail-value-mobile">${vaccine.Data_validade ? formatDate(vaccine.Data_validade) : '-'}</span>
                         </div>
                     </div>
-                    
+
                     <div class="vaccine-actions-mobile">
-                        <button class="action-btn btn-edit" onclick="editVaccine(${vaccine.id})" title="Editar">
+                        <button class="action-btn btn-edit" onclick="editVaccine(${vaccine.IDVACINA})" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${vaccine.id})" title="Excluir">
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${vaccine.IDVACINA})" title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -457,7 +413,7 @@
         }
 
         // Renderizar vacinas (ambas as views)
-        function renderVaccines(vaccines = vaccinesMockData) {
+        function renderVaccines(vaccines = vaccinesData) {
             renderVaccinesTable(vaccines);
             renderVaccinesCards(vaccines);
         }
@@ -465,22 +421,23 @@
         // Filtrar vacinas
         function filterVaccines() {
             const searchTerm = searchInput.value.toLowerCase();
-            
+
             if (!searchTerm) {
                 renderVaccines();
                 return;
             }
-            
-            const filteredVaccines = vaccinesMockData.filter(vaccine => {
+
+            const filteredVaccines = vaccinesData.filter(vaccine => {
                 return (
-                    vaccine.name.toLowerCase().includes(searchTerm) ||
-                    vaccine.batch.toLowerCase().includes(searchTerm) ||
-                    vaccine.appliedBy.toLowerCase().includes(searchTerm)
+                    (vaccine.NOME && vaccine.NOME.toLowerCase().includes(searchTerm)) ||
+                    (vaccine.Lote && vaccine.Lote.toLowerCase().includes(searchTerm)) ||
+                    (vaccine.Marca && vaccine.Marca.toLowerCase().includes(searchTerm)) ||
+                    (vaccine.Fornecedor && vaccine.Fornecedor.toLowerCase().includes(searchTerm))
                 );
             });
-            
+
             renderVaccines(filteredVaccines);
-            
+
             if (filteredVaccines.length === 0) {
                 showAlert('Nenhuma vacina encontrada com os termos de busca informados.', 'warning');
             } else {
@@ -498,19 +455,25 @@
         }
 
         // Editar vacina
-        function editVaccine(vaccineId) {
-            const vaccine = vaccinesMockData.find(v => v.id === vaccineId);
-            if (vaccine) {
-                isEditing = true;
-                modalTitle.textContent = 'Editar Vacina';
-                document.getElementById('vaccine-id').value = vaccine.id;
-                document.getElementById('vaccine-name').value = vaccine.name;
-                document.getElementById('vaccine-batch').value = vaccine.batch;
-                document.getElementById('vaccine-expiry').value = vaccine.expiry;
-                document.getElementById('vaccine-next').value = vaccine.next;
-                document.getElementById('vaccine-applied-by').value = vaccine.appliedBy;
-                document.getElementById('vaccine-status').value = vaccine.status;
-                vaccineModal.show();
+        async function editVaccine(vaccineId) {
+            try {
+                const response = await fetch(`${API_URL}/${vaccineId}`);
+                if (response.ok) {
+                    const vaccine = await response.json();
+                    isEditing = true;
+                    modalTitle.textContent = 'Editar Vacina';
+                    document.getElementById('vaccine-id').value = vaccine.IDVACINA;
+                    document.getElementById('vaccine-name').value = vaccine.NOME || '';
+                    document.getElementById('vaccine-batch').value = vaccine.Lote || '';
+                    document.getElementById('vaccine-expiry').value = vaccine.Data_validade ? vaccine.Data_validade.split('T')[0] : '';
+                    document.getElementById('vaccine-brand').value = vaccine.Marca || '';
+                    document.getElementById('vaccine-supplier').value = vaccine.Fornecedor || '';
+                    document.getElementById('vaccine-status').value = vaccine.ATIVO || 'S';
+                    vaccineModal.show();
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao carregar dados da vacina.', 'danger');
             }
         }
 
@@ -521,13 +484,22 @@
         }
 
         // Excluir vacina
-        function deleteVaccine(vaccineId) {
-            const index = vaccinesMockData.findIndex(v => v.id === vaccineId);
-            if (index !== -1) {
-                const vaccineName = vaccinesMockData[index].name;
-                vaccinesMockData.splice(index, 1);
-                renderVaccines();
-                showAlert(`Vacina "${vaccineName}" excluída com sucesso!`, 'success');
+        async function deleteVaccine(vaccineId) {
+            try {
+                const response = await fetch(`${API_URL}/${vaccineId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Vacina excluída com sucesso!', 'success');
+                    await loadVaccines();
+                } else {
+                    const result = await response.json();
+                    showAlert(result.message || 'Erro ao excluir vacina', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor.', 'danger');
             }
         }
 
@@ -544,72 +516,70 @@
         });
 
         // Salvar vacina
-        btnSave.addEventListener('click', () => {
-            // Validar campos obrigatórios
-            const requiredFields = ['vaccine-name', 'vaccine-batch', 'vaccine-expiry', 'vaccine-next', 'vaccine-applied-by', 'vaccine-status'];
-            let isValid = true;
-            const vaccineData = {};
-            
-            requiredFields.forEach(field => {
-                const value = document.getElementById(field).value.trim();
-                if (!value) {
-                    isValid = false;
-                    document.getElementById(field).classList.add('is-invalid');
-                } else {
-                    document.getElementById(field).classList.remove('is-invalid');
-                    vaccineData[field.replace('vaccine-', '')] = value;
-                }
-            });
+        btnSave.addEventListener('click', async () => {
+            // Validar campo obrigatório
+            const name = document.getElementById('vaccine-name').value.trim();
 
-            if (!isValid) {
-                showAlert('Por favor, preencha todos os campos obrigatórios.', 'danger');
+            if (!name) {
+                document.getElementById('vaccine-name').classList.add('is-invalid');
+                showAlert('Por favor, preencha o nome da vacina.', 'danger');
                 return;
             }
 
-            // Simular loading
-            btnSave.classList.add('btn-loading');
+            document.getElementById('vaccine-name').classList.remove('is-invalid');
+
+            // Coletar dados
+            const vaccineData = {
+                NOME: name,
+                Lote: document.getElementById('vaccine-batch').value.trim() || null,
+                Data_validade: document.getElementById('vaccine-expiry').value || null,
+                Marca: document.getElementById('vaccine-brand').value.trim() || null,
+                Fornecedor: document.getElementById('vaccine-supplier').value.trim() || null,
+                ATIVO: document.getElementById('vaccine-status').value,
+                DATACAD: new Date().toISOString()
+            };
+
+            // Loading
+            const originalText = btnSave.innerHTML;
+            btnSave.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
             btnSave.disabled = true;
 
-            setTimeout(() => {
+            try {
                 const id = document.getElementById('vaccine-id').value;
-                
+                let response;
+
                 if (id) {
                     // Editar
-                    const index = vaccinesMockData.findIndex(v => v.id === parseInt(id));
-                    if (index !== -1) {
-                        vaccinesMockData[index] = {
-                            ...vaccinesMockData[index],
-                            name: vaccineData.name,
-                            batch: vaccineData.batch,
-                            expiry: vaccineData.expiry,
-                            next: vaccineData.next,
-                            appliedBy: vaccineData['applied-by'],
-                            status: vaccineData.status
-                        };
-                        showAlert('Vacina atualizada com sucesso!', 'success');
-                    }
+                    response = await fetch(`${API_URL}/${id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(vaccineData)
+                    });
                 } else {
-                    // Adicionar
-                    const newVaccine = {
-                        id: Date.now(),
-                        name: vaccineData.name,
-                        batch: vaccineData.batch,
-                        created: new Date().toISOString().split('T')[0],
-                        expiry: vaccineData.expiry,
-                        next: vaccineData.next,
-                        appliedBy: vaccineData['applied-by'],
-                        status: vaccineData.status
-                    };
-                    vaccinesMockData.push(newVaccine);
-                    showAlert('Nova vacina adicionada com sucesso!', 'success');
+                    // Criar
+                    response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(vaccineData)
+                    });
                 }
 
-                renderVaccines();
-                vaccineModal.hide();
-                
-                btnSave.classList.remove('btn-loading');
+                const result = await response.json();
+
+                if (response.ok) {
+                    showAlert(id ? 'Vacina atualizada com sucesso!' : 'Vacina criada com sucesso!', 'success');
+                    vaccineModal.hide();
+                    await loadVaccines();
+                } else {
+                    showAlert(result.message || 'Erro ao salvar vacina', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor.', 'danger');
+            } finally {
+                btnSave.innerHTML = originalText;
                 btnSave.disabled = false;
-            }, 1500);
+            }
         });
 
         btnConfirmDelete.addEventListener('click', () => {
@@ -620,8 +590,8 @@
             }
         });
 
-        // Inicializar
-        renderVaccines();
+        // Carregar vacinas ao iniciar a página
+        loadVaccines();
     </script>
 </body>
 </html>

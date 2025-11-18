@@ -143,116 +143,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        const petsMockData = [
-            {
-                id: 1,
-                nome: "Rex",
-                especie: "Cachorro",
-                raca: "Labrador",
-                cor: "Caramelo",
-                porte: "G",
-                idade: 24,
-                peso: 25.5,
-                caracteristicas: "Dócil, brincalhão e bem treinado",
-                situacao_adocao: "Disponível",
-                castrado: "S",
-                sexo: "M",
-                origem: "Resgate",
-                responsavel: "João Silva",
-                telefone: "(11) 99999-9999",
-                data_cadastro: "2025-05-15T10:30:00"
-            },
-            {
-                id: 2,
-                nome: "Luna",
-                especie: "Gato",
-                raca: "Siamês",
-                cor: "Branco e Marrom",
-                porte: "P",
-                idade: 12,
-                peso: 3.2,
-                caracteristicas: "Calma e independente",
-                situacao_adocao: "Adotado",
-                castrado: "S",
-                sexo: "F",
-                origem: "Doação",
-                responsavel: "Maria Oliveira",
-                telefone: "(11) 98888-8888",
-                data_cadastro: "2025-05-14T14:15:00"
-            },
-            {
-                id: 3,
-                nome: "Bob",
-                especie: "Cachorro",
-                raca: "Vira-lata",
-                cor: "Preto",
-                porte: "M",
-                idade: 36,
-                peso: 15.0,
-                caracteristicas: "Muito amigável e gosta de crianças",
-                situacao_adocao: "Disponível",
-                castrado: "N",
-                sexo: "M",
-                origem: "Resgate",
-                responsavel: "Pedro Santos",
-                telefone: "(11) 97777-7777",
-                data_cadastro: "2025-05-13T09:45:00"
-            },
-            {
-                id: 4,
-                nome: "Nina",
-                especie: "Gato",
-                raca: "Persa",
-                cor: "Cinza",
-                porte: "P",
-                idade: 18,
-                peso: 4.1,
-                caracteristicas: "Gosta de carinho e dormir",
-                situacao_adocao: "Disponível",
-                castrado: "S",
-                sexo: "F",
-                origem: "Doação",
-                responsavel: "Ana Sousa",
-                telefone: "(11) 96666-6666",
-                data_cadastro: "2025-05-12T16:20:00"
-            },
-            {
-                id: 5,
-                nome: "Max",
-                especie: "Cachorro",
-                raca: "Golden Retriever",
-                cor: "Dourado",
-                porte: "G",
-                idade: 8,
-                peso: 20.7,
-                caracteristicas: "Filhote muito ativo e brincalhão",
-                situacao_adocao: "Adotado",
-                castrado: "N",
-                sexo: "M",
-                origem: "Criador",
-                responsavel: "Carlos Ferreira",
-                telefone: "(11) 95555-5555",
-                data_cadastro: "2025-05-10T11:10:00"
-            },
-            {
-                id: 6,
-                nome: "Mia",
-                especie: "Gato",
-                raca: "Maine Coon",
-                cor: "Mesclado",
-                porte: "M",
-                idade: 30,
-                peso: 6.5,
-                caracteristicas: "Pelagem longa e densa, gosta de brincar",
-                situacao_adocao: "Disponível",
-                castrado: "S",
-                sexo: "F",
-                origem: "Resgate",
-                responsavel: "Beatriz Lima",
-                telefone: "(11) 94444-4444",
-                data_cadastro: "2025-05-08T15:30:00"
-            }
-        ];
+        const API_URL = 'http://localhost:3000/api/pets';
+        let petsData = [];
+
         const searchInput = document.getElementById('search-input');
         const alertBox = document.getElementById('alert');
         const petsTableBody = document.getElementById('pets-table-body');
@@ -261,6 +154,23 @@
         const btnConfirmDelete = document.getElementById('btn-confirm-delete');
 
         let currentDeleteId = null;
+
+        // Carregar pets da API
+        async function loadPets() {
+            try {
+                const response = await fetch(API_URL);
+                if (response.ok) {
+                    petsData = await response.json();
+                    renderPets();
+                } else {
+                    showAlert('Erro ao carregar pets do servidor', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
+                petsData = [];
+            }
+        }
         function formatAge(months) {
             if (months < 12) {
                 return `${months} meses`;
@@ -290,27 +200,52 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
+        // Função para converter código de status
+        function getStatusDisplay(statusCode) {
+            const statusMap = {
+                'D': 'Disponível',
+                'A': 'Adotado',
+                'T': 'Em Tratamento'
+            };
+            return statusMap[statusCode] || statusCode || '-';
+        }
+
         function renderPetsTable(pets) {
             petsTableBody.innerHTML = '';
-            
+
+            if (pets.length === 0) {
+                petsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>Nenhum pet cadastrado</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
             pets.forEach(pet => {
+                const statusDisplay = getStatusDisplay(pet.SITUACAO_ADOCAO);
+                const statusClass = pet.SITUACAO_ADOCAO === 'D' ? 'status-available' : 'status-adopted';
+
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td><strong>${pet.nome}</strong></td>
-                    <td>${pet.especie}</td>
-                    <td>${pet.raca}</td>
-                    <td>${formatAge(pet.idade)}</td>
-                    <td>${pet.responsavel}</td>
+                    <td><strong>${pet.NOME || '-'}</strong></td>
+                    <td>${pet.ESPECIE || '-'}</td>
+                    <td>${pet.RACA || '-'}</td>
+                    <td>${pet.IDADE ? formatAge(parseInt(pet.IDADE)) : '-'}</td>
+                    <td>${pet.RESPONSAVEL || 'Sem tutor'}</td>
                     <td>
-                        <span class="status-badge ${pet.situacao_adocao === 'Disponível' ? 'status-available' : 'status-adopted'}">
-                            ${pet.situacao_adocao}
+                        <span class="status-badge ${statusClass}">
+                            ${statusDisplay}
                         </span>
                     </td>
                     <td>
-                        <button class="action-btn btn-edit" onclick="editPet(${pet.id})" title="Editar">
+                        <button class="action-btn btn-edit" onclick="editPet(${pet.IDPET})" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${pet.id})" title="Excluir">
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${pet.IDPET})" title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -321,50 +256,63 @@
 
         function renderPetsCards(pets) {
             petsCardsContainer.innerHTML = '';
-            
+
+            if (pets.length === 0) {
+                petsCardsContainer.innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="fas fa-inbox fa-3x mb-3"></i>
+                        <p>Nenhum pet cadastrado</p>
+                    </div>
+                `;
+                return;
+            }
+
             pets.forEach(pet => {
+                const statusDisplay = getStatusDisplay(pet.SITUACAO_ADOCAO);
+                const statusClass = pet.SITUACAO_ADOCAO === 'D' ? 'status-available' : 'status-adopted';
+
                 const card = document.createElement('div');
                 card.className = 'pet-card-mobile';
                 card.innerHTML = `
                     <div class="pet-header-mobile">
-                        <h4 class="pet-name-mobile">${pet.nome}</h4>
-                        <span class="status-badge ${pet.situacao_adocao === 'Disponível' ? 'status-available' : 'status-adopted'}">
-                            ${pet.situacao_adocao}
+                        <h4 class="pet-name-mobile">${pet.NOME || '-'}</h4>
+                        <span class="status-badge ${statusClass}">
+                            ${statusDisplay}
                         </span>
                     </div>
-                    
+
                     <div class="pet-details-mobile">
                         <div class="pet-detail-mobile">
                             <span class="pet-detail-label-mobile">Espécie</span>
-                            <span class="pet-detail-value-mobile">${pet.especie}</span>
+                            <span class="pet-detail-value-mobile">${pet.ESPECIE || '-'}</span>
                         </div>
                         <div class="pet-detail-mobile">
                             <span class="pet-detail-label-mobile">Raça</span>
-                            <span class="pet-detail-value-mobile">${pet.raca}</span>
+                            <span class="pet-detail-value-mobile">${pet.RACA || '-'}</span>
                         </div>
                         <div class="pet-detail-mobile">
                             <span class="pet-detail-label-mobile">Idade</span>
-                            <span class="pet-detail-value-mobile">${formatAge(pet.idade)}</span>
+                            <span class="pet-detail-value-mobile">${pet.IDADE ? formatAge(parseInt(pet.IDADE)) : '-'}</span>
                         </div>
                         <div class="pet-detail-mobile">
                             <span class="pet-detail-label-mobile">Sexo</span>
-                            <span class="pet-detail-value-mobile">${pet.sexo === 'M' ? 'Macho' : 'Fêmea'}</span>
+                            <span class="pet-detail-value-mobile">${pet.SEXO === 'M' ? 'Macho' : 'Fêmea'}</span>
                         </div>
                         <div class="pet-detail-mobile">
                             <span class="pet-detail-label-mobile">Responsável</span>
-                            <span class="pet-detail-value-mobile">${pet.responsavel}</span>
+                            <span class="pet-detail-value-mobile">${pet.RESPONSAVEL || 'Sem tutor'}</span>
                         </div>
                         <div class="pet-detail-mobile">
                             <span class="pet-detail-label-mobile">Telefone</span>
-                            <span class="pet-detail-value-mobile">${pet.telefone}</span>
+                            <span class="pet-detail-value-mobile">${pet.TELEFONE || '-'}</span>
                         </div>
                     </div>
-                    
+
                     <div class="pet-actions-mobile">
-                        <button class="action-btn btn-edit" onclick="editPet(${pet.id})" title="Editar">
+                        <button class="action-btn btn-edit" onclick="editPet(${pet.IDPET})" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${pet.id})" title="Excluir">
+                        <button class="action-btn btn-delete" onclick="showDeleteConfirmation(${pet.IDPET})" title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
@@ -373,31 +321,31 @@
             });
         }
 
-        function renderPets(pets = petsMockData) {
+        function renderPets(pets = petsData) {
             renderPetsTable(pets);
             renderPetsCards(pets);
         }
 
         function filterPets() {
             const searchTerm = searchInput.value.toLowerCase();
-            
+
             if (!searchTerm) {
                 renderPets();
                 return;
             }
-            
-            const filteredPets = petsMockData.filter(pet => {
+
+            const filteredPets = petsData.filter(pet => {
                 return (
-                    pet.nome.toLowerCase().includes(searchTerm) ||
-                    pet.especie.toLowerCase().includes(searchTerm) ||
-                    pet.raca.toLowerCase().includes(searchTerm) ||
-                    pet.responsavel.toLowerCase().includes(searchTerm) ||
-                    pet.caracteristicas.toLowerCase().includes(searchTerm)
+                    (pet.NOME && pet.NOME.toLowerCase().includes(searchTerm)) ||
+                    (pet.ESPECIE && pet.ESPECIE.toLowerCase().includes(searchTerm)) ||
+                    (pet.RACA && pet.RACA.toLowerCase().includes(searchTerm)) ||
+                    (pet.RESPONSAVEL && pet.RESPONSAVEL.toLowerCase().includes(searchTerm)) ||
+                    (pet.CARACTERISTICAS && pet.CARACTERISTICAS.toLowerCase().includes(searchTerm))
                 );
             });
-            
+
             renderPets(filteredPets);
-            
+
             if (filteredPets.length === 0) {
                 showAlert('Nenhum pet encontrado com os termos de busca informados.', 'warning');
             } else {
@@ -414,13 +362,22 @@
             confirmDeleteModal.show();
         }
 
-        function deletePet(petId) {
-            const index = petsMockData.findIndex(p => p.id === petId);
-            if (index !== -1) {
-                const petName = petsMockData[index].nome;
-                petsMockData.splice(index, 1);
-                renderPets();
-                showAlert(`Pet "${petName}" excluído com sucesso!`, 'success');
+        async function deletePet(petId) {
+            try {
+                const response = await fetch(`${API_URL}/${petId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    showAlert('Pet excluído com sucesso!', 'success');
+                    await loadPets(); // Recarregar lista
+                } else {
+                    const result = await response.json();
+                    showAlert(result.message || 'Erro ao excluir pet', 'danger');
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showAlert('Erro ao conectar com o servidor.', 'danger');
             }
         }
 
@@ -442,7 +399,8 @@
             }
         });
 
-        renderPets();
+        // Carregar pets ao iniciar a página
+        loadPets();
     </script>
 </body>
 </html>

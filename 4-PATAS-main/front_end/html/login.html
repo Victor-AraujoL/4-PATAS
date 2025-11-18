@@ -134,11 +134,11 @@
 
         function validateForm() {
             hideAlert();
-            
-            const email = emailInput.value.trim();
-            const password = passwordInput.value;
 
-            // Validar campos vazios
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Validar campos vazios ou apenas espaços
             if (!email || !password) {
                 showAlert('Por favor, preencha todos os campos.', 'warning');
                 return false;
@@ -151,7 +151,7 @@
                 return false;
             }
 
-            // Validar comprimento da senha
+            // Validar comprimento da senha (já sem espaços)
             if (password.length < 6) {
                 showAlert('A senha deve ter pelo menos 6 caracteres.', 'warning');
                 passwordInput.focus();
@@ -164,9 +164,22 @@
         // ========== FEEDBACK VISUAL NOS INPUTS ==========
         function addInputFeedback() {
             [emailInput, passwordInput].forEach(input => {
+                // Prevenir qualquer espaço em qualquer posição
+                input.addEventListener('input', (e) => {
+                    // Remove TODOS os espaços do valor
+                    input.value = input.value.replace(/\s/g, '');
+                    input.classList.remove('is-valid', 'is-invalid');
+                });
+
                 input.addEventListener('blur', () => {
-                    if (input.value.trim()) {
-                        if (input === emailInput && !validateEmail(input.value.trim())) {
+                    const trimmedValue = input.value.trim();
+                    input.value = trimmedValue;
+
+                    if (trimmedValue) {
+                        if (input === emailInput && !validateEmail(trimmedValue)) {
+                            input.classList.add('is-invalid');
+                            input.classList.remove('is-valid');
+                        } else if (input === passwordInput && trimmedValue.length < 6) {
                             input.classList.add('is-invalid');
                             input.classList.remove('is-valid');
                         } else {
@@ -176,10 +189,6 @@
                     } else {
                         input.classList.remove('is-valid', 'is-invalid');
                     }
-                });
-
-                input.addEventListener('input', () => {
-                    input.classList.remove('is-valid', 'is-invalid');
                 });
             });
         }
@@ -193,7 +202,7 @@
             }
 
             const email = emailInput.value.trim();
-            const password = passwordInput.value;
+            const password = passwordInput.value.trim();
 
             // Mostrar loading
             loginBtn.classList.add('btn-loading');
