@@ -11,8 +11,12 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD, // Senha do banco
   {
     host: process.env.DB_HOST, // Host do banco de dados
+    port: process.env.DB_PORT || 3306, // Porta do banco de dados
     dialect: 'mysql', // Tipo de banco de dados
-    logging: false // Para desabilitar os logs SQL no console
+    logging: false, // Para desabilitar os logs SQL no console
+    dialectOptions: {
+      connectTimeout: 60000 // Timeout de 60 segundos
+    }
   }
 );
 

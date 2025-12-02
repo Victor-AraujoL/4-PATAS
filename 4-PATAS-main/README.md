@@ -1,108 +1,249 @@
-# 4-PATAS — Guia para Rodar o Front-end
+# 🐾 Quatro Patas- Sistema de Gerenciamento Veterinário
 
-Este guia ensina como abrir e navegar pelas telas do front-end do projeto. O foco aqui é a execução das páginas HTML e dos estilos CSS.
+Sistema completo de gerenciamento para a **Associação Quatro Patas** de Divinolândia de Minas/MG, desenvolvido para facilitar o controle de pets, atendimentos, vacinas e colaboradores.
 
-## Estrutura do Front-end
+## 📋 Índice
 
-- HTML: `front_end/html`
-- CSS: `front_end/css`
-- Assets (imagens/ícones): `front_end/assets`
+- [Sobre o Projeto](#sobre-o-projeto)
+- [Funcionalidades](#funcionalidades)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
+- [Pré-requisitos](#pré-requisitos)
+- [Instalação e Execução](#instalação-e-execução)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Deploy](#deploy)
+- [API Documentation](#api-documentation)
 
-As páginas HTML já referenciam os estilos via caminhos relativos como `../css/...` a partir da pasta `front_end/html`.
+## 🎯 Sobre o Projeto
 
-## Pré‑requisitos
+O **Quatro Patas Hub** é uma solução completa para gerenciamento de clínicas e associações veterinárias. O sistema permite cadastro de pets, proprietários, colaboradores, controle de estoque de vacinas, registro de atendimentos e geração de relatórios em PDF.
 
-- Um navegador atual (Chrome, Edge, Firefox ou Safari)
-- Opcional (para servir como site):
-  - VS Code (extensão Live Server) ou
-  - Node.js com `http-server` ou
-  - Python 3 (módulo `http.server`)
+### Problema que Resolve
 
-## Como Executar as Telas
+- Centralização de informações de pets e proprietários
+- Histórico completo de atendimentos veterinários
+- Controle de estoque de vacinas
+- Gestão de colaboradores e usuários
+- Geração automática de relatórios e fichas
 
-### Opção A — Abrir diretamente no navegador
+## ⚡ Funcionalidades
 
-1. Localize o arquivo de entrada: `front_end/html/index.html`.
-2. Dê duplo clique para abrir no navegador.
-3. Você também pode abrir diretamente outras telas conforme necessário:
-   - `front_end/html/login.html`
-   - `front_end/html/pets.html`
-   - `front_end/html/colaboradores.html`
-   - `front_end/html/pesquisar_vacinas.html`
-   - `front_end/html/cadastro_pet.html`
-   - `front_end/html/cadastro_usuario.html`
-   - `front_end/html/cadastro_atendimento.html`
-   - `front_end/html/cadastro_vacina.html`
-   - `front_end/html/historico_atendimento.html`
-   - `front_end/html/historico_atendimento_admin.html`
+### Gestão de Pets
+- ✅ Cadastro completo de pets com foto
+- ✅ Busca e filtros avançados
+- ✅ Histórico de atendimentos por pet
+- ✅ Informações de proprietário vinculadas
 
-Os estilos devem carregar normalmente, pois os caminhos relativos já foram ajustados.
+### Gestão de Usuários
+- ✅ Cadastro de proprietários
+- ✅ Sistema de login e autenticação
+- ✅ Perfis de usuário (Admin/Comum)
+- ✅ Busca com validação de CPF
 
-### Opção B — Servir via servidor estático (recomendado)
+### Gestão de Colaboradores
+- ✅ Cadastro de veterinários e funcionários
+- ✅ Controle de CRMV
+- ✅ Endereço completo com busca por CEP
+- ✅ Status ativo/inativo
 
-Isso simula melhor um ambiente real e evita problemas de caminho/segurança do navegador.
+### Gestão de Vacinas
+- ✅ Controle de estoque
+- ✅ Registro de lotes e validade
+- ✅ Alertas de vencimento
+- ✅ Histórico de aplicações
 
-- VS Code (Live Server):
-  1. Abra a pasta do projeto no VS Code.
-  2. Clique com o botão direito em `front_end/html/index.html` e escolha “Open with Live Server”.
+### Atendimentos
+- ✅ Registro completo de consultas
+- ✅ Prescrições e observações
+- ✅ Vinculação pet/colaborador/proprietário
+- ✅ Histórico completo
 
-- Node `http-server`:
-  1. Instale globalmente: `npm i -g http-server`
-  2. Rode a partir da pasta raiz do projeto: `http-server front_end -p 8080`
-  3. Acesse no navegador: `http://localhost:8080/html/index.html`
+### Relatórios
+- ✅ Geração de PDFs
+- ✅ Fichas de atendimento
+- ✅ Relatórios de vacinas aplicadas
 
-- Python 3:
-  1. Execute: `python -m http.server 8080 -d front_end`
-  2. Acesse no navegador: `http://localhost:8080/html/index.html`
+## 🚀 Tecnologias Utilizadas
 
-## Integração com o Back-end (opcional)
+### Backend
+- **Node.js** v18+ - Runtime JavaScript
+- **Express.js** - Framework web
+- **Sequelize** - ORM para banco de dados
+- **MySQL** - Banco de dados relacional
+- **Swagger** - Documentação automática da API
+- **PDFKit** - Geração de relatórios em PDF
+- **Bcrypt** - Criptografia de senhas
+- **dotenv** - Gerenciamento de variáveis de ambiente
 
-Algumas telas podem futuramente consumir APIs. Caso necessário:
+### Frontend
+- **HTML5** - Estrutura
+- **CSS3** - Estilização customizada
+- **JavaScript Vanilla** - Lógica e interações
+- **Bootstrap 5** - Framework CSS responsivo
+- **Font Awesome** - Ícones
+- **Google Fonts** - Tipografia (Poppins)
 
-- Suba o back-end (padrão em `http://localhost:3000`).
-- Ajuste eventuais URLs de API nos scripts das páginas.
+### Infraestrutura
+- **Railway** - Plataforma de deploy
+- **Git/GitHub** - Controle de versão
 
-Resumo para subir o back-end (se precisar):
+## 📦 Pré-requisitos
 
-1. Entre em `back_end` e instale dependências: `npm install`
-2. Crie o banco MySQL `quatro_patas2` e aplique o SQL em `banco_dados/banco_4patas.sql`
-3. (Se usar Prisma) gere o client: `npx prisma generate`
-4. Inicie a API: `npm run dev` (acessa em `http://localhost:3000`)
+- Node.js >= 18.x
+- MySQL 8.0+
+- NPM ou Yarn
+- Git
 
-## Solução de Problemas
+## 🔧 Instalação e Execução
 
-- CSS não carrega
-  - Garanta que está abrindo a partir de `front_end/html/...` e que o caminho relativo `../css/...` permanece válido.
-  - Se estiver servindo via servidor, confirme que a raiz é `front_end`.
+### 1. Clone o repositório
 
-- Ícones/Fontes não aparecem
-  - Verifique sua conexão com a internet. As páginas usam CDNs (Bootstrap, Font Awesome, Google Fonts).
+```bash
+git clone https://github.com/paulovictornt/pata-care-hub.git
+cd pata-care-hub
+```
 
-- 404 ao servir
-  - Revise a URL e sirva a pasta `front_end` como raiz. Ex.: `http://localhost:8080/html/index.html`.
+### 2. Configure o banco de dados
+
+```bash
+# Crie o banco de dados MySQL
+CREATE DATABASE quatro_patas2;
+
+# Importe o schema (se houver arquivo SQL)
+mysql -u root -p quatro_patas2 < banco_dados/schema.sql
+```
+
+### 3. Configure as variáveis de ambiente
+
+Crie um arquivo `.env` dentro da pasta `back_end/`:
+
+```env
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=sua_senha
+DB_NAME=quatro_patas2
+DB_PORT=3306
+PORT=3000
+```
+
+### 4. Instale as dependências
+
+```bash
+npm install
+```
+
+Este comando automaticamente instala as dependências do backend.
+
+### 5. Execute o projeto
+
+```bash
+npm start
+```
+
+O servidor estará disponível em:
+- **Frontend**: http://localhost:3000
+- **API**: http://localhost:3000/api
+- **Swagger Docs**: http://localhost:3000/api-docs
+
+## 📁 Estrutura do Projeto
+
+```
+pata-care-hub/
+├── back_end/
+│   ├── src/
+│   │   ├── Config/       # Configuração do banco de dados
+│   │   ├── Models/       # Modelos Sequelize
+│   │   ├── Routes/       # Rotas da API
+│   │   ├── Controller/   # Controladores
+│   │   └── services/     # Serviços de negócio
+│   ├── index.js          # Entrada do servidor
+│   ├── package.json
+│   └── .env             # Variáveis de ambiente (não versionado)
+│
+├── front_end/
+│   ├── html/            # Páginas HTML
+│   ├── css/             # Estilos
+│   └── assets/          # Imagens e recursos
+│
+├── banco_dados/         # Scripts SQL
+├── package.json         # Configuração raiz
+├── railway.json         # Config do Railway
+├── nixpacks.toml        # Config de build
+├── Procfile             # Config alternativa de deploy
+└── README.md
+
+```
+
+## 🌐 Deploy
+
+O projeto está configurado para deploy automático no Railway.
+
+### Variáveis de Ambiente no Railway
+
+Configure as seguintes variáveis:
+
+```
+DB_HOST=seu-host-railway.proxy.rlwy.net
+DB_USER=root
+DB_PASSWORD=sua-senha-railway
+DB_NAME=quatro_patas2
+DB_PORT=porta-railway
+PORT=3000
+```
+
+### Deploy Automático
+
+1. Push para o repositório GitHub
+2. Railway detecta automaticamente e faz o build
+3. Aplicação disponível na URL fornecida pelo Railway
+
+Mais detalhes em: [DEPLOY.md](DEPLOY.md)
+
+## 📚 API Documentation
+
+A documentação completa da API está disponível via Swagger:
+
+- **Local**: http://localhost:3000/api-docs
+- **Produção**: `https://seu-app.railway.app/api-docs`
+
+### Principais Endpoints
+
+#### Pets
+- `GET /api/pets` - Lista todos os pets
+- `POST /api/pets` - Cria novo pet
+- `PUT /api/pets/:id` - Atualiza pet
+- `DELETE /api/pets/:id` - Remove pet
+
+#### Usuários
+- `POST /api/usuarios/login` - Login de usuário
+- `GET /api/usuarios` - Lista usuários
+- `POST /api/usuarios` - Cria novo usuário
+
+#### Colaboradores
+- `GET /api/colaboradores` - Lista colaboradores
+- `POST /api/colaboradores` - Cria colaborador
+- `PUT /api/colaboradores/:id` - Atualiza colaborador
+
+#### Vacinas
+- `GET /api/vacinas` - Lista vacinas
+- `POST /api/vacinas` - Registra vacina
+- `GET /api/vacinas/search` - Busca vacinas
+
+#### Atendimentos
+- `GET /api/atendimentos` - Lista atendimentos
+- `POST /api/atendimentos` - Registra atendimento
+- `GET /api/atendimentos/:id` - Detalhes do atendimento
+
+#### Relatórios
+- `GET /api/pdf/ficha-atendimento/:id` - Gera PDF de atendimento
+
+## 👥 Autores
+
+Projeto desenvolvido como Trabalho de Conclusão de Curso.
+
+## 📄 Licença
+
+Este projeto é de uso acadêmico.
 
 ---
 
-# Informações do Projeto
-
-Sistema de Gerenciamento — Associação Quatro Patas (Divinolândia de Minas/MG)
-
-## Funcionalidades Principais
-
-- Cadastro, edição e listagem de pets
-- Registro e histórico de atendimentos
-- Cadastro e controle de vacinas
-- Gerenciamento de colaboradores
-- Acesso restrito por login de usuários
-
-## Tecnologias Utilizadas
-
-- Node.js + Express (back-end)
-- Prisma ORM e MySQL (banco de dados)
-- HTML/CSS (front-end)
-- Insomnia (testes de API)
-
-## Status
-
-- Projeto em desenvolvimento ativo.
-- Front-end estático com estilos próprios e dependências via CDN.
+**Desenvolvido com ❤️ para a Associação Quatro Patas**

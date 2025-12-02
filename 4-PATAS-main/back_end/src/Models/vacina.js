@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const sequelize = require('../Config/db');
 
 const Vacina = sequelize.define('vacina', {
   IDVACINA: {

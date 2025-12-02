@@ -284,7 +284,9 @@
         // ===========================
         // CONFIGURAÇÕES
         // ===========================
-        const API_BASE_URL = 'http://localhost:3000/api';
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api'
+            : `${window.location.origin}/api`;
         const API_ATENDIMENTOS_URL = `${API_BASE_URL}/atendimentos`;
         const ITEMS_PER_PAGE = 10;
 

@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ['nodejs_18']
+
+[phases.install]
+cmds = ['cd back_end && npm ci --prefer-offline --no-audit']
+
+[start]
+cmd = 'cd back_end && node index.js'

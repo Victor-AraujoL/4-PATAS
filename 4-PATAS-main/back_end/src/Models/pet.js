@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const db = require('../config/db');
+const db = require('../Config/db');
 
 const Pet = db.define('Pet', {
   IDPET: {

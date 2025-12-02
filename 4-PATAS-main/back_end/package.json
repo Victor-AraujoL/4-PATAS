@@ -1,12 +1,15 @@
 {
-  "name": "backend_4_patas",
+  "name": "pata-care-hub-backend",
   "version": "1.0.0",
+  "description": "Backend API para Sistema de Gerenciamento Veterinário - Associação Quatro Patas",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["veterinaria", "api", "gestao", "pets", "nodejs", "express"],
+  "author": " Quatro Patas",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.5.0",
@@ -17,6 +20,5 @@
     "sequelize": "^6.37.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
-  },
-  "description": ""
+  }
 }

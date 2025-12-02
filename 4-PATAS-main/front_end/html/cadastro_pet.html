@@ -374,7 +374,13 @@
         // Elementos DOM
         const alertBox = document.getElementById('alert');
         const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
-        
+
+        // API URL - Detecta automaticamente a origem
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api'
+            : `${window.location.origin}/api`;
+        const API_URL = `${API_BASE}/pets`;
+
         // Mostrar alerta
         function showAlert(message, type) {
             alertBox.innerHTML = `
@@ -502,7 +508,7 @@
         // Carregar dados do pet para edição
         async function loadPetData(petId) {
             try {
-                const response = await fetch(`http://localhost:3000/api/pets/${petId}`);
+                const response = await fetch(`${API_URL}/${petId}`);
                 if (response.ok) {
                     const pet = await response.json();
 
@@ -624,8 +630,8 @@
 
             try {
                 const url = isEditing
-                    ? `http://localhost:3000/api/pets/${editingPetId}`
-                    : 'http://localhost:3000/api/pets';
+                    ? `${API_URL}/${editingPetId}`
+                    : API_URL;
 
                 const response = await fetch(url, {
                     method: isEditing ? 'PUT' : 'POST',
