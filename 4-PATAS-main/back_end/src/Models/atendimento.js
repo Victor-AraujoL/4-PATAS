@@ -23,13 +23,9 @@ const Atendimento = sequelize.define('Atendimento', {
       key: 'IDCOLABORADOR'
     }
   },
-  IDUSUARIO: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'usuario',
-      key: 'IDUSUARIO'
-    }
+  RESPONSAVEL: {
+    type: DataTypes.STRING(255),
+    allowNull: false
   },
   PESO: {
     type: DataTypes.FLOAT,

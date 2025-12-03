@@ -1,5 +1,5 @@
 // Importar models COM relacionamentos já configurados
-const { Atendimento, Pet, Colaborador, Usuario } = require('../Models/index');
+const { Atendimento, Pet, Colaborador } = require('../Models/index');
 const { Op } = require('sequelize');
 
 class AtendimentoController {
@@ -21,12 +21,6 @@ class AtendimentoController {
             model: Colaborador,
             as: 'colaborador',
             attributes: ['IDCOLABORADOR', 'NOME', 'CARGO', 'CRMV'],
-            required: false // LEFT JOIN
-          },
-          {
-            model: Usuario,
-            as: 'usuario',
-            attributes: ['IDUSUARIO', 'NOME', 'EMAIL', 'TELEFONE'],
             required: false // LEFT JOIN
           }
         ],
@@ -68,11 +62,6 @@ class AtendimentoController {
             model: Colaborador,
             as: 'colaborador',
             required: false
-          },
-          {
-            model: Usuario,
-            as: 'usuario',
-            required: false
           }
         ]
       });
@@ -109,8 +98,7 @@ class AtendimentoController {
       const atendimentoCompleto = await Atendimento.findByPk(novoAtendimento.IDATENDIMENTO, {
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false },
-          { model: Usuario, as: 'usuario', required: false }
+          { model: Colaborador, as: 'colaborador', required: false }
         ]
       });
 
@@ -144,8 +132,7 @@ class AtendimentoController {
         const atendimentoAtualizado = await Atendimento.findByPk(id, {
           include: [
             { model: Pet, as: 'pet', required: false },
-            { model: Colaborador, as: 'colaborador', required: false },
-            { model: Usuario, as: 'usuario', required: false }
+            { model: Colaborador, as: 'colaborador', required: false }
           ]
         });
 
@@ -213,8 +200,7 @@ class AtendimentoController {
         where: { IDPET: petId },
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false },
-          { model: Usuario, as: 'usuario', required: false }
+          { model: Colaborador, as: 'colaborador', required: false }
         ],
         order: [['DATAHORA', 'DESC']]
       });
@@ -244,8 +230,7 @@ class AtendimentoController {
         where: { IDCOLABORADOR: colaboradorId },
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false },
-          { model: Usuario, as: 'usuario', required: false }
+          { model: Colaborador, as: 'colaborador', required: false }
         ],
         order: [['DATAHORA', 'DESC']]
       });
@@ -259,37 +244,6 @@ class AtendimentoController {
       res.status(500).json({
         success: false,
         message: 'Erro ao buscar atendimentos do colaborador',
-        error: error.message
-      });
-    }
-  }
-
-  // ====================================
-  // BUSCAR ATENDIMENTOS POR USUARIO
-  // ====================================
-  static async getByUsuarioId(req, res) {
-    try {
-      const { usuarioId } = req.params;
-
-      const atendimentos = await Atendimento.findAll({
-        where: { IDUSUARIO: usuarioId },
-        include: [
-          { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false },
-          { model: Usuario, as: 'usuario', required: false }
-        ],
-        order: [['DATAHORA', 'DESC']]
-      });
-
-      res.json({
-        success: true,
-        data: atendimentos
-      });
-    } catch (error) {
-      console.error('Erro ao buscar atendimentos do usuário:', error);
-      res.status(500).json({
-        success: false,
-        message: 'Erro ao buscar atendimentos do usuário',
         error: error.message
       });
     }
@@ -316,8 +270,7 @@ class AtendimentoController {
         },
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false },
-          { model: Usuario, as: 'usuario', required: false }
+          { model: Colaborador, as: 'colaborador', required: false }
         ],
         order: [['DATAHORA', 'ASC']]
       });

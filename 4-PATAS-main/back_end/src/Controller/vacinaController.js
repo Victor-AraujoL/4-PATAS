@@ -22,9 +22,12 @@ const vacinaController = {
 
   async criar(req, res) {
     try {
+      console.log('Dados recebidos:', req.body);
       const nova = await vacinaService.criar(req.body);
+      console.log('Vacina criada:', nova);
       res.status(201).json(nova);
     } catch (err) {
+      console.error('Erro ao criar vacina:', err);
       res.status(500).json({ error: err.message });
     }
   },

@@ -80,10 +80,9 @@
                     <div class="row mb-3">
                         <div class="col-md-6 mb-3">
                             <label for="usuario" class="form-label form-label-custom required">Responsável</label>
-                            <select id="usuario" name="idUsuario" class="form-control form-control-custom" required>
-                                <option value="">Selecione o Responsável</option>
-                            </select>
-                            <div class="invalid-feedback">Por favor, selecione um responsável.</div>
+                            <input type="text" id="usuario" name="responsavel" class="form-control form-control-custom"
+                                   placeholder="Digite o nome do responsável" required>
+                            <div class="invalid-feedback">Por favor, informe o responsável.</div>
                         </div>
                         
                         <div class="col-md-6 mb-3">
@@ -174,13 +173,11 @@
             : `${window.location.origin}/api`;
         const API_PETS_URL = `${API_BASE_URL}/pets`;
         const API_COLABORADORES_URL = `${API_BASE_URL}/colaboradores`;
-        const API_USUARIOS_URL = `${API_BASE_URL}/usuarios`;
         const API_ATENDIMENTOS_URL = `${API_BASE_URL}/atendimentos`;
 
         // Arrays para armazenar dados carregados da API
         let pets = [];
         let colaboradores = [];
-        let usuarios = [];
         let editingAtendimentoId = null; // ID do atendimento em edição
 
         // Elementos DOM
@@ -250,35 +247,11 @@
             }
         }
 
-        // Função para carregar usuários da API
-        async function carregarUsuarios() {
-            try {
-                const response = await fetch(API_USUARIOS_URL);
-                if (response.ok) {
-                    usuarios = await response.json();
-                    const selectUsuario = document.getElementById('usuario');
-
-                    usuarios.forEach(usuario => {
-                        const option = document.createElement('option');
-                        option.value = usuario.IDUSUARIO;
-                        option.textContent = `${usuario.NOME}${usuario.TELEFONE ? ' - ' + usuario.TELEFONE : ''}`;
-                        selectUsuario.appendChild(option);
-                    });
-                } else {
-                    showAlert('Erro ao carregar lista de responsáveis', 'danger');
-                }
-            } catch (error) {
-                console.error('Erro ao carregar usuários:', error);
-                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
-            }
-        }
-
         // Função para carregar todos os selects
         async function carregarSelects() {
             await Promise.all([
                 carregarPets(),
-                carregarColaboradores(),
-                carregarUsuarios()
+                carregarColaboradores()
             ]);
         }
         
@@ -303,7 +276,8 @@
             try {
                 const response = await fetch(`${API_ATENDIMENTOS_URL}/${atendimentoId}`);
                 if (response.ok) {
-                    const atendimento = await response.json();
+                    const result = await response.json();
+                    const atendimento = result.data || result;
 
                     // Atualizar título
                     document.querySelector('.card-header-custom h3').innerHTML = '<i class="fas fa-edit"></i> Editar Atendimento';
@@ -313,7 +287,7 @@
                     // Preencher formulário
                     document.getElementById('pet').value = atendimento.IDPET || '';
                     document.getElementById('colaborador').value = atendimento.IDCOLABORADOR || '';
-                    document.getElementById('usuario').value = atendimento.IDUSUARIO || '';
+                    document.getElementById('usuario').value = atendimento.RESPONSAVEL || '';
                     document.getElementById('peso').value = atendimento.PESO || '';
                     document.getElementById('medicamento').value = atendimento.MEDICAMENTO || '';
                     document.getElementById('diagnostico').value = atendimento.DIAGNOSTICO || '';
@@ -393,7 +367,7 @@
             const atendimento = {
                 IDPET: parseInt(formData.get('idPet')),
                 IDCOLABORADOR: parseInt(formData.get('idColaborador')),
-                IDUSUARIO: parseInt(formData.get('idUsuario')),
+                RESPONSAVEL: formData.get('responsavel'),
                 PESO: parseFloat(formData.get('peso')),
                 DATAHORA: formData.get('dataHora'),
                 MEDICAMENTO: formData.get('medicamento') || null,

@@ -70,35 +70,32 @@
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
                                 <label for="vaccine-name" class="form-label form-label-custom required">Nome da Vacina</label>
-                                <input type="text" id="vaccine-name" name="vaccineName" class="form-control form-control-custom" 
+                                <input type="text" id="vaccine-name" name="NOME" class="form-control form-control-custom"
                                        placeholder="Ex: V10, Antirrábica, Tríplice Felina..." required>
                                 <div class="invalid-feedback">Nome da vacina é obrigatório</div>
                             </div>
-                            
+
                             <div class="col-md-6 mb-3">
-                                <label for="vaccine-manufacturer" class="form-label form-label-custom required">Fabricante</label>
-                                <input type="text" id="vaccine-manufacturer" name="vaccineManufacturer" class="form-control form-control-custom" 
+                                <label for="vaccine-manufacturer" class="form-label form-label-custom required">Marca</label>
+                                <input type="text" id="vaccine-manufacturer" name="MARCA" class="form-control form-control-custom"
                                        placeholder="Ex: Zoetis, MSD, Virbac..." required>
-                                <div class="invalid-feedback">Fabricante é obrigatório</div>
+                                <div class="invalid-feedback">Marca é obrigatória</div>
                             </div>
                         </div>
 
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
                                 <label for="vaccine-batch" class="form-label form-label-custom required">Lote</label>
-                                <input type="text" id="vaccine-batch" name="vaccineBatch" class="form-control form-control-custom" 
+                                <input type="text" id="vaccine-batch" name="LOTE" class="form-control form-control-custom"
                                        placeholder="Número do lote da vacina" required>
                                 <div class="invalid-feedback">Lote é obrigatório</div>
                             </div>
-                            
+
                             <div class="col-md-6 mb-3">
-                                <label for="vaccine-dosage" class="form-label form-label-custom required">Dosagem</label>
-                                <div class="input-group">
-                                    <input type="number" id="vaccine-dosage" name="vaccineDosage" class="form-control form-control-custom" 
-                                           placeholder="1.0" step="0.1" min="0.1" required>
-                                    <span class="input-group-text bg-white border-start-0">ml</span>
-                                </div>
-                                <div class="invalid-feedback">Dosagem é obrigatória</div>
+                                <label for="vaccine-supplier" class="form-label form-label-custom required">Fornecedor</label>
+                                <input type="text" id="vaccine-supplier" name="FORNECEDOR" class="form-control form-control-custom"
+                                       placeholder="Nome do fornecedor" required>
+                                <div class="invalid-feedback">Fornecedor é obrigatório</div>
                             </div>
                         </div>
                     </div>
@@ -111,67 +108,28 @@
                         </h4>
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
-                                <label for="vaccine-creation-date" class="form-label form-label-custom required">Data de Cadastro</label>
-                                <input type="date" id="vaccine-creation-date" name="vaccineCreationDate" class="form-control form-control-custom" required>
-                                <div class="invalid-feedback">Data de cadastro é obrigatória</div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
                                 <label for="vaccine-expiry-date" class="form-label form-label-custom required">Data de Validade</label>
-                                <input type="date" id="vaccine-expiry-date" name="vaccineExpiryDate" class="form-control form-control-custom" required>
+                                <input type="date" id="vaccine-expiry-date" name="DATAVALIDADE" class="form-control form-control-custom" required>
                                 <div class="invalid-feedback">Data de validade é obrigatória</div>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6 mb-3">
-                                <label for="vaccine-next-application" class="form-label form-label-custom required">Próxima Aplicação</label>
-                                <input type="date" id="vaccine-next-application" name="vaccineNextApplication" class="form-control form-control-custom" required>
-                                <div class="invalid-feedback">Data da próxima aplicação é obrigatória</div>
-                            </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="vaccine-applier" class="form-label form-label-custom required">Aplicado por</label>
-                                <input type="text" id="vaccine-applier" name="vaccineApplier" class="form-control form-control-custom" 
-                                       placeholder="Nome do veterinário ou técnico" required>
-                                <div class="invalid-feedback">Nome do aplicador é obrigatório</div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Status e Observações -->
+                    <!-- Status -->
                     <div class="form-section">
                         <h4 class="section-title">
                             <i class="fas fa-clipboard-check"></i>
-                            Status e Observações
+                            Status
                         </h4>
                         <div class="row mb-3">
                             <div class="col-md-6 mb-3">
                                 <label for="vaccine-status" class="form-label form-label-custom required">Status</label>
-                                <select id="vaccine-status" name="vaccineStatus" class="form-control form-control-custom" required>
-                                    <option value="">Selecione o status</option>
-                                    <option value="active">Ativa</option>
-                                    <option value="inactive">Inativa</option>
-                                    <option value="expired">Vencida</option>
+                                <select id="vaccine-status" name="ATIVO" class="form-control form-control-custom" required>
+                                    <option value="S" selected>Ativa</option>
+                                    <option value="N">Inativa</option>
                                 </select>
                                 <div class="invalid-feedback">Status é obrigatório</div>
                             </div>
-                            
-                            <div class="col-md-6 mb-3">
-                                <label for="vaccine-type" class="form-label form-label-custom">Tipo de Vacina</label>
-                                <select id="vaccine-type" name="vaccineType" class="form-control form-control-custom">
-                                    <option value="">Selecione o tipo</option>
-                                    <option value="core">Essencial (Core)</option>
-                                    <option value="non-core">Não Essencial (Non-Core)</option>
-                                    <option value="therapeutic">Terapêutica</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="vaccine-notes" class="form-label form-label-custom">Observações</label>
-                            <textarea id="vaccine-notes" name="vaccineNotes" class="form-control form-control-custom" 
-                                      rows="4" placeholder="Informações adicionais sobre a vacina (reações, cuidados especiais, etc.)"></textarea>
                         </div>
                     </div>
 
@@ -219,6 +177,12 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
+        // API URLs - Detecta automaticamente a origem
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:3000/api'
+            : `${window.location.origin}/api`;
+        const API_VACINAS_URL = `${API_BASE_URL}/vacinas`;
+
         // Elementos DOM
         const alertBox = document.getElementById('alert');
         const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
@@ -241,26 +205,17 @@
 
         // Preencher datas padrão
         function setDefaultDates() {
-            const today = new Date();
-            document.getElementById('vaccine-creation-date').value = today.toISOString().split('T')[0];
-            
-            // Sugestão para data de validade (1 ano)
+            // Sugestão para data de validade (1 ano a partir de hoje)
             const nextYear = new Date();
             nextYear.setFullYear(nextYear.getFullYear() + 1);
             document.getElementById('vaccine-expiry-date').value = nextYear.toISOString().split('T')[0];
-            
-            // Sugestão para próxima aplicação (6 meses para reforço)
-            const nextApplication = new Date();
-            nextApplication.setMonth(nextApplication.getMonth() + 6);
-            document.getElementById('vaccine-next-application').value = nextApplication.toISOString().split('T')[0];
         }
 
         // Validar formulário
         function validateForm() {
             const requiredFields = [
-                'vaccine-name', 'vaccine-manufacturer', 'vaccine-batch', 'vaccine-dosage',
-                'vaccine-creation-date', 'vaccine-expiry-date', 'vaccine-next-application',
-                'vaccine-applier', 'vaccine-status'
+                'vaccine-name', 'vaccine-manufacturer', 'vaccine-batch', 'vaccine-supplier',
+                'vaccine-expiry-date', 'vaccine-status'
             ];
 
             let isValid = true;
@@ -279,27 +234,14 @@
                 }
             });
 
-            // Validações específicas
-            const creationDate = new Date(document.getElementById('vaccine-creation-date').value);
+            // Validação de data de validade (deve ser futura)
             const expiryDate = new Date(document.getElementById('vaccine-expiry-date').value);
-            const nextAppDate = new Date(document.getElementById('vaccine-next-application').value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-            if (expiryDate <= creationDate) {
+            if (expiryDate <= today) {
                 document.getElementById('vaccine-expiry-date').classList.add('is-invalid');
-                showAlert('A data de validade deve ser posterior à data de cadastro.', 'danger');
-                isValid = false;
-            }
-
-            if (nextAppDate <= creationDate) {
-                document.getElementById('vaccine-next-application').classList.add('is-invalid');
-                showAlert('A data da próxima aplicação deve ser posterior à data de cadastro.', 'danger');
-                isValid = false;
-            }
-
-            const dosage = parseFloat(document.getElementById('vaccine-dosage').value);
-            if (isNaN(dosage) || dosage <= 0) {
-                document.getElementById('vaccine-dosage').classList.add('is-invalid');
-                showAlert('Por favor, informe uma dosagem válida.', 'danger');
+                showAlert('A data de validade deve ser futura.', 'danger');
                 isValid = false;
             }
 
@@ -307,45 +249,65 @@
         }
 
         // Salvar vacina
-        function saveVaccine() {
+        async function saveVaccine() {
             const submitBtn = document.getElementById('submit-btn');
             const originalText = submitBtn.innerHTML;
-            
+
             // Estado de loading
-            submitBtn.classList.add('btn-loading');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
             submitBtn.disabled = true;
 
             // Coletar dados do formulário
             const formData = new FormData(document.getElementById('vaccine-form'));
+
+            // Converter FormData para objeto JSON com os nomes corretos dos campos
             const vaccineData = {
-                name: formData.get('vaccineName'),
-                manufacturer: formData.get('vaccineManufacturer'),
-                batch: formData.get('vaccineBatch'),
-                dosage: formData.get('vaccineDosage'),
-                creationDate: formData.get('vaccineCreationDate'),
-                expiryDate: formData.get('vaccineExpiryDate'),
-                nextApplication: formData.get('vaccineNextApplication'),
-                applier: formData.get('vaccineApplier'),
-                status: formData.get('vaccineStatus'),
-                type: formData.get('vaccineType'),
-                notes: formData.get('vaccineNotes'),
-                id: 'VAC' + Math.floor(10000 + Math.random() * 90000)
+                NOME: formData.get('NOME'),
+                Marca: formData.get('MARCA'),
+                Lote: formData.get('LOTE'),
+                Data_validade: formData.get('DATAVALIDADE'),
+                Fornecedor: formData.get('FORNECEDOR'),
+                ATIVO: formData.get('ATIVO'),
+                DATACAD: new Date().toISOString()
             };
 
-            // Simular envio para servidor
-            setTimeout(() => {
-                console.log('Vacina salva:', vaccineData);
-                
-                submitBtn.classList.remove('btn-loading');
+            try {
+                console.log('Enviando dados:', vaccineData);
+                const response = await fetch(API_VACINAS_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(vaccineData)
+                });
+
+                console.log('Status da resposta:', response.status);
+                const result = await response.json();
+                console.log('Resultado:', result);
+
+                if (response.ok) {
+                    showAlert(`Vacina "${vaccineData.NOME}" cadastrada com sucesso!`, 'success');
+
+                    // Limpar formulário após sucesso
+                    setTimeout(() => {
+                        document.getElementById('vaccine-form').reset();
+                        document.querySelectorAll('.is-invalid').forEach(field => {
+                            field.classList.remove('is-invalid');
+                        });
+                        setDefaultDates();
+                    }, 1500);
+                } else {
+                    const errorMsg = result.error || result.message || 'Erro ao cadastrar vacina';
+                    console.error('Erro do servidor:', errorMsg);
+                    showAlert(errorMsg, 'danger');
+                }
+            } catch (error) {
+                console.error('Erro completo:', error);
+                showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
+            } finally {
+                submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
-                
-                showAlert(`Vacina cadastrada com sucesso! ID: ${vaccineData.id}`, 'success');
-                
-                // Limpar formulário após sucesso
-                setTimeout(() => {
-                    resetForm();
-                }, 2000);
-            }, 2000);
+            }
         }
 
         // Confirmar ação
@@ -360,19 +322,17 @@
 
         // Resetar formulário
         function resetForm() {
-            confirmarAcao('Tem certeza que deseja limpar todos os campos?', () => {
-                document.getElementById('vaccine-form').reset();
-                
-                // Remover validações
-                document.querySelectorAll('.is-invalid').forEach(field => {
-                    field.classList.remove('is-invalid');
-                });
-                
-                // Redefinir datas padrão
-                setDefaultDates();
-                
-                showAlert('Formulário limpo com sucesso!', 'success');
+            document.getElementById('vaccine-form').reset();
+
+            // Remover validações
+            document.querySelectorAll('.is-invalid').forEach(field => {
+                field.classList.remove('is-invalid');
             });
+
+            // Redefinir datas padrão
+            setDefaultDates();
+
+            showAlert('Formulário limpo com sucesso!', 'success');
         }
 
         // Event listeners

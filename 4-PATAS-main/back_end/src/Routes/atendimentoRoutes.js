@@ -149,35 +149,6 @@ router.get('/colaborador/:colaboradorId', AtendimentoController.getByColaborador
 
 /**
  * @swagger
- * /api/atendimentos/usuario/{usuarioId}:
- *   get:
- *     summary: Lista atendimentos por ID do usuário
- *     tags: [Atendimentos]
- *     parameters:
- *       - in: path
- *         name: usuarioId
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID do usuário
- *     responses:
- *       200:
- *         description: Lista de atendimentos do usuário
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/schemas/Atendimento'
- *       404:
- *         description: Usuário não encontrado
- *       500:
- *         description: Erro interno do servidor
- */
-router.get('/usuario/:usuarioId', AtendimentoController.getByUsuarioId);
-
-/**
- * @swagger
  * /api/atendimentos/data/{data}:
  *   get:
  *     summary: Lista atendimentos por data

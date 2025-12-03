@@ -3,7 +3,17 @@
     "allow": [
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm run dev:*)",
+      "Bash(timeout /t 3)",
+      "Bash(node index.js:*)",
+      "Bash(ping:*)",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(timeout /t)",
+      "Bash(echo:*)",
+      "Bash(mysql -h centerbeam.proxy.rlwy.net -P 37718 -u root -pbeHDNZzTLtQRMWDmficFGkEYTAjBqNYT quatro_patas2 -e \"DESCRIBE vacina;\")",
+      "Bash(node check_and_fix_db.js:*)",
+      "Bash(powershell -Command:*)"
     ],
     "deny": [],
     "ask": []

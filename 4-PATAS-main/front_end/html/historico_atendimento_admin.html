@@ -565,7 +565,7 @@
             appointments.forEach(appointment => {
                 const petName = appointment.pet?.NOME || '<span class="text-muted fst-italic">Sem registro</span>';
                 const colaboradorName = appointment.colaborador?.NOME || '<span class="text-muted fst-italic">Sem registro</span>';
-                const usuarioName = appointment.usuario?.NOME || '<span class="text-muted fst-italic">Sem registro</span>';
+                const responsavel = appointment.RESPONSAVEL || '<span class="text-muted fst-italic">Sem registro</span>';
                 const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico';
                 const peso = appointment.PESO ? appointment.PESO.toFixed(1) : '0.0';
 
@@ -574,7 +574,7 @@
                     <td><strong>#${appointment.IDATENDIMENTO}</strong></td>
                     <td>${petName}</td>
                     <td>${colaboradorName}</td>
-                    <td>${usuarioName}</td>
+                    <td>${responsavel}</td>
                     <td>${peso} kg</td>
                     <td><small>${formatDateTime(appointment.DATAHORA)}</small></td>
                     <td>
@@ -614,7 +614,7 @@
             appointments.forEach(appointment => {
                 const petName = appointment.pet?.NOME || 'Sem registro';
                 const colaboradorName = appointment.colaborador?.NOME || 'Sem registro';
-                const usuarioName = appointment.usuario?.NOME || 'Sem registro';
+                const responsavel = appointment.RESPONSAVEL || 'Sem registro';
                 const medicamento = appointment.MEDICAMENTO || 'Não informado';
                 const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico';
                 const peso = appointment.PESO ? appointment.PESO.toFixed(1) : '0.0';
@@ -638,7 +638,7 @@
                             <span class="appointment-detail-label-mobile">
                                 <i class="fas fa-user me-2"></i>Responsável
                             </span>
-                            <span class="appointment-detail-value-mobile ${!appointment.usuario ? 'text-muted fst-italic' : ''}">${usuarioName}</span>
+                            <span class="appointment-detail-value-mobile ${!appointment.RESPONSAVEL ? 'text-muted fst-italic' : ''}">${responsavel}</span>
                         </div>
                         <div class="appointment-detail-mobile">
                             <span class="appointment-detail-label-mobile">
@@ -713,7 +713,7 @@
             filteredAppointments = allAppointments.filter(appointment => {
                 const petName = appointment.pet?.NOME || '';
                 const colaboradorName = appointment.colaborador?.NOME || '';
-                const usuarioName = appointment.usuario?.NOME || '';
+                const responsavel = appointment.RESPONSAVEL || '';
                 const diagnostico = appointment.DIAGNOSTICO || '';
                 const medicamento = appointment.MEDICAMENTO || '';
                 const observacao = appointment.OBSERVACAO || '';
@@ -722,7 +722,7 @@
                 return (
                     petName.toLowerCase().includes(searchTerm) ||
                     colaboradorName.toLowerCase().includes(searchTerm) ||
-                    usuarioName.toLowerCase().includes(searchTerm) ||
+                    responsavel.toLowerCase().includes(searchTerm) ||
                     diagnostico.toLowerCase().includes(searchTerm) ||
                     medicamento.toLowerCase().includes(searchTerm) ||
                     observacao.toLowerCase().includes(searchTerm) ||
@@ -756,8 +756,7 @@
             const colaboradorName = appointment.colaborador?.NOME || 'Registro não encontrado';
             const colaboradorInfo = appointment.colaborador?.CARGO ? `${colaboradorName} - ${appointment.colaborador.CARGO}` : colaboradorName;
 
-            const usuarioName = appointment.usuario?.NOME || 'Registro não encontrado';
-            const usuarioInfo = appointment.usuario?.EMAIL ? `${usuarioName} (${appointment.usuario.EMAIL})` : usuarioName;
+            const responsavel = appointment.RESPONSAVEL || 'Registro não encontrado';
 
             const medicamento = appointment.MEDICAMENTO || 'Não informado';
             const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico registrado';
@@ -769,7 +768,7 @@
             document.getElementById('detail-pet').textContent = petInfo;
             document.getElementById('detail-weight').textContent = `${peso} kg`;
             document.getElementById('detail-collaborator').textContent = colaboradorInfo;
-            document.getElementById('detail-user').textContent = usuarioInfo;
+            document.getElementById('detail-user').textContent = responsavel;
             document.getElementById('detail-medication').textContent = medicamento;
             document.getElementById('detail-diagnosis').textContent = diagnostico;
             document.getElementById('detail-observation').textContent = observacao;

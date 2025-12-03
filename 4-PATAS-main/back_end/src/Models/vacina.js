@@ -37,7 +37,8 @@ const Vacina = sequelize.define('vacina', {
   }
 }, {
   tableName: 'vacina',
-  timestamps: false
+  timestamps: false,
+  freezeTableName: true
 });
 
 module.exports = Vacina;
