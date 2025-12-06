@@ -97,23 +97,8 @@
             <div id="pets-cards-container">
             </div>
         </div>
-        <nav>
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                </li>
+        <nav id="pagination-nav">
+            <ul class="pagination" id="pagination-controls">
             </ul>
         </nav>
     </div>
@@ -148,15 +133,20 @@
             : `${window.location.origin}/api`;
         const API_URL = `${API_BASE}/pets`;
         let petsData = [];
+        let filteredPets = [];
 
         const searchInput = document.getElementById('search-input');
         const alertBox = document.getElementById('alert');
         const petsTableBody = document.getElementById('pets-table-body');
         const petsCardsContainer = document.getElementById('pets-cards-container');
+        const paginationControls = document.getElementById('pagination-controls');
+        const paginationNav = document.getElementById('pagination-nav');
         const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
         const btnConfirmDelete = document.getElementById('btn-confirm-delete');
 
         let currentDeleteId = null;
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         // Carregar pets da API
         async function loadPets() {
@@ -164,6 +154,8 @@
                 const response = await fetch(API_URL);
                 if (response.ok) {
                     petsData = await response.json();
+                    filteredPets = petsData;
+                    currentPage = 1;
                     renderPets();
                 } else {
                     showAlert('Erro ao carregar pets do servidor', 'danger');
@@ -172,6 +164,7 @@
                 console.error('Erro:', error);
                 showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
                 petsData = [];
+                filteredPets = [];
             }
         }
         function formatAge(months) {
@@ -324,20 +317,84 @@
             });
         }
 
-        function renderPets(pets = petsData) {
-            renderPetsTable(pets);
-            renderPetsCards(pets);
+        function renderPets() {
+            const totalPages = Math.ceil(filteredPets.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const petsToShow = filteredPets.slice(startIndex, endIndex);
+
+            renderPetsTable(petsToShow);
+            renderPetsCards(petsToShow);
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            paginationControls.innerHTML = '';
+
+            // Esconde a paginação se houver apenas 1 página ou nenhum pet
+            if (totalPages <= 1) {
+                paginationNav.style.display = 'none';
+                return;
+            }
+
+            paginationNav.style.display = 'block';
+
+            // Botão Anterior
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `
+                <a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            `;
+            paginationControls.appendChild(prevLi);
+
+            // Páginas numeradas
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `
+                    <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+                `;
+                paginationControls.appendChild(pageLi);
+            }
+
+            // Botão Próximo
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `
+                <a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            `;
+            paginationControls.appendChild(nextLi);
+        }
+
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredPets.length / itemsPerPage);
+
+            if (page < 1 || page > totalPages) {
+                return;
+            }
+
+            currentPage = page;
+            renderPets();
+
+            // Scroll suave para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function filterPets() {
             const searchTerm = searchInput.value.toLowerCase();
 
             if (!searchTerm) {
+                filteredPets = petsData;
+                currentPage = 1;
                 renderPets();
                 return;
             }
 
-            const filteredPets = petsData.filter(pet => {
+            filteredPets = petsData.filter(pet => {
                 return (
                     (pet.NOME && pet.NOME.toLowerCase().includes(searchTerm)) ||
                     (pet.ESPECIE && pet.ESPECIE.toLowerCase().includes(searchTerm)) ||
@@ -347,7 +404,8 @@
                 );
             });
 
-            renderPets(filteredPets);
+            currentPage = 1;
+            renderPets();
 
             if (filteredPets.length === 0) {
                 showAlert('Nenhum pet encontrado com os termos de busca informados.', 'warning');

@@ -1,5 +1,5 @@
 // Importar models COM relacionamentos já configurados
-const { Atendimento, Pet, Colaborador } = require('../Models/index');
+const { Atendimento, Pet, Colaborador, Vacina } = require('../Models/index');
 const { Op } = require('sequelize');
 
 class AtendimentoController {
@@ -21,6 +21,12 @@ class AtendimentoController {
             model: Colaborador,
             as: 'colaborador',
             attributes: ['IDCOLABORADOR', 'NOME', 'CARGO', 'CRMV'],
+            required: false // LEFT JOIN
+          },
+          {
+            model: Vacina,
+            as: 'vacina',
+            attributes: ['IDVACINA', 'NOME', 'Marca', 'Lote'],
             required: false // LEFT JOIN
           }
         ],
@@ -62,6 +68,11 @@ class AtendimentoController {
             model: Colaborador,
             as: 'colaborador',
             required: false
+          },
+          {
+            model: Vacina,
+            as: 'vacina',
+            required: false
           }
         ]
       });
@@ -98,7 +109,8 @@ class AtendimentoController {
       const atendimentoCompleto = await Atendimento.findByPk(novoAtendimento.IDATENDIMENTO, {
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false }
+          { model: Colaborador, as: 'colaborador', required: false },
+          { model: Vacina, as: 'vacina', required: false }
         ]
       });
 
@@ -132,7 +144,8 @@ class AtendimentoController {
         const atendimentoAtualizado = await Atendimento.findByPk(id, {
           include: [
             { model: Pet, as: 'pet', required: false },
-            { model: Colaborador, as: 'colaborador', required: false }
+            { model: Colaborador, as: 'colaborador', required: false },
+            { model: Vacina, as: 'vacina', required: false }
           ]
         });
 
@@ -200,7 +213,8 @@ class AtendimentoController {
         where: { IDPET: petId },
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false }
+          { model: Colaborador, as: 'colaborador', required: false },
+          { model: Vacina, as: 'vacina', required: false }
         ],
         order: [['DATAHORA', 'DESC']]
       });
@@ -230,7 +244,8 @@ class AtendimentoController {
         where: { IDCOLABORADOR: colaboradorId },
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false }
+          { model: Colaborador, as: 'colaborador', required: false },
+          { model: Vacina, as: 'vacina', required: false }
         ],
         order: [['DATAHORA', 'DESC']]
       });
@@ -270,7 +285,8 @@ class AtendimentoController {
         },
         include: [
           { model: Pet, as: 'pet', required: false },
-          { model: Colaborador, as: 'colaborador', required: false }
+          { model: Colaborador, as: 'colaborador', required: false },
+          { model: Vacina, as: 'vacina', required: false }
         ],
         order: [['DATAHORA', 'ASC']]
       });

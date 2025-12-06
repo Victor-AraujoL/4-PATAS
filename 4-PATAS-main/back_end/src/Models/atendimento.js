@@ -23,6 +23,14 @@ const Atendimento = sequelize.define('Atendimento', {
       key: 'IDCOLABORADOR'
     }
   },
+  IDVACINA: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: 'vacina',
+      key: 'IDVACINA'
+    }
+  },
   RESPONSAVEL: {
     type: DataTypes.STRING(255),
     allowNull: false

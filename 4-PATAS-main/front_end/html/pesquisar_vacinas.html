@@ -115,23 +115,8 @@
         </div>
 
         <!-- Pagination -->
-        <nav>
-            <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="#"><i class="fas fa-chevron-left"></i></a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#"><i class="fas fa-chevron-right"></i></a>
-                </li>
+        <nav id="pagination-nav">
+            <ul class="pagination" id="pagination-controls">
             </ul>
         </nav>
     </div>
@@ -224,12 +209,15 @@
             : `${window.location.origin}/api`;
         const API_URL = `${API_BASE}/vacinas`;
         let vaccinesData = [];
+        let filteredVaccines = [];
 
         // Elementos DOM
         const searchInput = document.getElementById('search-input');
         const alertBox = document.getElementById('alert');
         const vaccinesTableBody = document.getElementById('vaccines-table-body');
         const vaccinesCardsContainer = document.getElementById('vaccines-cards-container');
+        const paginationControls = document.getElementById('pagination-controls');
+        const paginationNav = document.getElementById('pagination-nav');
         const vaccineModal = new bootstrap.Modal(document.getElementById('vaccineModal'));
         const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
         const vaccineForm = document.getElementById('vaccine-form');
@@ -239,6 +227,8 @@
 
         let currentDeleteId = null;
         let isEditing = false;
+        let currentPage = 1;
+        const itemsPerPage = 10;
 
         // Carregar vacinas da API
         async function loadVaccines() {
@@ -246,6 +236,8 @@
                 const response = await fetch(API_URL);
                 if (response.ok) {
                     vaccinesData = await response.json();
+                    filteredVaccines = vaccinesData;
+                    currentPage = 1;
                     renderVaccines();
                 } else {
                     showAlert('Erro ao carregar vacinas do servidor', 'danger');
@@ -254,6 +246,7 @@
                 console.error('Erro:', error);
                 showAlert('Erro ao conectar com o servidor. Verifique se o backend está rodando.', 'danger');
                 vaccinesData = [];
+                filteredVaccines = [];
             }
         }
 
@@ -416,9 +409,71 @@
         }
 
         // Renderizar vacinas (ambas as views)
-        function renderVaccines(vaccines = vaccinesData) {
-            renderVaccinesTable(vaccines);
-            renderVaccinesCards(vaccines);
+        function renderVaccines() {
+            const totalPages = Math.ceil(filteredVaccines.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const vaccinesToShow = filteredVaccines.slice(startIndex, endIndex);
+
+            renderVaccinesTable(vaccinesToShow);
+            renderVaccinesCards(vaccinesToShow);
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            paginationControls.innerHTML = '';
+
+            // Esconde a paginação se houver apenas 1 página ou nenhuma vacina
+            if (totalPages <= 1) {
+                paginationNav.style.display = 'none';
+                return;
+            }
+
+            paginationNav.style.display = 'block';
+
+            // Botão Anterior
+            const prevLi = document.createElement('li');
+            prevLi.className = `page-item ${currentPage === 1 ? 'disabled' : ''}`;
+            prevLi.innerHTML = `
+                <a class="page-link" href="#" onclick="changePage(${currentPage - 1}); return false;">
+                    <i class="fas fa-chevron-left"></i>
+                </a>
+            `;
+            paginationControls.appendChild(prevLi);
+
+            // Páginas numeradas
+            for (let i = 1; i <= totalPages; i++) {
+                const pageLi = document.createElement('li');
+                pageLi.className = `page-item ${i === currentPage ? 'active' : ''}`;
+                pageLi.innerHTML = `
+                    <a class="page-link" href="#" onclick="changePage(${i}); return false;">${i}</a>
+                `;
+                paginationControls.appendChild(pageLi);
+            }
+
+            // Botão Próximo
+            const nextLi = document.createElement('li');
+            nextLi.className = `page-item ${currentPage === totalPages ? 'disabled' : ''}`;
+            nextLi.innerHTML = `
+                <a class="page-link" href="#" onclick="changePage(${currentPage + 1}); return false;">
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+            `;
+            paginationControls.appendChild(nextLi);
+        }
+
+        function changePage(page) {
+            const totalPages = Math.ceil(filteredVaccines.length / itemsPerPage);
+
+            if (page < 1 || page > totalPages) {
+                return;
+            }
+
+            currentPage = page;
+            renderVaccines();
+
+            // Scroll suave para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // Filtrar vacinas
@@ -426,11 +481,13 @@
             const searchTerm = searchInput.value.toLowerCase();
 
             if (!searchTerm) {
+                filteredVaccines = vaccinesData;
+                currentPage = 1;
                 renderVaccines();
                 return;
             }
 
-            const filteredVaccines = vaccinesData.filter(vaccine => {
+            filteredVaccines = vaccinesData.filter(vaccine => {
                 return (
                     (vaccine.NOME && vaccine.NOME.toLowerCase().includes(searchTerm)) ||
                     (vaccine.Lote && vaccine.Lote.toLowerCase().includes(searchTerm)) ||
@@ -439,7 +496,8 @@
                 );
             });
 
-            renderVaccines(filteredVaccines);
+            currentPage = 1;
+            renderVaccines();
 
             if (filteredVaccines.length === 0) {
                 showAlert('Nenhuma vacina encontrada com os termos de busca informados.', 'warning');

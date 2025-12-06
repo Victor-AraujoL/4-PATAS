@@ -23,6 +23,12 @@ Atendimento.belongsTo(Colaborador, {
   as: 'colaborador'
 });
 
+// Atendimento pertence a Vacina (Many-to-One)
+Atendimento.belongsTo(Vacina, {
+  foreignKey: 'IDVACINA',
+  as: 'vacina'
+});
+
 // Relacionamentos inversos (One-to-Many) - opcional mas recomendado
 Pet.hasMany(Atendimento, {
   foreignKey: 'IDPET',
@@ -31,6 +37,11 @@ Pet.hasMany(Atendimento, {
 
 Colaborador.hasMany(Atendimento, {
   foreignKey: 'IDCOLABORADOR',
+  as: 'atendimentos'
+});
+
+Vacina.hasMany(Atendimento, {
+  foreignKey: 'IDVACINA',
   as: 'atendimentos'
 });
 

@@ -219,11 +219,19 @@
                             <p id="detail-user" class="form-control-static"></p>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label text-primary fw-bold">
-                            <i class="fas fa-pills me-2"></i>Medicamento Prescrito
-                        </label>
-                        <p id="detail-medication" class="form-control-static"></p>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-primary fw-bold">
+                                <i class="fas fa-syringe me-2"></i>Vacina Aplicada
+                            </label>
+                            <p id="detail-vaccine" class="form-control-static"></p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-primary fw-bold">
+                                <i class="fas fa-pills me-2"></i>Medicamento Prescrito
+                            </label>
+                            <p id="detail-medication" class="form-control-static"></p>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label text-primary fw-bold">
@@ -615,6 +623,7 @@
                 const petName = appointment.pet?.NOME || 'Sem registro';
                 const colaboradorName = appointment.colaborador?.NOME || 'Sem registro';
                 const responsavel = appointment.RESPONSAVEL || 'Sem registro';
+                const vacinaName = appointment.vacina?.NOME || 'Nenhuma vacina';
                 const medicamento = appointment.MEDICAMENTO || 'Não informado';
                 const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico';
                 const peso = appointment.PESO ? appointment.PESO.toFixed(1) : '0.0';
@@ -645,6 +654,12 @@
                                 <i class="fas fa-weight me-2"></i>Peso
                             </span>
                             <span class="appointment-detail-value-mobile">${peso} kg</span>
+                        </div>
+                        <div class="appointment-detail-mobile">
+                            <span class="appointment-detail-label-mobile">
+                                <i class="fas fa-syringe me-2"></i>Vacina
+                            </span>
+                            <span class="appointment-detail-value-mobile ${!appointment.vacina ? 'text-muted fst-italic' : ''}">${vacinaName}</span>
                         </div>
                         <div class="appointment-detail-mobile">
                             <span class="appointment-detail-label-mobile">
@@ -758,6 +773,11 @@
 
             const responsavel = appointment.RESPONSAVEL || 'Registro não encontrado';
 
+            const vacinaName = appointment.vacina?.NOME || 'Nenhuma vacina aplicada';
+            const vacinaInfo = appointment.vacina ?
+                `${vacinaName}${appointment.vacina.Marca ? ' - ' + appointment.vacina.Marca : ''}${appointment.vacina.Lote ? ' (Lote: ' + appointment.vacina.Lote + ')' : ''}` :
+                vacinaName;
+
             const medicamento = appointment.MEDICAMENTO || 'Não informado';
             const diagnostico = appointment.DIAGNOSTICO || 'Sem diagnóstico registrado';
             const observacao = appointment.OBSERVACAO || 'Sem observações adicionais';
@@ -769,6 +789,7 @@
             document.getElementById('detail-weight').textContent = `${peso} kg`;
             document.getElementById('detail-collaborator').textContent = colaboradorInfo;
             document.getElementById('detail-user').textContent = responsavel;
+            document.getElementById('detail-vaccine').textContent = vacinaInfo;
             document.getElementById('detail-medication').textContent = medicamento;
             document.getElementById('detail-diagnosis').textContent = diagnostico;
             document.getElementById('detail-observation').textContent = observacao;

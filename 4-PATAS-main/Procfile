@@ -1,1 +1,0 @@
-web: cd back_end && node index.js

@@ -13,7 +13,13 @@
       "Bash(echo:*)",
       "Bash(mysql -h centerbeam.proxy.rlwy.net -P 37718 -u root -pbeHDNZzTLtQRMWDmficFGkEYTAjBqNYT quatro_patas2 -e \"DESCRIBE vacina;\")",
       "Bash(node check_and_fix_db.js:*)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(del railway.json)",
+      "Bash(del nixpacks.toml)",
+      "Bash(mysql -h centerbeam.proxy.rlwy.net -P 37718 -u root -pbeHDNZzTLtQRMWDmficFGkEYTAjBqNYT quatro_patas2 -e \"DESCRIBE atendimento;\")",
+      "Bash(node sync_database.js:*)",
+      "Bash(node test_atendimento.js:*)",
+      "Bash(node fix_charset.js)"
     ],
     "deny": [],
     "ask": []
